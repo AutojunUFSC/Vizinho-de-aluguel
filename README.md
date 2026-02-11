@@ -35,10 +35,12 @@ Bash
 python manage.py migrate
 python manage.py runserver
 👥 Equipe
-Bernardo Nunes
-
 Artur Tomaz
+Bernardo Nunes
+Gabriel Madeira
+Gustavo Borget
+Rafael Mussi
 
-RM
 
-Este projeto faz parte do desenvolvimento da nossa Junior Enterprise/UFSC.
+
+Este projeto faz parte do desenvolvimento da AutoJun/UFSC.
