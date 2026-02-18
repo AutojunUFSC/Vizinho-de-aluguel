@@ -34,11 +34,14 @@ Bash
 
 python manage.py migrate
 python manage.py runserver
+
+
 👥 Equipe
 Artur Tomaz
 Bernardo Nunes
 Gabriel Madeira
 Gustavo Borget
+Pedro Petrelli    
 Rafael Mussi
 
 
