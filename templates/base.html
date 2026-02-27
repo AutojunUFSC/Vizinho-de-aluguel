@@ -4,19 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50">
+<body>
 
     {% include "partials/header.html" %}
 
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
+    {% block content %}{% endblock %}
 
     {% include "partials/footer.html" %}
+
+    <!-- É melhor deixar o script de animar botão do header mobile aqui -->
+    <script>
+      const menuBtn = document.getElementById("menuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      menuBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("max-h-0");
+        mobileMenu.classList.toggle("max-h-screen");
+      });
+    </script>
 
 </body>
 </html>
