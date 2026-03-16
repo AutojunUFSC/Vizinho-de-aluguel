@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.accounts',
     'apps.services',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +130,7 @@ STATIC_URL = 'static/'
 
 # Tipo de usuário personalizado
 AUTH_USER_MODEL = 'accounts.User'
+
+# Chave primária padrão 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
