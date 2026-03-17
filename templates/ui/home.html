@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+
+{% block title %}Início{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="bg-blue-900 text-white">
+    <div class="max-w-7xl mx-auto px-8 py-20">
+        <h1 class="text-5xl text-center font-bold leading-tight">
+            Encontre Profissionais de <br>
+            Confiança para sua Casa
+        </h1>
+        <p class="mt-6 text-center text-blue-200 max-w-2xl mx-auto text-lg">
+            Conectamos você aos melhores prestadores de serviços domésticos de Florianópolis.<br>
+            Rápido, seguro e confiável.
+        </p>
+        <div class="mt-16 grid grid-cols-3 text-center gap-8 border-t border-blue-800 pt-12">
+            <div>
+                <p class="text-4xl font-bold">500+</p>
+                <p class="text-blue-300 mt-1">Profissionais</p>
+            </div>
+            <div>
+                <p class="text-4xl font-bold">10.000+</p>
+                <p class="text-blue-300 mt-1">Serviços Realizados</p>
+            </div>
+            <div>
+                <p class="text-4xl font-bold">4.8</p>
+                <p class="text-blue-300 mt-1">Avaliação Média</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CATEGORIAS -->
+<section class="bg-white">
+    <div class="max-w-7xl mx-auto px-4 py-20 text-blue-950">
+        <h2 class="text-4xl text-center font-bold leading-tight">Categoria de Serviços</h2>
+        <p class="mt-4 text-center max-w-2xl mx-auto text-gray-500">
+            Escolha a categoria do serviço que você precisa e encontre profissionais qualificados
+        </p>
+        <div class="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer">
+                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <div class="font-semibold text-base">Elétrica</div>
+                <div class="text-gray-500 text-xs mt-1 leading-snug">Instalações, reparos e manutenção elétrica</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer">
+                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 2C6 8 4 12 4 15a8 8 0 0016 0c0-3-2-7-8-13z" />
+                    </svg>
+                </div>
+                <div class="font-semibold text-base">Hidráulica</div>
+                <div class="text-gray-500 text-xs mt-1 leading-snug">Encanamento, vazamentos e instalações</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer">
+                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h10a2 2 0 012 2v3M7 21h10a2 2 0 002-2v-3M7 21H5m14-7h2a2 2 0 110 4h-2" />
+                    </svg>
+                </div>
+                <div class="font-semibold text-base">Pintura</div>
+                <div class="text-gray-500 text-xs mt-1 leading-snug">Pintura residencial e comercial</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer">
+                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+                <div class="font-semibold text-base">Manutenção</div>
+                <div class="text-gray-500 text-xs mt-1 leading-snug">Reparos gerais e pequenos consertos</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer">
+                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                </div>
+                <div class="font-semibold text-base">Montagem</div>
+                <div class="text-gray-500 text-xs mt-1 leading-snug">Móveis, prateleiras e estruturas</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer">
+                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                    </svg>
+                </div>
+                <div class="font-semibold text-base">Outros</div>
+                <div class="text-gray-500 text-xs mt-1 leading-snug">Diversos serviços domésticos</div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- POR QUE ESCOLHER -->
+<section class="bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 py-20">
+        <h2 class="text-4xl text-center font-bold text-blue-950 leading-tight">
+            Por que escolher o Vizinho de Aluguel?
+        </h2>
+        <p class="mt-4 text-center max-w-2xl mx-auto text-gray-500">
+            Uma plataforma desenvolvida pensando na sua segurança e conveniência
+        </p>
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 transition-shadow duration-200">
+                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                <div class="font-semibold text-lg text-blue-950">Profissionais Verificados</div>
+                <div class="text-gray-500 text-sm mt-2 leading-relaxed">Todos os prestadores passam por verificação de documentos e antecedentes.</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 transition-shadow duration-200">
+                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div class="font-semibold text-lg text-blue-950">Atendimento Rápido</div>
+                <div class="text-gray-500 text-sm mt-2 leading-relaxed">Encontre profissionais disponíveis para atendimento no mesmo dia.</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 transition-shadow duration-200">
+                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                    </svg>
+                </div>
+                <div class="font-semibold text-lg text-blue-950">Avaliações Reais</div>
+                <div class="text-gray-500 text-sm mt-2 leading-relaxed">Veja avaliações de clientes anteriores antes de contratar.</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 transition-shadow duration-200">
+                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    </svg>
+                </div>
+                <div class="font-semibold text-lg text-blue-950">Pagamento Seguro</div>
+                <div class="text-gray-500 text-sm mt-2 leading-relaxed">Diversas formas de pagamento com total segurança.</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 transition-shadow duration-200">
+                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                    </svg>
+                </div>
+                <div class="font-semibold text-lg text-blue-950">Suporte Dedicado</div>
+                <div class="text-gray-500 text-sm mt-2 leading-relaxed">Equipe de suporte pronta para ajudar em qualquer etapa.</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 transition-shadow duration-200">
+                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                    </svg>
+                </div>
+                <div class="font-semibold text-lg text-blue-950">Garantia de Qualidade</div>
+                <div class="text-gray-500 text-sm mt-2 leading-relaxed">Satisfação garantida ou seu dinheiro de volta.</div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- CTA DUPLO -->
+<section class="bg-white">
+    <div class="max-w-7xl mx-auto px-4 py-20">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- Precisa de um Serviço? -->
+            <div class="bg-blue-900 text-white p-8 rounded-2xl flex flex-col justify-between shadow-lg">
+                <div>
+                    <div class="w-14 h-14 bg-blue-800 rounded-xl flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-3">Precisa de um Serviço?</h2>
+                    <p class="text-blue-200 mb-6 leading-relaxed">
+                        <span class="text-blue-400 font-semibold">Encontre</span> profissionais qualificados para qualquer serviço doméstico. Rápido, fácil e seguro.
+                    </p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-2 text-blue-100 text-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                            Cadastro gratuito
+                        </li>
+                        <li class="flex items-center gap-2 text-blue-100 text-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                            Orçamentos sem compromisso
+                        </li>
+                        <li class="flex items-center gap-2 text-blue-100 text-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                            Profissionais verificados
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <button class="bg-white text-blue-900 font-semibold px-6 py-3 rounded-lg inline-flex items-center gap-2 hover:bg-blue-50 hover:shadow-md active:scale-95 transition-all duration-150">
+                        Solicitar Serviço
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- É Profissional? -->
+            <div class="bg-blue-500 text-white p-8 rounded-2xl flex flex-col justify-between shadow-lg">
+                <div>
+                    <div class="w-14 h-14 bg-blue-400 rounded-xl flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-3">É Profissional?</h2>
+                    <p class="text-blue-100 mb-6 leading-relaxed">
+                        Cadastre-se e comece a receber solicitações de serviços na sua região. Aumente sua renda!
+                    </p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-2 text-blue-100 text-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-200 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                            Mais visibilidade
+                        </li>
+                        <li class="flex items-center gap-2 text-blue-100 text-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-200 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                            Gerencie sua agenda
+                        </li>
+                        <li class="flex items-center gap-2 text-blue-100 text-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-200 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                            Receba avaliações
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <button class="border-2 border-white text-white font-semibold px-6 py-3 rounded-lg inline-flex items-center gap-2 hover:bg-blue-400 hover:shadow-md active:scale-95 transition-all duration-150">
+                        Cadastrar como Profissional
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
