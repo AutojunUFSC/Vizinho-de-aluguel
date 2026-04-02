@@ -9,4 +9,9 @@ def create_user_profile(sender, instance, created, **kwargs):
         if instance.user_type == User.UserType.CIDADAO:
             CitizenProfile.objects.create(user=instance)
         elif instance.user_type == User.UserType.MEI:
-            MEIProfile.objects.create(user=instance)
+            MEIProfile.objects.create(
+                user=instance,
+                cnpj='',
+                razao_social='',
+                nome_fantasia='',
+            )

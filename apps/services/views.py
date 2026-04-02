@@ -1,101 +1,174 @@
-from rest_framework import generics, status, viewsets
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.db import transaction
+from django.utils import timezone
+
 from .models import ServiceCategory, ServiceRequest, ServiceRequestMedia
-from .serializers import (
-    ServiceCategorySerializer, ServiceRequestSerializer, ServiceRequestMediaSerializer
-)
-from apps.accounts.models import CitizenProfile
+from .forms import ServiceRequestForm, ServiceRequestMediaForm
+from apps.accounts.decorators import citizen_required, mei_required
+from apps.accounts.models import Address
+from apps.auctions.models import Bid
+from apps.orders.models import ServiceOrder
 
 
-class ServiceCategoryListView(generics.ListAPIView):
-    serializer_class = ServiceCategorySerializer
-    permission_classes = (AllowAny,)
-    queryset = ServiceCategory.objects.filter(is_active=True).order_by('order')
+# --- Categorias ---
+
+def category_list(request):
+    categories = ServiceCategory.objects.filter(is_active=True)
+    return render(request, 'services/category_list.html', {'categories': categories})
 
 
-class ServiceCategoryDetailView(generics.RetrieveAPIView):
-    serializer_class = ServiceCategorySerializer
-    permission_classes = (AllowAny,)
-    queryset = ServiceCategory.objects.filter(is_active=True)
-    lookup_field = 'slug'
+# --- Solicitações (Cidadão) ---
+
+@citizen_required
+def service_request_create(request):
+    if request.method == 'POST':
+        form = ServiceRequestForm(request.POST, user=request.user)
+        files = request.FILES.getlist('media_files')
+        if form.is_valid():
+            sr = form.save(commit=False)
+            sr.citizen = request.user.citizen_profile
+            sr.save()
+            for f in files:
+                ServiceRequestMedia.objects.create(
+                    service_request=sr,
+                    file=f,
+                    media_type='IMAGE',
+                )
+            messages.success(request, 'Solicitação criada com sucesso!')
+            return redirect('service_request_detail', pk=sr.pk)
+    else:
+        form = ServiceRequestForm(user=request.user)
+    return render(request, 'services/request_form.html', {'form': form})
 
 
-class ServiceRequestViewSet(viewsets.ModelViewSet):
-    serializer_class = ServiceRequestSerializer
-    permission_classes = (IsAuthenticated,)
+@citizen_required
+def service_request_detail(request, pk):
+    sr = get_object_or_404(ServiceRequest, pk=pk, citizen__user=request.user)
+    bids = sr.bids.filter(status=Bid.Status.ACTIVE).select_related('mei_profile__user')
+    context = {
+        'service_request': sr,
+        'bids': bids,
+        'media': sr.media.all(),
+    }
+    return render(request, 'services/request_detail.html', context)
 
-    def get_queryset(self):
-        return ServiceRequest.objects.filter(
-            citizen__user=self.request.user
-        ).order_by('-created_at')
 
-    def perform_create(self, serializer):
-        citizen = CitizenProfile.objects.get(user=self.request.user)
-        serializer.save(citizen=citizen)
+@citizen_required
+def service_request_update(request, pk):
+    sr = get_object_or_404(ServiceRequest, pk=pk, citizen__user=request.user, status=ServiceRequest.Status.OPEN)
+    if request.method == 'POST':
+        form = ServiceRequestForm(request.POST, instance=sr, user=request.user)
+        files = request.FILES.getlist('media_files')
+        if form.is_valid():
+            form.save()
+            for f in files:
+                ServiceRequestMedia.objects.create(
+                    service_request=sr,
+                    file=f,
+                    media_type='IMAGE',
+                )
+            messages.success(request, 'Solicitação atualizada com sucesso!')
+            return redirect('service_request_detail', pk=sr.pk)
+    else:
+        form = ServiceRequestForm(instance=sr, user=request.user)
+    return render(request, 'services/request_form.html', {'form': form, 'service_request': sr})
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context['request'] = self.request
-        return context
 
-    @action(detail=False, methods=['get'], url_path='mine')
-    def mine(self, request):
-        status_filter = request.query_params.get('status')
-        queryset = self.get_queryset()
-        if status_filter:
-            queryset = queryset.filter(status=status_filter)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+@citizen_required
+def service_request_cancel(request, pk):
+    sr = get_object_or_404(ServiceRequest, pk=pk, citizen__user=request.user)
+    if request.method == 'POST':
+        if sr.status in [ServiceRequest.Status.COMPLETED, ServiceRequest.Status.CANCELLED]:
+            messages.error(request, 'Não é possível cancelar esta solicitação.')
+        else:
+            sr.status = ServiceRequest.Status.CANCELLED
+            sr.save()
+            messages.success(request, 'Solicitação cancelada.')
+    return redirect('dashboard_citizen')
 
-    @action(detail=True, methods=['post'], url_path='cancel')
-    def cancel(self, request, pk=None):
-        service_request = self.get_object()
-        if service_request.status in ['COMPLETED', 'CANCELLED']:
-            return Response(
-                {'error': 'Não é possível cancelar esta solicitação.'},
-                status=status.HTTP_400_BAD_REQUEST
+
+@citizen_required
+def award_bid(request, pk, bid_id):
+    sr = get_object_or_404(ServiceRequest, pk=pk, citizen__user=request.user)
+    bid = get_object_or_404(Bid, pk=bid_id, service_request=sr, status=Bid.Status.ACTIVE)
+
+    if request.method == 'POST':
+        with transaction.atomic():
+            bid.status = Bid.Status.WINNER
+            bid.save()
+
+            sr.bids.filter(status=Bid.Status.ACTIVE).exclude(pk=bid.pk).update(status=Bid.Status.REJECTED)
+
+            sr.status = ServiceRequest.Status.AWARDED
+            sr.awarded_at = timezone.now()
+            sr.save()
+
+            order = ServiceOrder.objects.create(
+                service_request=sr,
+                winning_bid=bid,
+                citizen=sr.citizen,
+                mei_profile=bid.mei_profile,
+                agreed_amount=bid.amount,
+                agreed_deadline=bid.proposed_deadline,
             )
-        service_request.status = 'CANCELLED'
-        service_request.save()
-        return Response({'status': 'Solicitação cancelada com sucesso.'})
+            messages.success(request, 'Lance aceito! Ordem de serviço criada.')
+            return redirect('order_detail', pk=order.pk)
 
-    @action(detail=False, methods=['get'], url_path='feed', permission_classes=[IsAuthenticated])
-    def feed(self, request):
-        queryset = ServiceRequest.objects.filter(
-            status__in=['OPEN', 'IN_AUCTION']
-        ).order_by('-created_at')
-        category = request.query_params.get('category')
-        city = request.query_params.get('city')
-        urgency = request.query_params.get('urgency')
-        if category:
-            queryset = queryset.filter(category__slug=category)
-        if city:
-            queryset = queryset.filter(address__city__icontains=city)
-        if urgency:
-            queryset = queryset.filter(urgency=urgency)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+    return redirect('service_request_detail', pk=sr.pk)
 
 
-class ServiceRequestMediaView(generics.ListCreateAPIView):
-    serializer_class = ServiceRequestMediaSerializer
-    permission_classes = (IsAuthenticated,)
+@citizen_required
+def media_delete(request, pk, media_id):
+    sr = get_object_or_404(ServiceRequest, pk=pk, citizen__user=request.user, status=ServiceRequest.Status.OPEN)
+    media = get_object_or_404(ServiceRequestMedia, pk=media_id, service_request=sr)
+    if request.method == 'POST':
+        media.file.delete()
+        media.delete()
+        messages.success(request, 'Mídia removida.')
+    return redirect('service_request_update', pk=sr.pk)
 
-    def get_queryset(self):
-        return ServiceRequestMedia.objects.filter(
-            service_request_id=self.kwargs['request_pk']
-        )
 
-    def perform_create(self, serializer):
-        service_request = ServiceRequest.objects.get(
-            id=self.kwargs['request_pk'],
-            citizen__user=self.request.user
-        )
-        serializer.save(service_request=service_request)
+# --- Feed (MEI) ---
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context['service_request_id'] = self.kwargs['request_pk']
-        return context
+@mei_required
+def feed(request):
+    queryset = ServiceRequest.objects.filter(
+        status__in=[ServiceRequest.Status.OPEN, ServiceRequest.Status.IN_AUCTION]
+    ).select_related('category', 'address', 'citizen__user')
+
+    category_slug = request.GET.get('categoria')
+    urgency = request.GET.get('urgencia')
+
+    if category_slug:
+        queryset = queryset.filter(category__slug=category_slug)
+    if urgency:
+        queryset = queryset.filter(urgency=urgency)
+
+    categories = ServiceCategory.objects.filter(is_active=True)
+
+    context = {
+        'service_requests': queryset,
+        'categories': categories,
+        'selected_category': category_slug,
+        'selected_urgency': urgency,
+    }
+    return render(request, 'services/feed.html', context)
+
+
+@mei_required
+def feed_detail(request, pk):
+    sr = get_object_or_404(ServiceRequest, pk=pk, status__in=[ServiceRequest.Status.OPEN, ServiceRequest.Status.IN_AUCTION])
+    existing_bid = Bid.objects.filter(
+        service_request=sr,
+        mei_profile=request.user.mei_profile,
+        status=Bid.Status.ACTIVE,
+    ).first()
+
+    context = {
+        'service_request': sr,
+        'media': sr.media.all(),
+        'existing_bid': existing_bid,
+    }
+    return render(request, 'services/feed_detail.html', context)
