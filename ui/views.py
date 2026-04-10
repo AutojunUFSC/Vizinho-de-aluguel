@@ -5,3 +5,6 @@ def home(request):
 
 def cadastro(request):
     return render(request, "ui/cadastro.html")
+
+def home_usuario(request):
+    return render(request, "ui/home_usuario.html")
