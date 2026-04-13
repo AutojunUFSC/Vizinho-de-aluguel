@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from decouple import config
 
 load_dotenv()
 
@@ -83,22 +84,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-<<<<<<< Updated upstream
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_VIZINHO'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
-
-=======
         'ENGINE': config('DATABASE_ENGINE', default='django.db.backends.sqlite3'),
         'NAME': config('DATABASE_NAME', default=BASE_DIR / 'db.sqlite3'),
         'USER': config('DATABASE_USER', default=''),
         'PASSWORD': config('DATABASE_PASSWORD', default=''),
         'HOST': config('DATABASE_HOST', default=''),
         'PORT': config('DATABASE_PORT', default=''),
->>>>>>> Stashed changes
     }
 }
 
