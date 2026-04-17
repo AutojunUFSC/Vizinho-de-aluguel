@@ -1,15 +1,21 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
+<<<<<<< HEAD
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
+=======
+>>>>>>> origin/feature/services-models
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User, CitizenProfile, MEIProfile, Address
 from .serializers import (
     RegisterSerializer, UserSerializer, UserMeSerializer,
     CitizenProfileSerializer, MEIProfileSerializer, AddressSerializer
 )
+<<<<<<< HEAD
 from .permissions import IsCitizen, IsMEI, IsAdmin, IsOwner
+=======
+>>>>>>> origin/feature/services-models
 
 
 class RegisterView(generics.CreateAPIView):
@@ -33,7 +39,11 @@ class RegisterView(generics.CreateAPIView):
 
 class UserMeView(generics.RetrieveUpdateAPIView):
     serializer_class = UserMeSerializer
+<<<<<<< HEAD
     permission_classes = (IsAuthenticated, IsOwner)
+=======
+    permission_classes = (IsAuthenticated,)
+>>>>>>> origin/feature/services-models
 
     def get_object(self):
         return self.request.user
@@ -41,7 +51,11 @@ class UserMeView(generics.RetrieveUpdateAPIView):
 
 class CitizenProfileMeView(generics.RetrieveUpdateAPIView):
     serializer_class = CitizenProfileSerializer
+<<<<<<< HEAD
     permission_classes = (IsAuthenticated, IsCitizen)
+=======
+    permission_classes = (IsAuthenticated,)
+>>>>>>> origin/feature/services-models
 
     def get_object(self):
         return self.request.user.citizen_profile
@@ -49,7 +63,11 @@ class CitizenProfileMeView(generics.RetrieveUpdateAPIView):
 
 class MEIProfileMeView(generics.RetrieveUpdateAPIView):
     serializer_class = MEIProfileSerializer
+<<<<<<< HEAD
     permission_classes = (IsAuthenticated, IsMEI)
+=======
+    permission_classes = (IsAuthenticated,)
+>>>>>>> origin/feature/services-models
 
     def get_object(self):
         return self.request.user.mei_profile
@@ -78,10 +96,18 @@ class MEIProfileListView(generics.ListAPIView):
 
 class AddressViewSet(generics.ListCreateAPIView):
     serializer_class = AddressSerializer
+<<<<<<< HEAD
     permission_classes = (IsAuthenticated, IsOwner)
+=======
+    permission_classes = (IsAuthenticated,)
+>>>>>>> origin/feature/services-models
 
     def get_queryset(self):
         return Address.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
+<<<<<<< HEAD
         serializer.save(user=self.request.user)
+=======
+        serializer.save(user=self.request.user)
+>>>>>>> origin/feature/services-models

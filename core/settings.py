@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Apps do Vizinho de Aluguel
     'apps.accounts',
+    'apps.services',
     'rest_framework',
     'rest_framework_simplejwt',
 ]

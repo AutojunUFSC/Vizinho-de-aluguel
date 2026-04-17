@@ -7,6 +7,7 @@ class ServiceCategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'is_active', 'order')
     prepopulated_fields = {'slug': ('name',)}
     list_filter = ('is_active',)
+    search_fields = ('name',)
 
 
 class ServiceRequestMediaInline(admin.TabularInline):
@@ -25,3 +26,4 @@ class ServiceRequestAdmin(admin.ModelAdmin):
 @admin.register(ServiceRequestMedia)
 class ServiceRequestMediaAdmin(admin.ModelAdmin):
     list_display = ('service_request', 'media_type', 'order', 'uploaded_at')
+    list_filter = ('media_type',)

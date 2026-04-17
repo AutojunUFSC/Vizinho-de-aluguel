@@ -36,11 +36,25 @@ class ServiceRequest(models.Model):
         CANCELLED = 'CANCELLED', 'Cancelado'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    citizen = models.ForeignKey('accounts.CitizenProfile', on_delete=models.CASCADE, related_name='service_requests')
+    citizen = models.ForeignKey(
+        'accounts.CitizenProfile',
+        on_delete=models.CASCADE,
+        related_name='service_requests'
+    )
     title = models.CharField(max_length=255)
     description = models.TextField()
-    category = models.ForeignKey(ServiceCategory, on_delete=models.SET_NULL, null=True, related_name='service_requests')
-    address = models.ForeignKey('accounts.Address', on_delete=models.SET_NULL, null=True, related_name='service_requests')
+    category = models.ForeignKey(
+        ServiceCategory,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='service_requests'
+    )
+    address = models.ForeignKey(
+        'accounts.Address',
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='service_requests'
+    )
     urgency = models.CharField(max_length=20, choices=Urgency.choices, default=Urgency.MEDIA)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.OPEN)
     budget_max = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
@@ -65,7 +79,11 @@ class ServiceRequestMedia(models.Model):
         VIDEO = 'VIDEO', 'Vídeo'
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    service_request = models.ForeignKey(ServiceRequest, on_delete=models.CASCADE, related_name='media')
+    service_request = models.ForeignKey(
+        ServiceRequest,
+        on_delete=models.CASCADE,
+        related_name='media'
+    )
     file = models.FileField(upload_to='service_requests/')
     media_type = models.CharField(max_length=10, choices=MediaType.choices)
     order = models.IntegerField(default=0)
