@@ -7,7 +7,7 @@
       <p>Prefeitura de Florianópolis - Serviços Domésticos</p>
 
       <div class="flex gap-4">
-        <a href="#" class="hover:underline">Área do Cliente</a>
+        <a href="{% url 'home_usuario' %}" class="hover:underline">Área do Cliente</a>
         <a href="#" class="hover:underline">Área do Profissional</a>
       </div>
     </div>
@@ -69,7 +69,7 @@
 
       <!-- Menu -->
       <nav class="hidden md:flex gap-6 text-gray-700 font-medium">
-        <a href="#" class="hover:text-blue-900">Início</a>
+        <a href="{% url 'home' %}" class="hover:text-blue-900">Início</a>
         <a href="#" class="hover:text-blue-900">Serviços</a>
         <a href="#" class="hover:text-blue-900">Institucional</a>
         <a href="#" class="hover:text-blue-900">Contato</a>
@@ -100,7 +100,7 @@
   >
     <div class="px-4 py-4 flex flex-col gap-4">
       <a
-        href="#"
+        href="{% url 'home' %}"
         class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200"
       >
         🏠 <span>Início</span>
@@ -129,7 +129,7 @@
 
       <hr class="my-4" />
 
-      <a href="#" class="text-gray-600 hover:bg-gray-100 m:auto"
+      <a href="{% url 'home_usuario' %}" class="text-gray-600 hover:bg-gray-100 m:auto"
         >Área do Cliente</a
       >
       <a href="#" class="text-gray-600 hover:bg-gray-100 m:auto"
