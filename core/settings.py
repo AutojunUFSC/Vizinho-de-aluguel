@@ -31,11 +31,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Apps do Vizinho de Aluguel
     'apps.accounts',
-    'apps.services',
-    'apps.auctions',
-    'apps.orders',
-    'apps.reviews',
-    'apps.admin_panel',
+    'rest_framework',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -134,8 +131,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.User'
 
 
-# Login / Logout redirects
+# Django REST Framework
 
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/dashboard/'
-LOGOUT_REDIRECT_URL = '/'
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
