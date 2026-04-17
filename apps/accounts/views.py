@@ -10,6 +10,8 @@ from .serializers import (
 
 
 class RegisterView(generics.CreateAPIView):
+    """Cadastra um novo usuário (CIDADAO ou MEI). Retorna tokens JWT de acesso e refresh junto com os dados do usuário criado."""
+
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
     permission_classes = (AllowAny,)
@@ -29,6 +31,8 @@ class RegisterView(generics.CreateAPIView):
 
 
 class UserMeView(generics.RetrieveUpdateAPIView):
+    """Recupera e atualiza os dados do usuário autenticado (nome, telefone, avatar). Email e user_type são somente leitura."""
+
     serializer_class = UserMeSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -37,6 +41,8 @@ class UserMeView(generics.RetrieveUpdateAPIView):
 
 
 class CitizenProfileMeView(generics.RetrieveUpdateAPIView):
+    """Recupera e atualiza o perfil de Cidadão do usuário autenticado. rating_avg e total_services_requested são somente leitura."""
+
     serializer_class = CitizenProfileSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -45,6 +51,8 @@ class CitizenProfileMeView(generics.RetrieveUpdateAPIView):
 
 
 class MEIProfileMeView(generics.RetrieveUpdateAPIView):
+    """Recupera e atualiza o perfil MEI do usuário autenticado. verification_status é gerenciado internamente e não pode ser alterado diretamente."""
+
     serializer_class = MEIProfileSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -53,12 +61,16 @@ class MEIProfileMeView(generics.RetrieveUpdateAPIView):
 
 
 class MEIProfileDetailView(generics.RetrieveAPIView):
+    """Exibe o perfil público de um MEI pelo UUID. Acessível sem autenticação."""
+
     serializer_class = MEIProfileSerializer
     permission_classes = (AllowAny,)
     queryset = MEIProfile.objects.filter(user__is_active=True)
 
 
 class MEIProfileListView(generics.ListAPIView):
+    """Lista perfis MEI de usuários ativos. Suporta filtros por query string: city (parcial) e is_available (booleano)."""
+
     serializer_class = MEIProfileSerializer
     permission_classes = (AllowAny,)
 
@@ -74,6 +86,8 @@ class MEIProfileListView(generics.ListAPIView):
 
 
 class AddressViewSet(generics.ListCreateAPIView):
+    """Lista e cria endereços do usuário autenticado. O campo user é preenchido automaticamente com o usuário da requisição."""
+
     serializer_class = AddressSerializer
     permission_classes = (IsAuthenticated,)
 

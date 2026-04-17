@@ -9,6 +9,9 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('email', 'full_name', 'phone', 'cpf', 'user_type', 'password', 'password_confirm')
+        extra_kwargs = {
+            'cpf': {'write_only': True},
+        }
 
     def validate(self, data):
         if data['password'] != data['password_confirm']:
@@ -49,6 +52,9 @@ class MEIProfileSerializer(serializers.ModelSerializer):
             'total_services_completed', 'is_available', 'cnpj_file', 'whatsapp_link'
         )
         read_only_fields = ('id', 'verification_status', 'rating_avg', 'total_services_completed')
+        extra_kwargs = {
+            'cnpj_file': {'write_only': True},
+        }
 
 
 class UserMeSerializer(serializers.ModelSerializer):

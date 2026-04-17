@@ -7,6 +7,14 @@ from .serializers import MEICategorySubscriptionSerializer, BidSerializer
 
 
 class MEICategorySubscriptionViewSet(viewsets.ViewSet):
+    """
+    Gerencia as inscrições do MEI em categorias de serviço.
+
+    - list: retorna as categorias em que o MEI autenticado está inscrito.
+    - create: inscreve o MEI em uma ou mais categorias de uma vez (body: {category_ids: [...]}).
+    - destroy: remove a inscrição do MEI em uma categoria pelo ID da categoria.
+    """
+
     permission_classes = (IsAuthenticated,)
 
     def list(self, request):
@@ -43,6 +51,15 @@ class MEICategorySubscriptionViewSet(viewsets.ViewSet):
 
 
 class BidViewSet(viewsets.ModelViewSet):
+    """
+    Gerencia lances (bids) de MEIs em solicitações de serviço.
+
+    Criação valida: verificação do MEI, inscrição ativa na categoria da solicitação,
+    ausência de lance ACTIVE duplicado e respeito ao budget_max.
+    - mine: lista os lances do MEI autenticado.
+    - withdraw: retira um lance ACTIVE, marcando-o como WITHDRAWN.
+    """
+
     serializer_class = BidSerializer
     permission_classes = (IsAuthenticated,)
 

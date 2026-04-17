@@ -7,6 +7,17 @@ from .models import ServiceOrder
 from .serializers import ServiceOrderSerializer
 
 class ServiceOrderViewSet(viewsets.ModelViewSet):
+    """
+    Gerencia ordens de serviço. Ordens são criadas automaticamente pela action award
+    em ServiceRequestViewSet e não devem ser criadas ou editadas diretamente.
+
+    - mine: retorna as ordens do usuário autenticado (filtra por citizen ou mei_profile conforme user_type).
+    - start: transição PENDING_START → IN_PROGRESS; registra started_at.
+    - complete: transição IN_PROGRESS → COMPLETED; registra completed_at.
+    - confirm: registra citizen_confirmed_at em uma ordem COMPLETED.
+    - cancel: cancela a ordem independentemente do status atual.
+    """
+
     queryset = ServiceOrder.objects.all()
     serializer_class = ServiceOrderSerializer
     permission_classes = [IsAuthenticated]
