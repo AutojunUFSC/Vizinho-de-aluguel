@@ -1,13 +1,15 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import User, MEIProfile, Address
+from .models import User, CitizenProfile, MEIProfile, Address
 from .serializers import (
     RegisterSerializer, UserSerializer, UserMeSerializer,
     CitizenProfileSerializer, MEIProfileSerializer, AddressSerializer
 )
+from .permissions import IsCitizen, IsMEI, IsAdmin, IsOwner
 
 
 class RegisterView(generics.CreateAPIView):
@@ -31,7 +33,7 @@ class RegisterView(generics.CreateAPIView):
 
 class UserMeView(generics.RetrieveUpdateAPIView):
     serializer_class = UserMeSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsOwner)
 
     def get_object(self):
         return self.request.user
@@ -39,7 +41,7 @@ class UserMeView(generics.RetrieveUpdateAPIView):
 
 class CitizenProfileMeView(generics.RetrieveUpdateAPIView):
     serializer_class = CitizenProfileSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsCitizen)
 
     def get_object(self):
         return self.request.user.citizen_profile
@@ -47,7 +49,7 @@ class CitizenProfileMeView(generics.RetrieveUpdateAPIView):
 
 class MEIProfileMeView(generics.RetrieveUpdateAPIView):
     serializer_class = MEIProfileSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsMEI)
 
     def get_object(self):
         return self.request.user.mei_profile
@@ -76,7 +78,7 @@ class MEIProfileListView(generics.ListAPIView):
 
 class AddressViewSet(generics.ListCreateAPIView):
     serializer_class = AddressSerializer
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsOwner)
 
     def get_queryset(self):
         return Address.objects.filter(user=self.request.user)
