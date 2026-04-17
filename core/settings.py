@@ -32,6 +32,10 @@ INSTALLED_APPS = [
     # Apps do Vizinho de Aluguel
     'apps.accounts',
     'apps.services',
+    'apps.auctions',
+    'apps.orders',
+    'apps.reviews',
+    'apps.admin_panel',
     'rest_framework',
     'rest_framework_simplejwt',
 ]
@@ -71,10 +75,10 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DATABASE_NAME'),
-        'USER': config('DATABASE_USER'),
-        'PASSWORD': config('DATABASE_PASSWORD'),
+        'ENGINE': config('DATABASE_ENGINE', default='django.db.backends.postgresql'),
+        'NAME': config('DATABASE_NAME', default=BASE_DIR / 'db.sqlite3'),
+        'USER': config('DATABASE_USER', default=''),
+        'PASSWORD': config('DATABASE_PASSWORD', default=''),
         'HOST': config('DATABASE_HOST', default='localhost'),
         'PORT': config('DATABASE_PORT', default='5432'),
     }

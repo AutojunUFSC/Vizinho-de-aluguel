@@ -1,97 +1,70 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
-
 from .models import ServiceOrder
-from apps.accounts.decorators import mei_required, citizen_required
+from .serializers import ServiceOrderSerializer
 
 
-@login_required
-def order_detail(request, pk):
-    order = get_object_or_404(ServiceOrder, pk=pk)
-    user = request.user
+class ServiceOrderViewSet(viewsets.ModelViewSet):
+    """
+    Gerencia ordens de serviço. Ordens são criadas automaticamente pela action award
+    em ServiceRequestViewSet e não devem ser criadas ou editadas diretamente.
 
-    # Verificar que o user é participante da ordem
-    is_citizen = hasattr(user, 'citizen_profile') and order.citizen == user.citizen_profile
-    is_mei = hasattr(user, 'mei_profile') and order.mei_profile == user.mei_profile
+    - mine: retorna as ordens do usuário autenticado (filtra por citizen ou mei_profile conforme user_type).
+    - start: transição PENDING_START → IN_PROGRESS; registra started_at.
+    - complete: transição IN_PROGRESS → COMPLETED; registra completed_at.
+    - confirm: registra citizen_confirmed_at em uma ordem COMPLETED.
+    - cancel: cancela a ordem independentemente do status atual.
+    """
 
-    if not is_citizen and not is_mei and not user.is_staff:
-        messages.error(request, 'Você não tem permissão para ver esta ordem.')
-        return redirect('/')
+    queryset = ServiceOrder.objects.all()
+    serializer_class = ServiceOrderSerializer
+    permission_classes = [IsAuthenticated]
 
-    context = {
-        'order': order,
-        'is_citizen': is_citizen,
-        'is_mei': is_mei,
-    }
-    return render(request, 'orders/order_detail.html', context)
-
-
-@mei_required
-def order_start(request, pk):
-    order = get_object_or_404(ServiceOrder, pk=pk, mei_profile=request.user.mei_profile)
-    if request.method == 'POST':
-        if order.status != ServiceOrder.Status.PENDING_START:
-            messages.error(request, 'Esta ordem não pode ser iniciada.')
+    @action(detail=False, methods=['get'])
+    def mine(self, request):
+        user = request.user
+        if getattr(user, 'user_type', None) == 'CIDADAO':
+            orders = self.queryset.filter(citizen__user=user)
         else:
-            order.status = ServiceOrder.Status.IN_PROGRESS
+            orders = self.queryset.filter(mei_profile__user=user)
+        serializer = self.get_serializer(orders, many=True)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['post'])
+    def start(self, request, pk=None):
+        order = self.get_object()
+        if order.status == 'PENDING_START':
+            order.status = 'IN_PROGRESS'
             order.started_at = timezone.now()
             order.save()
-            messages.success(request, 'Serviço iniciado!')
-    return redirect('order_detail', pk=order.pk)
+            return Response({'status': 'Serviço iniciado com sucesso!'})
+        return Response({'error': 'Não é possível iniciar esta ordem.'}, status=status.HTTP_400_BAD_REQUEST)
 
-
-@mei_required
-def order_complete(request, pk):
-    order = get_object_or_404(ServiceOrder, pk=pk, mei_profile=request.user.mei_profile)
-    if request.method == 'POST':
-        if order.status != ServiceOrder.Status.IN_PROGRESS:
-            messages.error(request, 'Esta ordem não pode ser concluída.')
-        else:
-            order.status = ServiceOrder.Status.COMPLETED
+    @action(detail=True, methods=['post'])
+    def complete(self, request, pk=None):
+        order = self.get_object()
+        if order.status == 'IN_PROGRESS':
+            order.status = 'COMPLETED'
             order.completed_at = timezone.now()
             order.save()
+            return Response({'status': 'Serviço concluído com sucesso!'})
+        return Response({'error': 'Não é possível concluir esta ordem.'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Atualizar status do ServiceRequest
-            order.service_request.status = 'COMPLETED'
-            order.service_request.save()
-
-            messages.success(request, 'Serviço marcado como concluído!')
-    return redirect('order_detail', pk=order.pk)
-
-
-@citizen_required
-def order_confirm(request, pk):
-    order = get_object_or_404(ServiceOrder, pk=pk, citizen=request.user.citizen_profile)
-    if request.method == 'POST':
-        if order.status != ServiceOrder.Status.COMPLETED or order.citizen_confirmed_at:
-            messages.error(request, 'Não é possível confirmar esta ordem.')
-        else:
+    @action(detail=True, methods=['post'])
+    def confirm(self, request, pk=None):
+        order = self.get_object()
+        if order.status == 'COMPLETED':
             order.citizen_confirmed_at = timezone.now()
             order.save()
-            messages.success(request, 'Conclusão confirmada! Agora você pode avaliar o profissional.')
-    return redirect('order_detail', pk=order.pk)
+            return Response({'status': 'Serviço confirmado pelo cidadão!'})
+        return Response({'error': 'Não é possível confirmar esta ordem.'}, status=status.HTTP_400_BAD_REQUEST)
 
-
-@login_required
-def order_cancel(request, pk):
-    order = get_object_or_404(ServiceOrder, pk=pk)
-    user = request.user
-
-    if request.method == 'POST':
-        is_citizen = hasattr(user, 'citizen_profile') and order.citizen == user.citizen_profile
-        is_mei = hasattr(user, 'mei_profile') and order.mei_profile == user.mei_profile
-
-        if order.status == ServiceOrder.Status.PENDING_START and (is_citizen or is_mei):
-            order.status = ServiceOrder.Status.CANCELLED
-            order.save()
-            messages.success(request, 'Ordem cancelada.')
-        elif user.is_staff:
-            order.status = ServiceOrder.Status.CANCELLED
-            order.save()
-            messages.success(request, 'Ordem cancelada pelo admin.')
-        else:
-            messages.error(request, 'Não é possível cancelar esta ordem.')
-
-    return redirect('order_detail', pk=order.pk)
+    @action(detail=True, methods=['post'])
+    def cancel(self, request, pk=None):
+        order = self.get_object()
+        order.status = 'CANCELLED'
+        order.save()
+        return Response({'status': 'Serviço cancelado!'})
