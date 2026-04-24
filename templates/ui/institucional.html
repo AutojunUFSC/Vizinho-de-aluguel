@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block title %}Institucional — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+
+<!-- HEADER DA PÁGINA -->
+<section class="bg-blue-900 text-white">
+    <div class="max-w-7xl mx-auto px-8 py-10">
+        <h1 class="text-3xl font-bold">Institucional</h1>
+        <p class="text-blue-300 mt-1">Conheça nossa plataforma, termos e políticas</p>
+    </div>
+</section>
+
+<section class="bg-gray-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 py-10 flex flex-col md:flex-row gap-8">
+
+        <!-- MENU LATERAL -->
+        <aside class="md:w-64 shrink-0">
+            <nav class="bg-white rounded-xl border border-gray-200 p-4 sticky top-6">
+                <ul class="flex flex-col gap-1">
+                    <li>
+                        <a href="#sobre" onclick="showSection('sobre')" id="menu-sobre"
+                            class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-blue-900 bg-blue-50 transition-all duration-150">
+                            Sobre a Plataforma
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#termos" onclick="showSection('termos')" id="menu-termos"
+                            class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-blue-900 transition-all duration-150">
+                            Termos de Uso
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#privacidade" onclick="showSection('privacidade')" id="menu-privacidade"
+                            class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-blue-900 transition-all duration-150">
+                            Política de Privacidade
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#faq" onclick="showSection('faq')" id="menu-faq"
+                            class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-blue-900 transition-all duration-150">
+                            Perguntas Frequentes
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="flex-1">
+
+            <!-- SOBRE -->
+            <div id="section-sobre">
+                <div class="bg-white rounded-xl border border-gray-200 p-8 mb-6">
+                    <h2 class="text-2xl font-bold text-blue-950 mb-4">Sobre o Vizinho de Aluguel</h2>
+                    <p class="text-gray-600 mb-4">
+                        O <strong>Vizinho de Aluguel</strong> é um marketplace de serviços domésticos que conecta cidadãos de Florianópolis a prestadores MEI de confiança, por meio de um sistema de leilão reverso — onde o cliente descreve sua necessidade e os profissionais competem com seus melhores preços.
+                    </p>
+                    <p class="text-gray-600 mb-4">
+                        Nossa missão é tornar o acesso a serviços domésticos mais seguro, transparente e acessível, garantindo que cada profissional seja verificado e que cada cliente seja tratado com respeito e agilidade.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                        <div class="bg-blue-50 rounded-lg p-4 text-center">
+                            <p class="text-3xl font-bold text-blue-900">500+</p>
+                            <p class="text-sm text-gray-500 mt-1">Profissionais verificados</p>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-4 text-center">
+                            <p class="text-3xl font-bold text-blue-900">10.000+</p>
+                            <p class="text-sm text-gray-500 mt-1">Serviços realizados</p>
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-4 text-center">
+                            <p class="text-3xl font-bold text-blue-900">4.8 ★</p>
+                            <p class="text-sm text-gray-500 mt-1">Avaliação média</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-200 p-8">
+                    <h3 class="text-xl font-bold text-blue-950 mb-4">Como funciona?</h3>
+                    <div class="flex flex-col gap-6">
+                        <div class="flex gap-4">
+                            <div class="bg-blue-900 text-white rounded-full w-8 h-8 flex items-center justify-center shrink-0 font-bold text-sm">1</div>
+                            <div>
+                                <p class="font-semibold text-blue-950">Cidadão abre uma solicitação</p>
+                                <p class="text-sm text-gray-500 mt-1">Descreve o serviço, a urgência, localização e orçamento máximo disponível.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="bg-blue-900 text-white rounded-full w-8 h-8 flex items-center justify-center shrink-0 font-bold text-sm">2</div>
+                            <div>
+                                <p class="font-semibold text-blue-950">Profissionais enviam lances</p>
+                                <p class="text-sm text-gray-500 mt-1">MEIs inscritos na categoria visualizam a solicitação e oferecem seus melhores preços e prazos.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="bg-blue-900 text-white rounded-full w-8 h-8 flex items-center justify-center shrink-0 font-bold text-sm">3</div>
+                            <div>
+                                <p class="font-semibold text-blue-950">Cidadão escolhe o melhor lance</p>
+                                <p class="text-sm text-gray-500 mt-1">Avalia os perfis, avaliações e preços e seleciona o profissional de confiança.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="bg-blue-900 text-white rounded-full w-8 h-8 flex items-center justify-center shrink-0 font-bold text-sm">4</div>
+                            <div>
+                                <p class="font-semibold text-blue-950">Serviço é realizado e avaliado</p>
+                                <p class="text-sm text-gray-500 mt-1">Após a conclusão, ambas as partes podem se avaliar para manter a qualidade da plataforma.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TERMOS DE USO -->
+            <div id="section-termos" class="hidden">
+                <div class="bg-white rounded-xl border border-gray-200 p-8">
+                    <h2 class="text-2xl font-bold text-blue-950 mb-2">Termos de Uso</h2>
+                    <p class="text-sm text-gray-400 mb-6">Última atualização: Janeiro de 2026</p>
+
+                    <div class="prose prose-sm text-gray-600 max-w-none flex flex-col gap-6">
+                        <div>
+                            <h3 class="text-base font-semibold text-blue-950 mb-2">1. Aceitação dos Termos</h3>
+                            <p>Ao utilizar o Vizinho de Aluguel, você concorda com estes Termos de Uso. Caso não concorde, não utilize a plataforma. Reservamo-nos o direito de alterar estes termos a qualquer momento, com notificação prévia aos usuários cadastrados.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-semibold text-blue-950 mb-2">2. Cadastro e Conta</h3>
+                            <p>Para utilizar os serviços, você deve criar uma conta com informações verdadeiras e atualizadas. É sua responsabilidade manter a segurança de sua senha. Profissionais MEI devem comprovar regularidade junto à Receita Federal para ter acesso ao sistema de lances.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-semibold text-blue-950 mb-2">3. Uso da Plataforma</h3>
+                            <p>A plataforma é destinada exclusivamente à conexão entre cidadãos e prestadores de serviços. É vedado o uso para fins ilícitos, divulgação de conteúdo enganoso ou qualquer prática que prejudique outros usuários ou a integridade do sistema.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-semibold text-blue-950 mb-2">4. Responsabilidades</h3>
+                            <p>O Vizinho de Aluguel atua como intermediário e não se responsabiliza pela qualidade dos serviços prestados, por acordos realizados fora da plataforma ou por danos decorrentes do uso inadequado do sistema por qualquer das partes.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-semibold text-blue-950 mb-2">5. Cancelamento</h3>
+                            <p>Qualquer das partes pode cancelar um serviço antes do início, respeitando as regras da plataforma. Cancelamentos reiterados podem resultar em suspensão ou exclusão da conta.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- POLÍTICA DE PRIVACIDADE -->
+            <div id="section-privacidade" class="hidden">
+                <div class="bg-white rounded-xl border border-gray-200 p-8">
+                    <h2 class="text-2xl font-bold text-blue-950 mb-2">Política de Privacidade</h2>
+                    <p class="text-sm text-gray-400 mb-6">Última atualização: Janeiro de 2026</p>
+
+                    <div class="prose prose-sm text-gray-600 max-w-none flex flex-col gap-6">
+                        <div>
+                            <h3 class="text-base font-semibold text-blue-950 mb-2">1. Dados que coletamos</h3>
+                            <p>Coletamos nome, e-mail, telefone, CPF/CNPJ, endereço e dados de uso da plataforma. Para profissionais MEI, coletamos também o número do CNPJ e documentos de habilitação para verificação.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-semibold text-blue-950 mb-2">2. Como usamos seus dados</h3>
+                            <p>Seus dados são utilizados para autenticação, matchmaking entre clientes e profissionais, comunicações sobre serviços e melhorias da plataforma. Não vendemos seus dados a terceiros.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-semibold text-blue-950 mb-2">3. Compartilhamento</h3>
+                            <p>Dados como nome e contato são compartilhados entre as partes somente após a confirmação de um serviço. Dados sensíveis como CPF e CNPJ não são expostos a outros usuários.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-semibold text-blue-950 mb-2">4. Seus direitos (LGPD)</h3>
+                            <p>Conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), você tem direito ao acesso, correção, exclusão e portabilidade dos seus dados. Para exercer esses direitos, entre em contato pelo e-mail <strong>privacidade@vizinhodealuguel.com.br</strong>.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-semibold text-blue-950 mb-2">5. Segurança</h3>
+                            <p>Adotamos medidas técnicas e organizacionais para proteger seus dados contra acesso não autorizado, perda ou divulgação indevida, incluindo criptografia e controle de acesso.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div id="section-faq" class="hidden">
+                <div class="bg-white rounded-xl border border-gray-200 p-8">
+                    <h2 class="text-2xl font-bold text-blue-950 mb-6">Perguntas Frequentes</h2>
+
+                    <div class="flex flex-col gap-3" id="faq-list">
+
+                        <div class="border border-gray-200 rounded-lg overflow-hidden">
+                            <button onclick="toggleFaq(0)"
+                                class="w-full flex items-center justify-between px-5 py-4 text-left text-sm font-semibold text-blue-950 hover:bg-gray-50 transition-all">
+                                Como faço para solicitar um serviço?
+                                <svg id="faq-icon-0" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div id="faq-body-0" class="hidden px-5 pb-4 text-sm text-gray-600">
+                                Após criar sua conta como cidadão, clique em "Solicitar Serviço", preencha as informações do serviço necessário (categoria, descrição, urgência e orçamento) e aguarde as propostas dos profissionais.
+                            </div>
+                        </div>
+
+                        <div class="border border-gray-200 rounded-lg overflow-hidden">
+                            <button onclick="toggleFaq(1)"
+                                class="w-full flex items-center justify-between px-5 py-4 text-left text-sm font-semibold text-blue-950 hover:bg-gray-50 transition-all">
+                                Os profissionais são verificados?
+                                <svg id="faq-icon-1" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div id="faq-body-1" class="hidden px-5 pb-4 text-sm text-gray-600">
+                                Sim! Todos os profissionais passam por verificação de CNPJ MEI ativo na Receita Federal antes de poder enviar lances. Profissionais com status "Verificado" foram aprovados pela nossa equipe.
+                            </div>
+                        </div>
+
+                        <div class="border border-gray-200 rounded-lg overflow-hidden">
+                            <button onclick="toggleFaq(2)"
+                                class="w-full flex items-center justify-between px-5 py-4 text-left text-sm font-semibold text-blue-950 hover:bg-gray-50 transition-all">
+                                Como funciona o leilão reverso?
+                                <svg id="faq-icon-2" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div id="faq-body-2" class="hidden px-5 pb-4 text-sm text-gray-600">
+                                No leilão reverso, o cliente define o orçamento máximo e os profissionais competem oferecendo o menor preço e melhor prazo. O cliente então escolhe a proposta que mais lhe agrada, considerando preço, prazo e avaliações do profissional.
+                            </div>
+                        </div>
+
+                        <div class="border border-gray-200 rounded-lg overflow-hidden">
+                            <button onclick="toggleFaq(3)"
+                                class="w-full flex items-center justify-between px-5 py-4 text-left text-sm font-semibold text-blue-950 hover:bg-gray-50 transition-all">
+                                Posso cancelar um serviço?
+                                <svg id="faq-icon-3" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div id="faq-body-3" class="hidden px-5 pb-4 text-sm text-gray-600">
+                                Sim, é possível cancelar uma solicitação antes de ela entrar em andamento. Após o início do serviço, o cancelamento depende de acordo entre as partes.
+                            </div>
+                        </div>
+
+                        <div class="border border-gray-200 rounded-lg overflow-hidden">
+                            <button onclick="toggleFaq(4)"
+                                class="w-full flex items-center justify-between px-5 py-4 text-left text-sm font-semibold text-blue-950 hover:bg-gray-50 transition-all">
+                                Sou MEI, como me cadastro como profissional?
+                                <svg id="faq-icon-4" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div id="faq-body-4" class="hidden px-5 pb-4 text-sm text-gray-600">
+                                Clique em "Área do Profissional" no menu superior, selecione "Cadastrar" e preencha seus dados pessoais e de MEI, incluindo o CNPJ. Nossa equipe irá verificar sua documentação em até 2 dias úteis.
+                            </div>
+                        </div>
+
+                        <div class="border border-gray-200 rounded-lg overflow-hidden">
+                            <button onclick="toggleFaq(5)"
+                                class="w-full flex items-center justify-between px-5 py-4 text-left text-sm font-semibold text-blue-950 hover:bg-gray-50 transition-all">
+                                O serviço é gratuito para o cliente?
+                                <svg id="faq-icon-5" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            <div id="faq-body-5" class="hidden px-5 pb-4 text-sm text-gray-600">
+                                Sim, o cadastro e a solicitação de serviços são totalmente gratuitos para os cidadãos. O profissional paga apenas uma pequena taxa por cada serviço concluído com sucesso pela plataforma.
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</section>
+
+<script>
+    const sections = ['sobre', 'termos', 'privacidade', 'faq'];
+
+    function showSection(section) {
+        sections.forEach(s => {
+            document.getElementById('section-' + s).classList.add('hidden');
+            const menu = document.getElementById('menu-' + s);
+            menu.classList.remove('text-blue-900', 'bg-blue-50');
+            menu.classList.add('text-gray-600', 'hover:bg-gray-100', 'hover:text-blue-900');
+        });
+        document.getElementById('section-' + section).classList.remove('hidden');
+        const activeMenu = document.getElementById('menu-' + section);
+        activeMenu.classList.add('text-blue-900', 'bg-blue-50');
+        activeMenu.classList.remove('text-gray-600', 'hover:bg-gray-100', 'hover:text-blue-900');
+    }
+
+    function toggleFaq(index) {
+        const body = document.getElementById('faq-body-' + index);
+        const icon = document.getElementById('faq-icon-' + index);
+        body.classList.toggle('hidden');
+        icon.classList.toggle('rotate-180');
+    }
+</script>
+
+{% endblock %}

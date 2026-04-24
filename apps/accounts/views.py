@@ -1,21 +1,15 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-<<<<<<< HEAD
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
-=======
->>>>>>> origin/feature/services-models
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User, CitizenProfile, MEIProfile, Address
 from .serializers import (
     RegisterSerializer, UserSerializer, UserMeSerializer,
     CitizenProfileSerializer, MEIProfileSerializer, AddressSerializer
 )
-<<<<<<< HEAD
 from .permissions import IsCitizen, IsMEI, IsAdmin, IsOwner
-=======
->>>>>>> origin/feature/services-models
 
 
 class RegisterView(generics.CreateAPIView):
@@ -43,11 +37,7 @@ class UserMeView(generics.RetrieveUpdateAPIView):
     """Recupera e atualiza os dados do usuário autenticado (nome, telefone, avatar). Email e user_type são somente leitura."""
 
     serializer_class = UserMeSerializer
-<<<<<<< HEAD
     permission_classes = (IsAuthenticated, IsOwner)
-=======
-    permission_classes = (IsAuthenticated,)
->>>>>>> origin/feature/services-models
 
     def get_object(self):
         return self.request.user
@@ -57,11 +47,7 @@ class CitizenProfileMeView(generics.RetrieveUpdateAPIView):
     """Recupera e atualiza o perfil de Cidadão do usuário autenticado. rating_avg e total_services_requested são somente leitura."""
 
     serializer_class = CitizenProfileSerializer
-<<<<<<< HEAD
     permission_classes = (IsAuthenticated, IsCitizen)
-=======
-    permission_classes = (IsAuthenticated,)
->>>>>>> origin/feature/services-models
 
     def get_object(self):
         return self.request.user.citizen_profile
@@ -71,11 +57,7 @@ class MEIProfileMeView(generics.RetrieveUpdateAPIView):
     """Recupera e atualiza o perfil MEI do usuário autenticado. verification_status é gerenciado internamente e não pode ser alterado diretamente."""
 
     serializer_class = MEIProfileSerializer
-<<<<<<< HEAD
     permission_classes = (IsAuthenticated, IsMEI)
-=======
-    permission_classes = (IsAuthenticated,)
->>>>>>> origin/feature/services-models
 
     def get_object(self):
         return self.request.user.mei_profile
@@ -110,18 +92,10 @@ class AddressViewSet(generics.ListCreateAPIView):
     """Lista e cria endereços do usuário autenticado. O campo user é preenchido automaticamente com o usuário da requisição."""
 
     serializer_class = AddressSerializer
-<<<<<<< HEAD
     permission_classes = (IsAuthenticated, IsOwner)
-=======
-    permission_classes = (IsAuthenticated,)
->>>>>>> origin/feature/services-models
 
     def get_queryset(self):
         return Address.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-<<<<<<< HEAD
         serializer.save(user=self.request.user)
-=======
-        serializer.save(user=self.request.user)
->>>>>>> origin/feature/services-models
