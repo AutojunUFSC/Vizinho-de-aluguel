@@ -18,11 +18,8 @@
         <!-- STEPPER -->
         <div class="flex items-center justify-center gap-2 md:gap-4 mb-10">
 
-            <!-- Step 1 -->
             <div class="flex items-center gap-2">
-                <div id="step-circle-1" class="w-9 h-9 rounded-full bg-blue-900 text-white flex items-center justify-center text-sm font-bold shrink-0">
-                    1
-                </div>
+                <div id="step-circle-1" class="w-9 h-9 rounded-full bg-blue-900 text-white flex items-center justify-center text-sm font-bold shrink-0">1</div>
                 <span id="step-label-1" class="text-sm font-medium text-blue-900 hidden sm:inline">Categoria</span>
             </div>
 
@@ -30,11 +27,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
             </svg>
 
-            <!-- Step 2 -->
             <div class="flex items-center gap-2">
-                <div id="step-circle-2" class="w-9 h-9 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold shrink-0">
-                    2
-                </div>
+                <div id="step-circle-2" class="w-9 h-9 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold shrink-0">2</div>
                 <span id="step-label-2" class="text-sm font-medium text-gray-400 hidden sm:inline">Detalhes</span>
             </div>
 
@@ -42,11 +36,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
             </svg>
 
-            <!-- Step 3 -->
             <div class="flex items-center gap-2">
-                <div id="step-circle-3" class="w-9 h-9 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold shrink-0">
-                    3
-                </div>
+                <div id="step-circle-3" class="w-9 h-9 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold shrink-0">3</div>
                 <span id="step-label-3" class="text-sm font-medium text-gray-400 hidden sm:inline">Confirmar</span>
             </div>
 
@@ -58,54 +49,13 @@
             <p class="text-gray-500 text-sm text-center mb-8">Selecione a categoria que melhor descreve o serviço</p>
 
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8" id="categoria-grid">
-
-                <button onclick="selectCategoria(this, 'Elétrica')" class="categoria-card border-2 border-gray-200 rounded-xl p-5 flex flex-col items-center gap-3 hover:border-blue-700 hover:bg-blue-50 transition-all duration-150">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                    <span class="text-sm font-medium text-gray-700">Elétrica</span>
-                </button>
-
-                <button onclick="selectCategoria(this, 'Hidráulica')" class="categoria-card border-2 border-gray-200 rounded-xl p-5 flex flex-col items-center gap-3 hover:border-blue-700 hover:bg-blue-50 transition-all duration-150">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 2C6 8 4 12 4 15a8 8 0 0016 0c0-3-2-7-8-13z" />
-                    </svg>
-                    <span class="text-sm font-medium text-gray-700">Hidráulica</span>
-                </button>
-
-                <button onclick="selectCategoria(this, 'Pintura')" class="categoria-card border-2 border-gray-200 rounded-xl p-5 flex flex-col items-center gap-3 hover:border-blue-700 hover:bg-blue-50 transition-all duration-150">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h10a2 2 0 012 2v3M7 21h10a2 2 0 002-2v-3M7 21H5m14-7h2a2 2 0 110 4h-2" />
-                    </svg>
-                    <span class="text-sm font-medium text-gray-700">Pintura</span>
-                </button>
-
-                <button onclick="selectCategoria(this, 'Manutenção')" class="categoria-card border-2 border-gray-200 rounded-xl p-5 flex flex-col items-center gap-3 hover:border-blue-700 hover:bg-blue-50 transition-all duration-150">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <span class="text-sm font-medium text-gray-700">Manutenção</span>
-                </button>
-
-                <button onclick="selectCategoria(this, 'Montagem')" class="categoria-card border-2 border-gray-200 rounded-xl p-5 flex flex-col items-center gap-3 hover:border-blue-700 hover:bg-blue-50 transition-all duration-150">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                    <span class="text-sm font-medium text-gray-700">Montagem</span>
-                </button>
-
-                <button onclick="selectCategoria(this, 'Outros')" class="categoria-card border-2 border-gray-200 rounded-xl p-5 flex flex-col items-center gap-3 hover:border-blue-700 hover:bg-blue-50 transition-all duration-150">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
-                    </svg>
-                    <span class="text-sm font-medium text-gray-700">Outros</span>
-                </button>
-
+                <p class="col-span-full text-center text-sm text-gray-400 py-6">Carregando categorias...</p>
             </div>
 
             <div class="flex justify-end">
-                <button onclick="goToStep(2)" id="btn-continuar-1" class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 active:scale-95 rounded-lg shadow-sm transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+                <button id="btn-continuar-1" onclick="goToStep(2)"
+                    class="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 active:scale-95 rounded-lg shadow-sm transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+                    disabled>
                     Continuar
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -118,6 +68,9 @@
         <div id="step-2" class="hidden bg-white rounded-2xl border border-gray-200 shadow-sm p-6 md:p-8">
             <h2 class="text-lg md:text-xl font-bold text-blue-950 mb-1">Descreva o serviço</h2>
             <p class="text-gray-500 text-sm mb-6">Quanto mais detalhes, melhores serão as propostas dos profissionais</p>
+
+            <!-- Alerta de validação step 2 -->
+            <div id="alert-step2" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700"></div>
 
             <!-- Título -->
             <div class="mb-4">
@@ -133,18 +86,23 @@
                     class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"></textarea>
             </div>
 
-            <!-- Bairro -->
+            <!-- Endereço -->
             <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Bairro <span class="text-red-500">*</span></label>
-                <div class="relative">
-                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                    </span>
-                    <input id="input-bairro" type="text" placeholder="Ex: Centro, Trindade..."
-                        class="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Endereço do Serviço <span class="text-red-500">*</span></label>
+                <div id="address-loading" class="flex items-center gap-2 text-sm text-gray-400 py-2">
+                    <svg class="animate-spin w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                    </svg>
+                    Carregando endereços...
+                </div>
+                <select id="select-address"
+                    class="hidden w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                    <option value="">Selecione um endereço</option>
+                </select>
+                <div id="address-empty" class="hidden p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-700">
+                    Você não tem endereços cadastrados.
+                    <a href="/usuario/" class="font-semibold underline">Adicione um no seu perfil</a> antes de continuar.
                 </div>
             </div>
 
@@ -158,7 +116,7 @@
                             <p class="text-sm font-semibold text-blue-900">Urgente</p>
                             <p class="text-xs text-gray-500">Preciso para hoje ou amanhã</p>
                         </div>
-                        <input type="radio" name="urgencia" value="Urgente" class="accent-blue-700" checked>
+                        <input type="radio" name="urgencia" value="ALTA" class="accent-blue-700" checked>
                     </label>
 
                     <label class="urgencia-option flex items-center justify-between border-2 border-gray-200 rounded-lg px-4 py-3 cursor-pointer hover:border-blue-400 transition-all duration-150">
@@ -166,7 +124,7 @@
                             <p class="text-sm font-semibold text-gray-700">Esta Semana</p>
                             <p class="text-xs text-gray-500">Nos próximos 7 dias</p>
                         </div>
-                        <input type="radio" name="urgencia" value="Esta Semana" class="accent-blue-700">
+                        <input type="radio" name="urgencia" value="MEDIA" class="accent-blue-700">
                     </label>
 
                     <label class="urgencia-option flex items-center justify-between border-2 border-gray-200 rounded-lg px-4 py-3 cursor-pointer hover:border-blue-400 transition-all duration-150">
@@ -174,7 +132,7 @@
                             <p class="text-sm font-semibold text-gray-700">Flexível</p>
                             <p class="text-xs text-gray-500">Sem pressa, busco o melhor preço</p>
                         </div>
-                        <input type="radio" name="urgencia" value="Flexível" class="accent-blue-700">
+                        <input type="radio" name="urgencia" value="BAIXA" class="accent-blue-700">
                     </label>
 
                 </div>
@@ -182,7 +140,7 @@
 
             <!-- Fotos -->
             <div class="mb-8">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Fotos <span class="text-gray-400 font-normal">(opcional)</span></label>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Fotos <span class="text-gray-400 font-normal">(opcional, máx. 5)</span></label>
                 <p class="text-xs text-gray-500 mb-3">Adicione fotos para ajudar os profissionais a entenderem melhor o serviço</p>
                 <div id="fotos-container" class="flex gap-3 flex-wrap">
                     <label id="btn-add-foto" class="w-24 h-24 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-all duration-150">
@@ -199,7 +157,7 @@
                 <button onclick="goToStep(1)" class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 bg-white hover:border-blue-700 hover:text-blue-700 rounded-lg transition-all duration-150">
                     Voltar
                 </button>
-                <button onclick="goToStep(3)" class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 active:scale-95 rounded-lg shadow-sm transition-all duration-150">
+                <button onclick="tryGoToStep3()" class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 active:scale-95 rounded-lg shadow-sm transition-all duration-150">
                     Continuar
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -222,16 +180,16 @@
                 <h3 id="confirm-titulo" class="text-lg font-bold text-blue-950 mb-2"></h3>
                 <p id="confirm-descricao" class="text-sm text-gray-600 mb-3"></p>
                 <div class="flex items-center gap-1.5 text-sm text-gray-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    <span id="confirm-bairro"></span>, Florianópolis
+                    <span id="confirm-endereco"></span>
                 </div>
             </div>
 
             <!-- Como funciona -->
-            <div class="bg-blue-50 border border-blue-100 rounded-xl p-5 mb-8">
+            <div class="bg-blue-50 border border-blue-100 rounded-xl p-5 mb-6">
                 <div class="flex items-center gap-2 mb-4">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -263,11 +221,15 @@
                 </div>
             </div>
 
+            <!-- Erro de envio -->
+            <div id="alert-submit-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700 whitespace-pre-line"></div>
+
             <div class="flex justify-between">
                 <button onclick="goToStep(2)" class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 bg-white hover:border-blue-700 hover:text-blue-700 rounded-lg transition-all duration-150">
                     Voltar
                 </button>
-                <button class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 active:scale-95 rounded-lg shadow-sm transition-all duration-150">
+                <button id="btn-publicar" onclick="submitSolicitacao()"
+                    class="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 active:scale-95 rounded-lg shadow-sm transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
@@ -280,79 +242,191 @@
 </section>
 
 <script>
-    let categoriaSelected = null;
+    requireAuth();
 
-    // Selecionar categoria
-    function selectCategoria(btn, nome) {
+    // Estado global do formulário
+    let categoriaSelectedId   = null;
+    let categoriaSelectedNome = null;
+    let _addresses            = [];
+    let _selectedFiles        = [];
+
+    const URGENCY_LABELS = { ALTA: 'Urgente', MEDIA: 'Esta Semana', BAIXA: 'Flexível', EMERGENCIA: 'Emergência' };
+
+    // Inicialização paralela
+    (async function init() {
+        await Promise.all([loadCategories(), loadAddresses()]);
+    })();
+
+    // ── Categorias ──────────────────────────────────────────────────────────
+
+    async function loadCategories() {
+        const grid = document.getElementById('categoria-grid');
+        try {
+            const res  = await fetch('/api/v1/categories/', { headers: getAuthHeaders() });
+            if (res.status === 401) { logout(); return; }
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            const cats = Array.isArray(data) ? data : (data.results || []);
+
+            if (!cats.length) {
+                grid.innerHTML = '<p class="col-span-full text-center text-sm text-gray-400 py-6">Nenhuma categoria disponível no momento.</p>';
+                return;
+            }
+
+            grid.innerHTML = cats.map(cat => `
+                <button
+                    data-cat-id="${escHtml(cat.id)}"
+                    data-cat-nome="${escHtml(cat.name)}"
+                    class="categoria-card border-2 border-gray-200 rounded-xl p-5 flex flex-col items-center gap-3 hover:border-blue-700 hover:bg-blue-50 transition-all duration-150">
+                    <span class="text-2xl leading-none" aria-hidden="true">${cat.icon || '🔧'}</span>
+                    <span class="text-sm font-medium text-gray-700">${escHtml(cat.name)}</span>
+                </button>
+            `).join('');
+        } catch {
+            grid.innerHTML = '<p class="col-span-full text-center text-sm text-red-500 py-6">Erro ao carregar categorias. Recarregue a página.</p>';
+        }
+    }
+
+    // Delegação de evento para cards de categoria
+    document.getElementById('categoria-grid').addEventListener('click', function(e) {
+        const btn = e.target.closest('.categoria-card');
+        if (!btn) return;
+        selectCategoria(btn);
+    });
+
+    function selectCategoria(btn) {
         document.querySelectorAll('.categoria-card').forEach(c => {
             c.classList.remove('border-blue-700', 'bg-blue-50');
             c.classList.add('border-gray-200');
-            c.querySelector('svg').classList.remove('text-blue-700');
-            c.querySelector('svg').classList.add('text-gray-500');
-            c.querySelector('span').classList.remove('text-blue-900', 'font-semibold');
+            const label = c.querySelector('span:last-child');
+            if (label) { label.className = 'text-sm font-medium text-gray-700'; }
         });
 
         btn.classList.add('border-blue-700', 'bg-blue-50');
         btn.classList.remove('border-gray-200');
-        btn.querySelector('svg').classList.add('text-blue-700');
-        btn.querySelector('svg').classList.remove('text-gray-500');
-        btn.querySelector('span').classList.add('text-blue-900', 'font-semibold');
+        const label = btn.querySelector('span:last-child');
+        if (label) { label.className = 'text-sm font-semibold text-blue-900'; }
 
-        categoriaSelected = nome;
+        categoriaSelectedId   = btn.dataset.catId;
+        categoriaSelectedNome = btn.dataset.catNome;
         document.getElementById('btn-continuar-1').disabled = false;
     }
 
-    // Highlight de urgência
+    // ── Endereços ────────────────────────────────────────────────────────────
+
+    async function loadAddresses() {
+        const loading = document.getElementById('address-loading');
+        const select  = document.getElementById('select-address');
+        const empty   = document.getElementById('address-empty');
+        try {
+            const res  = await fetch('/api/v1/addresses/', { headers: getAuthHeaders() });
+            if (res.status === 401) { logout(); return; }
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            _addresses = Array.isArray(data) ? data : (data.results || []);
+
+            loading.classList.add('hidden');
+
+            if (!_addresses.length) {
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            select.innerHTML = '<option value="">Selecione um endereço</option>' +
+                _addresses.map(a => {
+                    const label = a.label || `${a.street}, ${a.number} — ${a.neighborhood}, ${a.city}`;
+                    return `<option value="${escHtml(a.id)}">${escHtml(label)}</option>`;
+                }).join('');
+            select.classList.remove('hidden');
+        } catch {
+            loading.textContent = 'Erro ao carregar endereços.';
+        }
+    }
+
+    // ── Urgência highlight ────────────────────────────────────────────────────
+
     document.querySelectorAll('input[name="urgencia"]').forEach(radio => {
         radio.addEventListener('change', () => {
             document.querySelectorAll('.urgencia-option').forEach(opt => {
                 opt.classList.remove('border-blue-700', 'bg-blue-50');
                 opt.classList.add('border-gray-200');
+                opt.querySelector('p').className = 'text-sm font-semibold text-gray-700';
             });
-            radio.closest('.urgencia-option').classList.add('border-blue-700', 'bg-blue-50');
-            radio.closest('.urgencia-option').classList.remove('border-gray-200');
+            const opt = radio.closest('.urgencia-option');
+            opt.classList.add('border-blue-700', 'bg-blue-50');
+            opt.classList.remove('border-gray-200');
+            opt.querySelector('p').className = 'text-sm font-semibold text-blue-900';
         });
     });
+
+    // ── Fotos ────────────────────────────────────────────────────────────────
 
     function handleFotos(input) {
-    const container = document.getElementById('fotos-container');
-    const btnAdd = document.getElementById('btn-add-foto');
+        const MAX = 5;
+        const container = document.getElementById('fotos-container');
+        const btnAdd    = document.getElementById('btn-add-foto');
 
-    Array.from(input.files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'relative w-24 h-24 rounded-xl overflow-hidden border border-gray-200 shrink-0';
+        Array.from(input.files).forEach(file => {
+            if (_selectedFiles.length >= MAX) return;
+            _selectedFiles.push(file);
+            const fileRef = file;
 
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.className = 'w-full h-full object-cover';
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'relative w-24 h-24 rounded-xl overflow-hidden border border-gray-200 shrink-0';
 
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs leading-none hover:bg-red-600';
-            btn.innerHTML = '×';
-            btn.onclick = () => wrapper.remove();
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'w-full h-full object-cover';
 
-            wrapper.appendChild(img);
-            wrapper.appendChild(btn);
-            container.insertBefore(wrapper, btnAdd);
-        };
-        reader.readAsDataURL(file);
-    });
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs leading-none hover:bg-red-600';
+                removeBtn.innerHTML = '&times;';
+                removeBtn.onclick = () => {
+                    _selectedFiles = _selectedFiles.filter(f => f !== fileRef);
+                    wrapper.remove();
+                    if (_selectedFiles.length < MAX) btnAdd.classList.remove('hidden');
+                };
 
-    // Limpa o input para permitir re-selecionar o mesmo arquivo
-    input.value = '';
-}
-
-    // Navegação entre steps
-    function goToStep(n) {
-        [1, 2, 3].forEach(i => {
-            document.getElementById('step-' + i).classList.add('hidden');
+                wrapper.appendChild(img);
+                wrapper.appendChild(removeBtn);
+                container.insertBefore(wrapper, btnAdd);
+            };
+            reader.readAsDataURL(file);
         });
+
+        if (_selectedFiles.length >= MAX) btnAdd.classList.add('hidden');
+        input.value = '';
+    }
+
+    // ── Navegação entre steps ─────────────────────────────────────────────────
+
+    function tryGoToStep3() {
+        const title   = document.getElementById('input-titulo').value.trim();
+        const desc    = document.getElementById('input-descricao').value.trim();
+        const addr    = document.getElementById('select-address').value;
+        const alert2  = document.getElementById('alert-step2');
+        const errors  = [];
+
+        if (!title)   errors.push('Preencha o título do serviço.');
+        if (!desc)    errors.push('Preencha a descrição.');
+        if (!addr)    errors.push('Selecione um endereço.');
+
+        if (errors.length) {
+            alert2.textContent = errors.join(' ');
+            alert2.classList.remove('hidden');
+            return;
+        }
+        alert2.classList.add('hidden');
+        goToStep(3);
+    }
+
+    function goToStep(n) {
+        [1, 2, 3].forEach(i => document.getElementById('step-' + i).classList.add('hidden'));
         document.getElementById('step-' + n).classList.remove('hidden');
         updateStepper(n);
-
         if (n === 3) fillConfirmation();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -360,34 +434,97 @@
     function updateStepper(current) {
         [1, 2, 3].forEach(i => {
             const circle = document.getElementById('step-circle-' + i);
-            const label = document.getElementById('step-label-' + i);
-
+            const lbl    = document.getElementById('step-label-' + i);
             if (i < current) {
-                // Concluído
                 circle.className = 'w-9 h-9 rounded-full bg-blue-900 text-white flex items-center justify-center text-sm font-bold shrink-0';
                 circle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`;
-                label.className = 'text-sm font-medium text-blue-900 hidden sm:inline';
+                lbl.className = 'text-sm font-medium text-blue-900 hidden sm:inline';
             } else if (i === current) {
-                // Ativo
                 circle.className = 'w-9 h-9 rounded-full bg-blue-900 text-white flex items-center justify-center text-sm font-bold shrink-0';
                 circle.innerHTML = i;
-                label.className = 'text-sm font-medium text-blue-900 hidden sm:inline';
+                lbl.className = 'text-sm font-medium text-blue-900 hidden sm:inline';
             } else {
-                // Futuro
                 circle.className = 'w-9 h-9 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold shrink-0';
                 circle.innerHTML = i;
-                label.className = 'text-sm font-medium text-gray-400 hidden sm:inline';
+                lbl.className = 'text-sm font-medium text-gray-400 hidden sm:inline';
             }
         });
     }
 
     function fillConfirmation() {
-        document.getElementById('confirm-categoria').textContent = categoriaSelected || 'Outros';
-        document.getElementById('confirm-titulo').textContent = document.getElementById('input-titulo').value || '(sem título)';
-        document.getElementById('confirm-descricao').textContent = document.getElementById('input-descricao').value || '(sem descrição)';
-        document.getElementById('confirm-bairro').textContent = document.getElementById('input-bairro').value || '(sem bairro)';
-        const urgencia = document.querySelector('input[name="urgencia"]:checked');
-        document.getElementById('confirm-urgencia').textContent = urgencia ? urgencia.value : '';
+        const urgencyVal = document.querySelector('input[name="urgencia"]:checked').value;
+        const addressId  = document.getElementById('select-address').value;
+        const address    = _addresses.find(a => a.id === addressId);
+        const addrLabel  = address
+            ? (address.label || `${address.street}, ${address.number} — ${address.neighborhood}, ${address.city}`)
+            : '';
+
+        document.getElementById('confirm-categoria').textContent  = categoriaSelectedNome || '';
+        document.getElementById('confirm-titulo').textContent     = document.getElementById('input-titulo').value || '(sem título)';
+        document.getElementById('confirm-descricao').textContent  = document.getElementById('input-descricao').value || '';
+        document.getElementById('confirm-urgencia').textContent   = URGENCY_LABELS[urgencyVal] || urgencyVal;
+        document.getElementById('confirm-endereco').textContent   = addrLabel;
+    }
+
+    // ── Envio ─────────────────────────────────────────────────────────────────
+
+    async function submitSolicitacao() {
+        const btn      = document.getElementById('btn-publicar');
+        const alertErr = document.getElementById('alert-submit-error');
+
+        btn.disabled    = true;
+        btn.innerHTML   = '<svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg> Publicando...';
+        alertErr.classList.add('hidden');
+
+        const body = {
+            title:       document.getElementById('input-titulo').value.trim(),
+            description: document.getElementById('input-descricao').value.trim(),
+            category:    categoriaSelectedId,
+            address:     document.getElementById('select-address').value,
+            urgency:     document.querySelector('input[name="urgencia"]:checked').value,
+        };
+
+        try {
+            const res  = await fetch('/api/v1/service-requests/', {
+                method:  'POST',
+                headers: Object.assign({ 'Content-Type': 'application/json' }, getAuthHeaders()),
+                body:    JSON.stringify(body),
+            });
+
+            if (res.status === 401) { logout(); return; }
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                alertErr.textContent = parseApiErrors(data) || 'Erro ao criar solicitação.';
+                alertErr.classList.remove('hidden');
+                return;
+            }
+
+            // Upload de fotos (ignora erros individuais para não bloquear)
+            if (_selectedFiles.length > 0) {
+                for (const [i, file] of _selectedFiles.entries()) {
+                    const fd = new FormData();
+                    fd.append('file', file);
+                    fd.append('media_type', 'IMAGE');
+                    fd.append('order', i);
+                    await fetch(`/api/v1/service-requests/${data.id}/media/`, {
+                        method:  'POST',
+                        headers: getAuthHeaders(),
+                        body:    fd,
+                    }).catch(() => {});
+                }
+            }
+
+            window.location.href = '/home-usuario/';
+
+        } catch {
+            alertErr.textContent = 'Erro de conexão. Verifique sua internet e tente novamente.';
+            alertErr.classList.remove('hidden');
+        } finally {
+            btn.disabled  = false;
+            btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg> Publicar Solicitação';
+        }
     }
 </script>
 

@@ -42,6 +42,15 @@ function redirectByUserType(userType) {
     }
 }
 
+function escHtml(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 function parseApiErrors(data) {
     if (typeof data === 'string') return data;
     const messages = [];
