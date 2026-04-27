@@ -7,7 +7,7 @@
 <!-- HEADER DA PÁGINA -->
 <section class="bg-blue-900 text-white">
     <div class="max-w-7xl mx-auto px-8 py-10">
-        <h1 class="text-3xl font-bold">Olá, João!</h1>
+        <h1 class="text-3xl font-bold" id="greeting">Carregando…</h1>
         <p class="text-blue-300 mt-1">Gerencie seus serviços e solicitações</p>
     </div>
 </section>
@@ -35,143 +35,44 @@
         <!-- ABA: MINHAS SOLICITAÇÕES -->
         <div id="content-solicitacoes">
 
-            <!-- Cabeçalho da seção -->
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-xl font-bold text-blue-950">Histórico de Serviços</h2>
-                <div class="flex gap-3">
-                    <button class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-900 border border-gray-300 rounded-lg bg-white hover:border-blue-700 transition-all duration-150">
-                        Ver Todas
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                    </button>
-                    <a href="{% url 'nova_solicitacao' %}" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 active:scale-95 rounded-lg shadow-sm transition-all duration-150">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                        </svg>
-                        Nova Solicitação
-                    </a>
-                </div>
+                <a href="{% url 'nova_solicitacao' %}"
+                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 active:scale-95 rounded-lg shadow-sm transition-all duration-150">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Nova Solicitação
+                </a>
             </div>
 
-            <!-- Card: Concluído -->
-            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-4">
-                <div class="flex items-start justify-between">
-                    <div>
-                        <div class="flex items-center gap-3 mb-3">
-                            <span class="font-semibold text-blue-950 text-lg">Reparo Elétrico</span>
-                            <span class="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold bg-green-100 text-green-700 rounded-full">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                </svg>
-                                Concluído
-                            </span>
-                        </div>
-                        <p class="text-sm text-gray-500 mb-1">
-                            <span class="text-blue-700 font-medium">Profissional:</span> Carlos Silva
-                        </p>
-                        <div class="flex items-center gap-4 text-sm text-gray-500 mt-2">
-                            <span class="inline-flex items-center gap-1.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                15/01/2024 às 14:00
-                            </span>
-                            <span class="inline-flex items-center gap-1.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                                Centro, Florianópolis
-                            </span>
-                        </div>
-                        <div class="flex gap-1 mt-3">
-                            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                        </div>
-                    </div>
-                </div>
+            <!-- Loading -->
+            <div id="loading-sol" class="text-center py-16 text-gray-400">
+                <svg class="w-8 h-8 animate-spin mx-auto mb-3 text-blue-300" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                </svg>
+                Carregando solicitações…
             </div>
 
-            <!-- Card: Agendado -->
-            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-4">
-                <div class="flex items-start justify-between">
-                    <div>
-                        <div class="flex items-center gap-3 mb-3">
-                            <span class="font-semibold text-blue-950 text-lg">Instalação de Torneira</span>
-                            <span class="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold bg-blue-100 text-blue-700 rounded-full">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                Agendado
-                            </span>
-                        </div>
-                        <p class="text-sm text-gray-500 mb-1">
-                            <span class="text-blue-700 font-medium">Profissional:</span> Roberto Santos
-                        </p>
-                        <div class="flex items-center gap-4 text-sm text-gray-500 mt-2">
-                            <span class="inline-flex items-center gap-1.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                20/01/2024 às 09:00
-                            </span>
-                            <span class="inline-flex items-center gap-1.5">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                                Trindade, Florianópolis
-                            </span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2 shrink-0 ml-4">
-                        <button class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg bg-white hover:border-blue-700 hover:text-blue-700 transition-all duration-150">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                            </svg>
-                            Chat
-                        </button>
-                        <button class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 active:scale-95 rounded-lg transition-all duration-150">
-                            Cancelar
-                        </button>
-                    </div>
-                </div>
+            <!-- Lista dinâmica -->
+            <div id="lista-sol" class="hidden"></div>
+
+            <!-- Empty state -->
+            <div id="empty-sol" class="hidden text-center py-16">
+                <svg class="w-14 h-14 text-gray-200 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                <p class="text-gray-500 font-medium">Nenhuma solicitação ainda</p>
+                <p class="text-gray-400 text-sm mt-1 mb-4">Crie sua primeira solicitação de serviço</p>
+                <a href="{% url 'nova_solicitacao' %}"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 rounded-lg shadow-sm transition-all duration-150">
+                    Criar Solicitação
+                </a>
             </div>
 
-            <!-- Card: Cancelado -->
-            <div class="bg-white rounded-xl border border-gray-200 p-6 mb-4 opacity-75">
-                <div class="flex items-center gap-3 mb-3">
-                    <span class="font-semibold text-blue-950 text-lg">Pintura de Quarto</span>
-                    <span class="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold bg-red-100 text-red-600 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                        Cancelado
-                    </span>
-                </div>
-                <p class="text-sm text-gray-500 mb-1">
-                    <span class="text-blue-700 font-medium">Profissional:</span> Fernando Costa
-                </p>
-                <div class="flex items-center gap-4 text-sm text-gray-500 mt-2">
-                    <span class="inline-flex items-center gap-1.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        10/01/2024 às 08:00
-                    </span>
-                    <span class="inline-flex items-center gap-1.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        Ingleses, Florianópolis
-                    </span>
-                </div>
-            </div>
+            <!-- Error state -->
+            <div id="error-sol" class="hidden p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600"></div>
 
         </div>
 
@@ -181,40 +82,33 @@
                 <h2 class="text-xl font-bold text-blue-950">Informações Pessoais</h2>
                 <p class="text-gray-500 text-sm mt-1 mb-8">Atualize seus dados cadastrais</p>
 
+                <div id="perfil-alert" class="hidden mb-5 p-3 rounded-lg text-sm"></div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
-                        <input type="text" value="João da Silva"
+                        <input id="perfil-nome" type="text"
                             class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-                        <input type="email" value="joao@email.com"
+                        <input id="perfil-email" type="email"
                             class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
-                        <input type="tel" value="(48) 99999-9999"
+                        <input id="perfil-phone" type="tel"
                             class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">CPF</label>
-                        <input type="text" placeholder="123.456.789-00"
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-400 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
-                    </div>
-                </div>
-
-                <div class="mb-8">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Endereço</label>
-                    <input type="text" value="Rua das Flores, 123 - Centro, Florianópolis/SC"
-                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                 </div>
 
                 <div class="flex gap-3">
-                    <button class="px-6 py-2.5 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 active:scale-95 rounded-lg shadow-sm transition-all duration-150">
+                    <button id="btn-salvar" onclick="salvarPerfil()"
+                        class="px-6 py-2.5 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 active:scale-95 rounded-lg shadow-sm transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed">
                         Salvar Alterações
                     </button>
-                    <button class="px-6 py-2.5 text-sm font-semibold text-gray-600 border border-gray-300 bg-white hover:border-red-400 hover:text-red-500 rounded-lg transition-all duration-150">
+                    <button onclick="logout()"
+                        class="px-6 py-2.5 text-sm font-semibold text-gray-600 border border-gray-300 bg-white hover:border-red-400 hover:text-red-500 rounded-lg transition-all duration-150">
                         Sair da Conta
                     </button>
                 </div>
@@ -225,30 +119,226 @@
 </section>
 
 <script>
+    requireAuth();
+
+    // Ordens carregadas — acessíveis pelos handlers de ação
+    let _ordersMap = {};
+
+    // --- Tabs ---
     function showTab(tab) {
-        const isSolicitacoes = tab === 'solicitacoes';
+        const isSol = tab === 'solicitacoes';
+        document.getElementById('content-solicitacoes').classList.toggle('hidden', !isSol);
+        document.getElementById('content-perfil').classList.toggle('hidden', isSol);
 
-        document.getElementById('content-solicitacoes').classList.toggle('hidden', !isSolicitacoes);
-        document.getElementById('content-perfil').classList.toggle('hidden', isSolicitacoes);
-
-        const btnSol = document.getElementById('tab-solicitacoes');
+        const btnSol    = document.getElementById('tab-solicitacoes');
         const btnPerfil = document.getElementById('tab-perfil');
+        const active    = ['border-blue-900', 'text-blue-900', 'shadow-sm'];
+        const inactive  = ['border-gray-300', 'text-gray-500', 'hover:border-blue-900', 'hover:text-blue-900'];
 
-        const active = ['border-blue-900', 'text-blue-900', 'shadow-sm'];
-        const inactive = ['border-gray-300', 'text-gray-500', 'hover:border-blue-900', 'hover:text-blue-900'];
-
-        if (isSolicitacoes) {
-            btnSol.classList.add(...active);
-            btnSol.classList.remove(...inactive);
-            btnPerfil.classList.remove(...active);
-            btnPerfil.classList.add(...inactive);
+        if (isSol) {
+            btnSol.classList.add(...active);       btnSol.classList.remove(...inactive);
+            btnPerfil.classList.remove(...active); btnPerfil.classList.add(...inactive);
         } else {
-            btnPerfil.classList.add(...active);
-            btnPerfil.classList.remove(...inactive);
-            btnSol.classList.remove(...active);
-            btnSol.classList.add(...inactive);
+            btnPerfil.classList.add(...active);   btnPerfil.classList.remove(...inactive);
+            btnSol.classList.remove(...active);   btnSol.classList.add(...inactive);
         }
     }
+
+    // --- Helpers de status ---
+    const STATUS = {
+        OPEN:        { label: 'Aberto',        cls: 'bg-gray-100 text-gray-600' },
+        IN_AUCTION:  { label: 'Em Leilão',     cls: 'bg-yellow-100 text-yellow-700' },
+        AWARDED:     { label: 'Lance Aceito',  cls: 'bg-indigo-100 text-indigo-700' },
+        IN_PROGRESS: { label: 'Em Andamento',  cls: 'bg-blue-100 text-blue-700' },
+        COMPLETED:   { label: 'Concluído',     cls: 'bg-green-100 text-green-700' },
+        CANCELLED:   { label: 'Cancelado',     cls: 'bg-red-100 text-red-600' },
+    };
+
+    function fmtDate(str) {
+        if (!str) return '';
+        return new Date(str).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+
+    function meiName(order) {
+        if (!order) return null;
+        const mp = order.mei_profile;
+        if (typeof mp === 'object' && mp !== null) {
+            return mp.user?.full_name || mp.nome_fantasia || null;
+        }
+        return 'Profissional atribuído';
+    }
+
+    function buildCard(req) {
+        const s      = STATUS[req.status] || { label: req.status, cls: 'bg-gray-100 text-gray-600' };
+        const order  = _ordersMap[req.id];
+        const cat    = req.category?.name || '';
+        const addr   = req.address
+            ? [req.address.neighborhood, req.address.city].filter(Boolean).join(', ')
+            : '';
+        const date   = fmtDate(req.created_at);
+        const mei    = meiName(order);
+        const dimmed = req.status === 'CANCELLED' ? 'opacity-75' : '';
+
+        return `
+        <div class="bg-white rounded-xl border border-gray-200 p-6 mb-4 ${dimmed}">
+            <div class="flex items-start justify-between gap-4">
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-3 mb-3 flex-wrap">
+                        <span class="font-semibold text-blue-950 text-lg">${escHtml(req.title)}</span>
+                        <span class="inline-flex items-center px-3 py-1 text-xs font-semibold rounded-full ${s.cls}">${s.label}</span>
+                        ${cat ? `<span class="text-xs text-gray-400">${escHtml(cat)}</span>` : ''}
+                    </div>
+                    ${mei ? `<p class="text-sm text-gray-500 mb-1"><span class="text-blue-700 font-medium">Profissional:</span> ${escHtml(mei)}</p>` : ''}
+                    <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 mt-2">
+                        ${date ? `<span class="inline-flex items-center gap-1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>${date}
+                        </span>` : ''}
+                        ${addr ? `<span class="inline-flex items-center gap-1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>${escHtml(addr)}
+                        </span>` : ''}
+                    </div>
+                </div>
+                ${buildActions(req, order)}
+            </div>
+        </div>`;
+    }
+
+    function buildActions(req, order) {
+        if (req.status === 'OPEN' || req.status === 'IN_AUCTION') {
+            return `<div class="shrink-0">
+                <a href="{% url 'minhas_solicitacoes' %}"
+                    class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg bg-white hover:border-blue-700 hover:text-blue-700 transition-all duration-150">
+                    Ver Lances
+                </a>
+            </div>`;
+        }
+        if (req.status === 'IN_PROGRESS' && order) {
+            return `<div class="shrink-0">
+                <button onclick="confirmarConclusao('${escHtml(order.id)}')"
+                    class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 active:scale-95 rounded-lg transition-all duration-150">
+                    Confirmar Conclusão
+                </button>
+            </div>`;
+        }
+        return '';
+    }
+
+    function escHtml(str) {
+        return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // --- Carregamento ---
+    async function loadPage() {
+        const h = getAuthHeaders();
+        try {
+            const [userRes, reqRes, ordRes] = await Promise.all([
+                fetch('/api/v1/users/me/',               { headers: h }),
+                fetch('/api/v1/service-requests/mine/',  { headers: h }),
+                fetch('/api/v1/service-orders/mine/',    { headers: h }),
+            ]);
+
+            if (userRes.status === 401) { logout(); return; }
+
+            const user    = await userRes.json();
+            const reqData = await reqRes.json();
+            const ordData = await ordRes.json();
+
+            // Saudação
+            const firstName = (user.full_name || 'Usuário').split(' ')[0];
+            document.getElementById('greeting').textContent = `Olá, ${firstName}!`;
+
+            // Prefill perfil
+            document.getElementById('perfil-nome').value  = user.full_name || '';
+            document.getElementById('perfil-email').value = user.email     || '';
+            document.getElementById('perfil-phone').value = user.phone     || '';
+
+            // Mapa de ordens: service_request (UUID) → order
+            const orders = ordData.results ?? (Array.isArray(ordData) ? ordData : []);
+            orders.forEach(o => { _ordersMap[o.service_request] = o; });
+
+            // Renderizar solicitações
+            const requests = reqData.results ?? (Array.isArray(reqData) ? reqData : []);
+            document.getElementById('loading-sol').classList.add('hidden');
+
+            if (requests.length === 0) {
+                document.getElementById('empty-sol').classList.remove('hidden');
+            } else {
+                const lista = document.getElementById('lista-sol');
+                lista.innerHTML = requests.map(buildCard).join('');
+                lista.classList.remove('hidden');
+            }
+
+        } catch {
+            document.getElementById('loading-sol').classList.add('hidden');
+            const errEl = document.getElementById('error-sol');
+            errEl.textContent = 'Erro ao carregar dados. Verifique sua conexão e tente novamente.';
+            errEl.classList.remove('hidden');
+        }
+    }
+
+    // --- Salvar perfil ---
+    async function salvarPerfil() {
+        const btn   = document.getElementById('btn-salvar');
+        const alert = document.getElementById('perfil-alert');
+        alert.classList.add('hidden');
+        btn.disabled    = true;
+        btn.textContent = 'Salvando…';
+
+        try {
+            const res = await fetch('/api/v1/users/me/', {
+                method:  'PATCH',
+                headers: Object.assign({ 'Content-Type': 'application/json' }, getAuthHeaders()),
+                body: JSON.stringify({
+                    full_name: document.getElementById('perfil-nome').value.trim(),
+                    email:     document.getElementById('perfil-email').value.trim(),
+                    phone:     document.getElementById('perfil-phone').value.trim(),
+                }),
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                const firstName = (data.full_name || '').split(' ')[0];
+                document.getElementById('greeting').textContent = `Olá, ${firstName}!`;
+                alert.className = 'mb-5 p-3 rounded-lg text-sm bg-green-50 border border-green-200 text-green-700';
+                alert.textContent = 'Dados salvos com sucesso!';
+            } else {
+                alert.className = 'mb-5 p-3 rounded-lg text-sm bg-red-50 border border-red-200 text-red-600';
+                alert.textContent = parseApiErrors(data) || 'Erro ao salvar. Tente novamente.';
+            }
+            alert.classList.remove('hidden');
+        } catch {
+            alert.className = 'mb-5 p-3 rounded-lg text-sm bg-red-50 border border-red-200 text-red-600';
+            alert.textContent = 'Erro de conexão.';
+            alert.classList.remove('hidden');
+        } finally {
+            btn.disabled    = false;
+            btn.textContent = 'Salvar Alterações';
+        }
+    }
+
+    // --- Confirmar conclusão ---
+    async function confirmarConclusao(orderId) {
+        const res = await fetch(`/api/v1/service-orders/${orderId}/confirm/`, {
+            method:  'POST',
+            headers: getAuthHeaders(),
+        });
+        if (res.ok) {
+            _ordersMap = {};
+            document.getElementById('lista-sol').classList.add('hidden');
+            document.getElementById('loading-sol').classList.remove('hidden');
+            loadPage();
+        } else {
+            const data = await res.json();
+            alert(parseApiErrors(data) || 'Não foi possível confirmar a conclusão.');
+        }
+    }
+
+    loadPage();
 </script>
 
 {% endblock %}
