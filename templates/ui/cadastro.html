@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Área do Cliente{% endblock %}
+{% block title %}Cadastro — Vizinho de Aluguel{% endblock %}
 
 {% block content %}
 
@@ -12,117 +12,234 @@
             <div class="flex justify-center mb-5">
                 <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                     </svg>
                 </div>
             </div>
 
             <!-- Título -->
-            <h1 class="text-2xl font-bold text-blue-950 text-center">Área do Cliente</h1>
-            <p class="text-gray-500 text-sm text-center mt-1 mb-6">Entre com sua conta para acessar seus serviços</p>
+            <h1 class="text-2xl font-bold text-blue-950 text-center">Criar Conta</h1>
+            <p class="text-gray-500 text-sm text-center mt-1 mb-6">Preencha os dados abaixo para se cadastrar</p>
 
-            <!-- Tabs -->
-            <div class="flex rounded-lg border border-gray-200 p-1 mb-6 bg-gray-50">
-                <button
-                    id="tab-entrar"
-                    onclick="showTab('entrar')"
-                    class="flex-1 py-2 text-sm font-semibold rounded-md transition-all duration-150 bg-white text-blue-900 shadow-sm">
-                    Entrar
-                </button>
-                <button
-                    id="tab-cadastrar"
-                    onclick="showTab('cadastrar')"
-                    class="flex-1 py-2 text-sm font-semibold rounded-md transition-all duration-150 text-gray-500 hover:text-gray-700">
-                    Cadastrar
-                </button>
-            </div>
+            <!-- Alerta de erro -->
+            <div id="alert-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700 whitespace-pre-line"></div>
 
-            <!-- Form: Entrar -->
-            <div id="form-entrar">
-                <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-                    <input
-                        type="email"
-                        placeholder="seu@email.com"
-                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
-                </div>
-                <div class="mb-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
-                    <input
-                        type="password"
-                        placeholder="••••••••"
-                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
-                </div>
-                <div class="text-right mb-6">
-                    <a href="#" class="text-sm text-blue-600 hover:underline">Esqueci minha senha</a>
-                </div>
-                <button class="w-full bg-blue-700 hover:bg-blue-800 active:scale-95 text-white font-semibold py-3 rounded-lg transition-all duration-150 shadow-sm">
-                    Entrar
-                </button>
-            </div>
+            <!-- Formulário -->
+            <form id="form-cadastro" onsubmit="handleCadastro(event)" novalidate>
 
-            <!-- Form: Cadastrar -->
-            <div id="form-cadastrar" class="hidden">
+                <!-- Tipo de usuário -->
+                <div class="mb-5">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Quero me cadastrar como</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label id="label-cidadao" class="flex items-center gap-2 p-3 rounded-lg border-2 border-blue-600 bg-blue-50 cursor-pointer transition">
+                            <input type="radio" name="user_type" value="CIDADAO" checked class="accent-blue-700">
+                            <span class="text-sm font-semibold text-blue-900">Cidadão</span>
+                        </label>
+                        <label id="label-mei" class="flex items-center gap-2 p-3 rounded-lg border-2 border-gray-200 bg-white cursor-pointer transition">
+                            <input type="radio" name="user_type" value="MEI" class="accent-blue-700">
+                            <span class="text-sm font-semibold text-gray-600">Profissional MEI</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Nome completo -->
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
                     <input
+                        id="cad-nome"
                         type="text"
                         placeholder="João da Silva"
+                        autocomplete="name"
+                        required
                         class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                 </div>
+
+                <!-- E-mail -->
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
                     <input
+                        id="cad-email"
                         type="email"
                         placeholder="seu@email.com"
+                        autocomplete="email"
+                        required
                         class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                 </div>
+
+                <!-- Telefone -->
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
                     <input
+                        id="cad-phone"
                         type="tel"
                         placeholder="(48) 99999-9999"
+                        autocomplete="tel"
+                        required
                         class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                 </div>
-                <div class="mb-6">
+
+                <!-- CPF -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">CPF</label>
+                    <input
+                        id="cad-cpf"
+                        type="text"
+                        placeholder="000.000.000-00"
+                        inputmode="numeric"
+                        maxlength="14"
+                        required
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                </div>
+
+                <!-- CNPJ (só MEI) -->
+                <div id="campo-cnpj" class="mb-4 hidden">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">CNPJ</label>
+                    <input
+                        id="cad-cnpj"
+                        type="text"
+                        placeholder="00.000.000/0001-00"
+                        inputmode="numeric"
+                        maxlength="18"
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                </div>
+
+                <!-- Senha -->
+                <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Senha</label>
                     <input
+                        id="cad-password"
                         type="password"
-                        placeholder="••••••••"
+                        placeholder="Mínimo 8 caracteres"
+                        autocomplete="new-password"
+                        required
                         class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                 </div>
-                <button class="w-full bg-blue-700 hover:bg-blue-800 active:scale-95 text-white font-semibold py-3 rounded-lg transition-all duration-150 shadow-sm">
+
+                <!-- Confirmar senha -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Confirmar Senha</label>
+                    <input
+                        id="cad-password-confirm"
+                        type="password"
+                        placeholder="Repita a senha"
+                        autocomplete="new-password"
+                        required
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                </div>
+
+                <button
+                    id="btn-cadastro"
+                    type="submit"
+                    class="w-full bg-blue-700 hover:bg-blue-800 active:scale-95 text-white font-semibold py-3 rounded-lg transition-all duration-150 shadow-sm disabled:opacity-60 disabled:cursor-not-allowed">
                     Criar Conta
                 </button>
-            </div>
+            </form>
+
+            <p class="text-center text-sm text-gray-500 mt-6">
+                Já tem conta?
+                <a href="{% url 'login' %}" class="text-blue-600 hover:underline font-medium">Entrar</a>
+            </p>
 
         </div>
     </div>
 </section>
 
 <script>
-    function showTab(tab) {
-        const isEntrar = tab === 'entrar';
+    redirectIfLogged();
 
-        document.getElementById('form-entrar').classList.toggle('hidden', !isEntrar);
-        document.getElementById('form-cadastrar').classList.toggle('hidden', isEntrar);
+    // Seletor visual de tipo de usuário
+    const radios = document.querySelectorAll('input[name="user_type"]');
+    radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            const isMei = radio.value === 'MEI';
+            document.getElementById('label-cidadao').className =
+                'flex items-center gap-2 p-3 rounded-lg border-2 cursor-pointer transition ' +
+                (!isMei ? 'border-blue-600 bg-blue-50' : 'border-gray-200 bg-white');
+            document.getElementById('label-mei').className =
+                'flex items-center gap-2 p-3 rounded-lg border-2 cursor-pointer transition ' +
+                (isMei ? 'border-blue-600 bg-blue-50' : 'border-gray-200 bg-white');
+            document.getElementById('label-cidadao').querySelector('span').className =
+                'text-sm font-semibold ' + (!isMei ? 'text-blue-900' : 'text-gray-600');
+            document.getElementById('label-mei').querySelector('span').className =
+                'text-sm font-semibold ' + (isMei ? 'text-blue-900' : 'text-gray-600');
+            document.getElementById('campo-cnpj').classList.toggle('hidden', !isMei);
+            document.getElementById('cad-cnpj').required = isMei;
+        });
+    });
 
-        const activeClasses = ['bg-white', 'text-blue-900', 'shadow-sm'];
-        const inactiveClasses = ['text-gray-500', 'hover:text-gray-700'];
+    // Máscara simples de CPF
+    document.getElementById('cad-cpf').addEventListener('input', function () {
+        let v = this.value.replace(/\D/g, '').slice(0, 11);
+        if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, '$1.$2.$3-$4');
+        else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
+        else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/, '$1.$2');
+        this.value = v;
+    });
 
-        const btnEntrar = document.getElementById('tab-entrar');
-        const btnCadastrar = document.getElementById('tab-cadastrar');
+    // Máscara simples de CNPJ
+    document.getElementById('cad-cnpj').addEventListener('input', function () {
+        let v = this.value.replace(/\D/g, '').slice(0, 14);
+        if (v.length > 12) v = v.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/, '$1.$2.$3/$4-$5');
+        else if (v.length > 8) v = v.replace(/(\d{2})(\d{3})(\d{3})(\d{0,4})/, '$1.$2.$3/$4');
+        else if (v.length > 5) v = v.replace(/(\d{2})(\d{3})(\d{0,3})/, '$1.$2.$3');
+        else if (v.length > 2) v = v.replace(/(\d{2})(\d{0,3})/, '$1.$2');
+        this.value = v;
+    });
 
-        if (isEntrar) {
-            btnEntrar.classList.add(...activeClasses);
-            btnEntrar.classList.remove(...inactiveClasses);
-            btnCadastrar.classList.remove(...activeClasses);
-            btnCadastrar.classList.add(...inactiveClasses);
-        } else {
-            btnCadastrar.classList.add(...activeClasses);
-            btnCadastrar.classList.remove(...inactiveClasses);
-            btnEntrar.classList.remove(...activeClasses);
-            btnEntrar.classList.add(...inactiveClasses);
+    async function handleCadastro(e) {
+        e.preventDefault();
+
+        const userType = document.querySelector('input[name="user_type"]:checked').value;
+        const password = document.getElementById('cad-password').value;
+        const confirm  = document.getElementById('cad-password-confirm').value;
+        const btn      = document.getElementById('btn-cadastro');
+        const alertErr = document.getElementById('alert-error');
+
+        alertErr.classList.add('hidden');
+
+        if (password !== confirm) {
+            alertErr.textContent = 'As senhas não coincidem.';
+            alertErr.classList.remove('hidden');
+            return;
+        }
+
+        const body = {
+            full_name:        document.getElementById('cad-nome').value.trim(),
+            email:            document.getElementById('cad-email').value.trim(),
+            phone:            document.getElementById('cad-phone').value.replace(/\D/g, ''),
+            cpf:              document.getElementById('cad-cpf').value.replace(/\D/g, ''),
+            password:         password,
+            password_confirm: confirm,
+            user_type:        userType,
+        };
+
+        if (userType === 'MEI') {
+            body.cnpj = document.getElementById('cad-cnpj').value.replace(/\D/g, '');
+        }
+
+        btn.disabled    = true;
+        btn.textContent = 'Criando conta…';
+
+        try {
+            const res  = await fetch('/api/v1/auth/register/', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify(body),
+            });
+            const data = await res.json();
+
+            if (res.ok || res.status === 201) {
+                window.location.href = '/login/?cadastro=ok';
+            } else {
+                alertErr.textContent = parseApiErrors(data) || 'Erro ao criar conta. Verifique os dados.';
+                alertErr.classList.remove('hidden');
+            }
+        } catch {
+            alertErr.textContent = 'Erro de conexão. Verifique sua internet e tente novamente.';
+            alertErr.classList.remove('hidden');
+        } finally {
+            btn.disabled    = false;
+            btn.textContent = 'Criar Conta';
         }
     }
 </script>

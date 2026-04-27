@@ -3,6 +3,9 @@ from django.shortcuts import render
 def home(request):
     return render(request, "ui/home.html")
 
+def login_view(request):
+    return render(request, "ui/login.html")
+
 def cadastro(request):
     return render(request, "ui/cadastro.html")
 
