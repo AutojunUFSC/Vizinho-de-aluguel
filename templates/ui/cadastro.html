@@ -230,21 +230,9 @@
                 return;
             }
 
-            // auto-login após cadastro
-            const loginRes  = await fetch('/api/v1/auth/login/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            });
-            const loginData = await loginRes.json();
-
-            if (loginRes.ok) {
-                localStorage.setItem('vda_token', loginData.access);
-                localStorage.setItem('vda_user_type', 'CIDADAO');
-                window.location.href = '/home-usuario/';
-            } else {
-                showTab('entrar');
-            }
+            localStorage.setItem('vda_token', data.tokens.access);
+            localStorage.setItem('vda_user_type', 'CIDADAO');
+            redirectByUserType('CIDADAO');
         } catch {
             showError('reg-error', 'Erro de conexão. Tente novamente.');
         } finally {

@@ -10,12 +10,12 @@ function getAuthHeaders() {
 function logout() {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_TYPE_KEY);
-    window.location.href = '/login/';
+    window.location.href = '/cadastro/';
 }
 
 function requireAuth() {
     if (!localStorage.getItem(TOKEN_KEY)) {
-        window.location.href = '/login/';
+        window.location.href = '/cadastro/';
     }
 }
 
@@ -27,9 +27,9 @@ function redirectIfLogged() {
 
 function redirectByUserType(userType) {
     if (userType === 'CIDADAO') {
-        window.location.href = '/home-usuario/';
+        window.location.href = '/usuario/';
     } else if (userType === 'MEI') {
-        window.location.href = '/feed/';
+        window.location.href = '/profissional/';
     } else {
         window.location.href = '/admin/';
     }
