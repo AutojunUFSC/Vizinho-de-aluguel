@@ -4,7 +4,7 @@ const USER_TYPE_KEY = 'vda_user_type';
 function getAuthHeaders() {
     const token = localStorage.getItem(TOKEN_KEY);
     if (!token) return {};
-    return { 'Authorization': 'Token ' + token };
+    return { 'Authorization': 'Bearer ' + token };
 }
 
 function logout() {

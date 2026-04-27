@@ -99,9 +99,14 @@
             const data = await res.json();
 
             if (res.ok) {
-                localStorage.setItem('vda_token',     data.token);
-                localStorage.setItem('vda_user_type', data.user_type);
-                redirectByUserType(data.user_type);
+                localStorage.setItem('vda_token', data.access);
+
+                const meRes  = await fetch('/api/v1/auth/users/me/', {
+                    headers: { 'Authorization': 'Bearer ' + data.access },
+                });
+                const meData = await meRes.json();
+                localStorage.setItem('vda_user_type', meData.user_type);
+                redirectByUserType(meData.user_type);
             } else {
                 alertErr.textContent = parseApiErrors(data) || 'E-mail ou senha inválidos.';
                 alertErr.classList.remove('hidden');
