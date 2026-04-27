@@ -11,6 +11,8 @@
 
     {% include "partials/header.html" %}
 
+    <script src="{% static 'js/auth.js' %}"></script>
+
     {% block content %}{% endblock %}
 
     {% include "partials/footer.html" %}
@@ -25,7 +27,5 @@
         mobileMenu.classList.toggle("max-h-screen");
       });
     </script>
-
-    <script src="{% static 'js/auth.js' %}"></script>
 </body>
 </html>
