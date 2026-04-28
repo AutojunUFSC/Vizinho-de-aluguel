@@ -1,28 +1,26 @@
 from django.urls import path
-from django.contrib.auth.views import PasswordResetDoneView
-from . import views
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from .views import (
+    RegisterView, UserMeView, CitizenProfileMeView,
+    MEIProfileMeView, MEIProfileDetailView, MEIProfileListView,
+    AddressViewSet
+)
 
 urlpatterns = [
     # Auth
-    path('login/', views.CustomLoginView.as_view(), name='login'),
-    path('logout/', views.CustomLogoutView.as_view(), name='logout'),
-    path('cadastro/cidadao/', views.register_citizen, name='register_citizen'),
-    path('cadastro/mei/', views.register_mei, name='register_mei'),
-    path('recuperar-senha/', views.CustomPasswordResetView.as_view(), name='password_reset'),
-    path('recuperar-senha/enviado/', PasswordResetDoneView.as_view(template_name='accounts/password_reset_done.html'), name='password_reset_done'),
-    path('resetar-senha/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('auth/register/', RegisterView.as_view(), name='register'),
+    path('auth/login/', TokenObtainPairView.as_view(), name='login'),
+    path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
-    # Dashboard
-    path('dashboard/', views.dashboard_citizen, name='dashboard_citizen'),
-    path('dashboard/mei/', views.dashboard_mei, name='dashboard_mei'),
+    # User
+    path('users/me/', UserMeView.as_view(), name='user_me'),
 
-    # Perfil
-    path('meu-perfil/', views.my_profile, name='my_profile'),
-    path('perfil/mei/<uuid:pk>/', views.mei_public_profile, name='mei_public_profile'),
-    path('perfil/cidadao/<uuid:pk>/', views.citizen_public_profile, name='citizen_public_profile'),
+    # Perfis
+    path('citizen-profiles/me/', CitizenProfileMeView.as_view(), name='citizen_profile_me'),
+    path('mei-profiles/me/', MEIProfileMeView.as_view(), name='mei_profile_me'),
+    path('mei-profiles/', MEIProfileListView.as_view(), name='mei_profile_list'),
+    path('mei-profiles/<uuid:pk>/', MEIProfileDetailView.as_view(), name='mei_profile_detail'),
 
     # Endereços
-    path('meu-perfil/enderecos/novo/', views.address_create, name='address_create'),
-    path('meu-perfil/enderecos/<uuid:pk>/editar/', views.address_update, name='address_update'),
-    path('meu-perfil/enderecos/<uuid:pk>/excluir/', views.address_delete, name='address_delete'),
+    path('addresses/', AddressViewSet.as_view(), name='addresses'),
 ]

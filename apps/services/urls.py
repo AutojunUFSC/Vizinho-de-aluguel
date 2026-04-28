@@ -1,19 +1,21 @@
-from django.urls import path
-from . import views
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import (
+    ServiceCategoryListView, ServiceCategoryDetailView,
+    ServiceRequestViewSet, ServiceRequestMediaView
+)
+
+router = DefaultRouter()
+router.register('service-requests', ServiceRequestViewSet, basename='service-request')
 
 urlpatterns = [
     # Categorias
-    path('categorias/', views.category_list, name='category_list'),
+    path('categories/', ServiceCategoryListView.as_view(), name='category_list'),
+    path('categories/<slug:slug>/', ServiceCategoryDetailView.as_view(), name='category_detail'),
 
-    # Solicitações (Cidadão)
-    path('solicitacoes/nova/', views.service_request_create, name='service_request_create'),
-    path('solicitacoes/<uuid:pk>/', views.service_request_detail, name='service_request_detail'),
-    path('solicitacoes/<uuid:pk>/editar/', views.service_request_update, name='service_request_update'),
-    path('solicitacoes/<uuid:pk>/cancelar/', views.service_request_cancel, name='service_request_cancel'),
-    path('solicitacoes/<uuid:pk>/aceitar/<uuid:bid_id>/', views.award_bid, name='award_bid'),
-    path('solicitacoes/<uuid:pk>/media/<uuid:media_id>/excluir/', views.media_delete, name='media_delete'),
+    # Service Requests
+    path('', include(router.urls)),
 
-    # Feed (MEI)
-    path('feed/', views.feed, name='feed'),
-    path('feed/<uuid:pk>/', views.feed_detail, name='feed_detail'),
+    # Mídia
+    path('service-requests/<uuid:request_pk>/media/', ServiceRequestMediaView.as_view(), name='service_request_media'),
 ]

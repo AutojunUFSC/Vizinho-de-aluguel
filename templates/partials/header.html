@@ -7,8 +7,8 @@
       <p>Prefeitura de Florianópolis - Serviços Domésticos</p>
 
       <div class="flex gap-4">
-        <a href="#" class="hover:underline">Área do Cliente</a>
-        <a href="#" class="hover:underline">Área do Profissional</a>
+        <a href="{% url 'home_usuario' %}" class="hover:underline">Área do Cliente</a>
+        <a href="{% url 'home_profissional' %}" class="hover:underline">Área do Profissional</a>
       </div>
     </div>
   </div>
@@ -69,23 +69,23 @@
 
       <!-- Menu -->
       <nav class="hidden md:flex gap-6 text-gray-700 font-medium">
-        <a href="#" class="hover:text-blue-900">Início</a>
-        <a href="#" class="hover:text-blue-900">Serviços</a>
-        <a href="#" class="hover:text-blue-900">Institucional</a>
+        <a href="{% url 'home' %}" class="hover:text-blue-900">Início</a>
+        <a href="{% url 'servicos' %}" class="hover:text-blue-900">Serviços</a>
+        <a href="{% url 'institucional' %}" class="hover:text-blue-900">Institucional</a>
         <a href="#" class="hover:text-blue-900">Contato</a>
       </nav>
 
       <!-- Actions -->
       <div class="hidden md:flex gap-3">
         <a
-          href="#"
+          href="{% url 'cadastro' %}"
           class="content-center border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-100"
         >
           Entrar
         </a>
 
         <a
-          href="#"
+          href="{% url 'nova_solicitacao' %}"
           class="content-center bg-blue-800 text-white px-4 py-2 rounded-md hover:bg-blue-900"
         >
           Solicitar Serviço
@@ -100,21 +100,21 @@
   >
     <div class="px-4 py-4 flex flex-col gap-4">
       <a
-        href="#"
+        href="{% url 'home' %}"
         class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200"
       >
         🏠 <span>Início</span>
       </a>
 
       <a
-        href="#"
+        href="{% url 'servicos' %}"
         class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200"
       >
         🛠 <span>Serviços</span>
       </a>
 
       <a
-        href="#"
+        href="{% url 'institucional' %}"
         class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200"
       >
         📄 <span>Institucional</span>
@@ -129,15 +129,15 @@
 
       <hr class="my-4" />
 
-      <a href="#" class="text-gray-600 hover:bg-gray-100 m:auto"
+      <a href="{% url 'home_usuario' %}" class="text-gray-600 hover:bg-gray-100 m:auto"
         >Área do Cliente</a
       >
-      <a href="#" class="text-gray-600 hover:bg-gray-100 m:auto"
+      <a href="{% url 'home_profissional' %}" class="text-gray-600 hover:bg-gray-100 m:auto"
         >Área do Profissional</a
       >
 
       <a
-        href="#"
+        href="{% url 'nova_solicitacao' %}"
         class="mt-4 bg-blue-800 text-white py-3 rounded-lg text-center hover:bg-blue-900"
       >
         Solicitar Serviço
