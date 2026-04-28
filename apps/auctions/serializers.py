@@ -15,13 +15,14 @@ class MEICategorySubscriptionSerializer(serializers.ModelSerializer):
 
 class BidSerializer(serializers.ModelSerializer):
     mei_name = serializers.CharField(source='mei_profile.user.full_name', read_only=True)
+    mei_rating = serializers.FloatField(source='mei_profile.rating_avg', read_only=True)
     service_request_title = serializers.CharField(source='service_request.title', read_only=True)
 
     class Meta:
         model = Bid
         fields = [
             'id', 'service_request', 'service_request_title',
-            'mei_profile', 'mei_name', 'amount', 'estimated_hours',
+            'mei_profile', 'mei_name', 'mei_rating', 'amount', 'estimated_hours',
             'proposed_deadline', 'notes', 'status', 'created_at',
         ]
         read_only_fields = ['id', 'mei_profile', 'status', 'created_at']

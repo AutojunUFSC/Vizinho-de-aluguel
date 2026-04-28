@@ -64,7 +64,23 @@ class BidViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return Bid.objects.filter(mei_profile=self.request.user.mei_profile)
+        user = self.request.user
+        service_request_id = self.request.query_params.get('service_request')
+
+        if user.user_type == 'MEI':
+            qs = Bid.objects.filter(mei_profile=user.mei_profile)
+            if service_request_id:
+                qs = qs.filter(service_request_id=service_request_id)
+            return qs
+
+        if user.user_type == 'CIDADAO' and service_request_id:
+            return Bid.objects.filter(
+                service_request_id=service_request_id,
+                service_request__citizen_profile=user.citizen_profile,
+                status='ACTIVE',
+            )
+
+        return Bid.objects.none()
 
     def perform_create(self, serializer):
         serializer.save(mei_profile=self.request.user.mei_profile)
