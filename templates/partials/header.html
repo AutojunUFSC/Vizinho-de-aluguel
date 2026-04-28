@@ -1,147 +1,144 @@
-<header>
-  <!-- Header azul em cima -->
-  <div class="bg-blue-900 text-white text-[12px] md:text-sm">
-    <div
-      class="max-w-7xl mx-auto px-4 py-2 flex flex-row gap-1 justify-between items-center"
-    >
-      <p>Prefeitura de Florianópolis - Serviços Domésticos</p>
+{% load static %}
+<header class="site-header">
 
-      <div class="flex gap-4">
-        <a href="{% url 'home_usuario' %}" class="hover:underline">Área do Cliente</a>
-        <a href="{% url 'home_profissional' %}" class="hover:underline">Área do Profissional</a>
+  {# ======== GovBar (institucional) ======== #}
+  <div class="gov-bar">
+    <div class="container gov-bar-inner">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span class="badge-oficial">Site Oficial</span>
+        <span class="gov-text hide-sm">Prefeitura Municipal de Florianópolis · Santa Catarina</span>
+      </div>
+      <div class="gov-links">
+        <a href="#a11y">Acessibilidade</a>
+        <span class="sep hide-xs">|</span>
+        <a href="#contraste" class="hide-xs">Alto contraste</a>
+        <span class="sep hide-xs">|</span>
+        <a href="#mapa" class="hide-xs">Mapa do site</a>
       </div>
     </div>
   </div>
 
-  <!-- Navbar principal em baixo -->
-  <div class="bg-white shadow-sm">
-    <div
-      class="max-w-7xl mx-auto px-4 py-4 flex flex-row gap-4 md:flex-row md:items-center justify-between"
-    >
-      <!-- Logo -->
-      <div class="flex items-center gap-3">
-        <div class="bg-blue-900 text-white p-2 rounded-md">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="lucide lucide-wrench w-7 h-7 text-primary-foreground"
-          >
-            <path
-              d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"
-            ></path>
-          </svg>
-        </div>
+  {# ======== Brand bar (PMF + Vizinho) ======== #}
+  <div class="brand-bar">
+    <div class="container brand-bar-inner">
+      <a href="{% url 'home' %}" class="brand-link brand-pmf" aria-label="Página inicial - Prefeitura de Florianópolis">
+        <img src="{% static 'images/logo-pmf-color.png' %}" alt="Prefeitura de Florianópolis">
+      </a>
 
-        <div>
-          <h1 class="font-semibold text-lg text-blue-900">
-            Vizinho de Aluguel
-          </h1>
-          <p class="text-sm text-gray-500">
-            Marketplace de Serviços Domésticos
-          </p>
-        </div>
-      </div>
+      <a href="{% url 'home' %}" class="brand-link brand-vizinho hide-md">
+        <img src="{% static 'images/logo-vizinho-color.png' %}" alt="Vizinho de Aluguel">
+      </a>
 
-      <!--Ícone hambúrguer -->
-      <button id="menuBtn" class="md:hidden text-blue-900">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-6 h-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16"
-          />
+      <button id="menuBtn" class="menu-toggle show-md" aria-label="Abrir menu" aria-expanded="false">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <path d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
       </button>
+    </div>
+  </div>
 
-      <!-- Menu -->
-      <nav class="hidden md:flex gap-6 text-gray-700 font-medium">
-        <a href="{% url 'home' %}" class="hover:text-blue-900">Início</a>
-        <a href="{% url 'servicos' %}" class="hover:text-blue-900">Serviços</a>
-        <a href="{% url 'institucional' %}" class="hover:text-blue-900">Institucional</a>
-        <a href="#" class="hover:text-blue-900">Contato</a>
-      </nav>
-
-      <!-- Actions -->
-      <div class="hidden md:flex gap-3">
-        <a
-          href="{% url 'cadastro' %}"
-          class="content-center border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-100"
-        >
-          Entrar
+  {# ======== Main nav (navy bar com links + ações) ======== #}
+  <nav class="main-nav hide-sm" aria-label="Navegação principal">
+    <div class="container main-nav-inner">
+      <div class="main-nav-links">
+        <a href="{% url 'home' %}" class="main-nav-link {% if request.resolver_match.url_name == 'home' %}is-active{% endif %}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+          Início
         </a>
-
-        <a
-          href="{% url 'nova_solicitacao' %}"
-          class="content-center bg-blue-800 text-white px-4 py-2 rounded-md hover:bg-blue-900"
-        >
-          Solicitar Serviço
+        <a href="{% url 'servicos' %}" class="main-nav-link {% if request.resolver_match.url_name == 'servicos' %}is-active{% endif %}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          Profissionais
+        </a>
+        <a href="{% url 'institucional' %}" class="main-nav-link {% if request.resolver_match.url_name == 'institucional' %}is-active{% endif %}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>
+          Institucional
         </a>
       </div>
+
+      <div class="main-nav-actions">
+        {% if user.is_authenticated %}
+          <div id="userMenu" class="user-menu">
+            <button id="userMenuBtn" type="button" class="user-menu-trigger" aria-haspopup="true" aria-expanded="false">
+              <span class="user-avatar-mini">
+                {% if user.full_name %}{{ user.full_name|slice:":1"|upper }}{% else %}{{ user.email|slice:":1"|upper }}{% endif %}
+              </span>
+              <span class="hide-md">{{ user.full_name|default:user.email }}</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="user-menu-dropdown" role="menu">
+              <div class="user-menu-head">
+                <div class="name">{{ user.full_name|default:user.email }}</div>
+                <div class="role">
+                  {% if user.user_type == 'CIDADAO' %}Cidadão · Florianópolis
+                  {% elif user.user_type == 'MEI' %}MEI · Profissional
+                  {% else %}Administrador
+                  {% endif %}
+                </div>
+              </div>
+              {% if user.user_type == 'MEI' %}
+                <a href="{% url 'home_profissional' %}" class="user-menu-item" role="menuitem">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+                  Painel do Profissional
+                </a>
+              {% else %}
+                <a href="{% url 'home_usuario' %}" class="user-menu-item" role="menuitem">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+                  Minha Área
+                </a>
+                <a href="{% url 'minhas_solicitacoes' %}" class="user-menu-item" role="menuitem">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+                  Minhas Solicitações
+                </a>
+              {% endif %}
+              <a href="{% url 'cadastro' %}?logout=1" class="user-menu-item is-danger" role="menuitem" onclick="if(window.logout){window.logout();return false;}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                Sair
+              </a>
+            </div>
+          </div>
+        {% else %}
+          <a href="{% url 'cadastro' %}" class="btn btn-sm btn-outline-light">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Entrar
+          </a>
+          <a href="{% url 'nova_solicitacao' %}" class="btn btn-sm btn-yellow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            Solicitar Serviço
+          </a>
+        {% endif %}
+      </div>
     </div>
+  </nav>
+
+  {# ======== Mobile menu ======== #}
+  <div id="mobileMenu" class="mobile-menu">
+    <a href="{% url 'home' %}" class="mobile-menu-link {% if request.resolver_match.url_name == 'home' %}is-active{% endif %}">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+      Início
+    </a>
+    <a href="{% url 'servicos' %}" class="mobile-menu-link {% if request.resolver_match.url_name == 'servicos' %}is-active{% endif %}">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      Profissionais
+    </a>
+    <a href="{% url 'institucional' %}" class="mobile-menu-link {% if request.resolver_match.url_name == 'institucional' %}is-active{% endif %}">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+      Institucional
+    </a>
+
+    <div class="mobile-menu-divider"></div>
+
+    {% if user.is_authenticated %}
+      {% if user.user_type == 'MEI' %}
+        <a href="{% url 'home_profissional' %}" class="mobile-menu-link">Painel do Profissional</a>
+      {% else %}
+        <a href="{% url 'home_usuario' %}" class="mobile-menu-link">Minha Área</a>
+        <a href="{% url 'minhas_solicitacoes' %}" class="mobile-menu-link">Minhas Solicitações</a>
+      {% endif %}
+      <a href="{% url 'cadastro' %}?logout=1" class="btn btn-block btn-secondary" style="margin-top:8px; border-color: var(--status-danger); color: var(--status-danger);">Sair</a>
+    {% else %}
+      <a href="{% url 'cadastro' %}" class="btn btn-block btn-secondary" style="margin-bottom:8px;">Entrar / Cadastrar</a>
+      <a href="{% url 'nova_solicitacao' %}" class="btn btn-block btn-yellow">Solicitar Serviço</a>
+    {% endif %}
   </div>
 
-  <div
-    id="mobileMenu"
-    class="md:hidden overflow-hidden transition-all duration-300 max-h-0"
-  >
-    <div class="px-4 py-4 flex flex-col gap-4">
-      <a
-        href="{% url 'home' %}"
-        class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200"
-      >
-        🏠 <span>Início</span>
-      </a>
-
-      <a
-        href="{% url 'servicos' %}"
-        class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200"
-      >
-        🛠 <span>Serviços</span>
-      </a>
-
-      <a
-        href="{% url 'institucional' %}"
-        class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200"
-      >
-        📄 <span>Institucional</span>
-      </a>
-
-      <a
-        href="#"
-        class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-200"
-      >
-        📞 <span>Contato</span>
-      </a>
-
-      <hr class="my-4" />
-
-      <a href="{% url 'home_usuario' %}" class="text-gray-600 hover:bg-gray-100 m:auto"
-        >Área do Cliente</a
-      >
-      <a href="{% url 'home_profissional' %}" class="text-gray-600 hover:bg-gray-100 m:auto"
-        >Área do Profissional</a
-      >
-
-      <a
-        href="{% url 'nova_solicitacao' %}"
-        class="mt-4 bg-blue-800 text-white py-3 rounded-lg text-center hover:bg-blue-900"
-      >
-        Solicitar Serviço
-      </a>
-    </div>
-  </div>
 </header>

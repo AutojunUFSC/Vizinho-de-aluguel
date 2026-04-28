@@ -1,311 +1,240 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Encontrar Profissionais — Vizinho de Aluguel{% endblock %}
+{% block title %}Encontrar profissionais — Vizinho de Aluguel{% endblock %}
 
 {% block content %}
+<main id="main">
 
-<!-- HEADER DA PÁGINA -->
-<section class="bg-blue-900 text-white">
-    <div class="max-w-7xl mx-auto px-8 py-10">
-        <h1 class="text-3xl font-bold">Encontrar Profissionais</h1>
-        <p class="text-blue-300 mt-1">Busque e filtre profissionais verificados para o seu serviço</p>
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li>Profissionais</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Encontrar profissionais</h1>
+          <p class="subtitle">Profissionais MEI cadastrados na Prefeitura de Florianópolis. Filtre por categoria, bairro e avaliação.</p>
+        </div>
+      </div>
     </div>
-</section>
+  </div>
 
-<section class="bg-gray-50 min-h-screen">
-    <div class="max-w-7xl mx-auto px-4 py-8">
+  <div class="container" style="padding: 32px 24px 60px;">
 
-        <!-- BARRA DE BUSCA + FILTROS -->
-        <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
-            <div class="flex flex-col md:flex-row gap-3">
-                <!-- Campo de busca -->
-                <div class="relative flex-1">
-                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z"/>
-                    </svg>
-                    <input type="text" id="search-input" oninput="filterProfissionais()"
-                        placeholder="Buscar por nome ou especialidade..."
-                        class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
-                </div>
-
-                <!-- Filtro: Categoria -->
-                <select id="filter-categoria" onchange="filterProfissionais()"
-                    class="px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white">
-                    <option value="">Todas as categorias</option>
-                    <option value="eletrica">Elétrica</option>
-                    <option value="hidraulica">Hidráulica</option>
-                    <option value="pintura">Pintura</option>
-                    <option value="manutencao">Manutenção</option>
-                    <option value="montagem">Montagem</option>
-                    <option value="outros">Outros</option>
-                </select>
-
-                <!-- Filtro: Disponibilidade -->
-                <select id="filter-disponivel" onchange="filterProfissionais()"
-                    class="px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white">
-                    <option value="">Disponibilidade</option>
-                    <option value="disponivel">Disponível agora</option>
-                    <option value="indisponivel">Indisponível</option>
-                </select>
-
-                <!-- Filtro: Avaliação -->
-                <select id="filter-avaliacao" onchange="filterProfissionais()"
-                    class="px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition bg-white">
-                    <option value="">Qualquer avaliação</option>
-                    <option value="4.5">4.5+ estrelas</option>
-                    <option value="4.0">4.0+ estrelas</option>
-                    <option value="3.0">3.0+ estrelas</option>
-                </select>
-
-                <button onclick="limparFiltros()"
-                    class="px-4 py-2.5 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg bg-white hover:border-red-400 hover:text-red-500 transition-all duration-150 whitespace-nowrap">
-                    Limpar filtros
-                </button>
-            </div>
-        </div>
-
-        <!-- RESULTADO -->
-        <div class="flex items-center justify-between mb-4">
-            <p id="result-count" class="text-sm text-gray-500">6 profissionais encontrados</p>
-            <select id="order-by" onchange="filterProfissionais()"
-                class="px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="avaliacao">Melhor avaliação</option>
-                <option value="nome">Nome (A-Z)</option>
-            </select>
-        </div>
-
-        <!-- LISTA DE PROFISSIONAIS -->
-        <div id="profissionais-list" class="flex flex-col gap-4">
-
-            <!-- Card profissional -->
-            <div class="profissional-card bg-white rounded-xl border border-gray-200 p-6"
-                data-nome="Carlos Silva" data-categoria="eletrica" data-disponivel="disponivel" data-avaliacao="4.8">
-                <div class="flex items-start justify-between flex-wrap gap-4">
-                    <div class="flex items-start gap-4">
-                        <div class="bg-blue-100 text-blue-800 w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg shrink-0">C</div>
-                        <div>
-                            <div class="flex items-center gap-2 flex-wrap">
-                                <p class="font-semibold text-blue-950 text-lg">Carlos Silva</p>
-                                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="px-2 py-0.5 text-xs font-semibold bg-green-100 text-green-700 rounded-full">Disponível</span>
-                            </div>
-                            <p class="text-sm text-gray-500 mt-0.5">Eletricista · Centro, Florianópolis</p>
-                            <div class="flex items-center gap-1 mt-1">
-                                <div class="flex gap-0.5">
-                                    {% for i in "12345" %}
-                                    <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                    </svg>
-                                    {% endfor %}
-                                </div>
-                                <span class="text-sm font-semibold text-gray-700">4.8</span>
-                                <span class="text-sm text-gray-400">(127 avaliações)</span>
-                            </div>
-                            <p class="text-sm text-gray-500 mt-2">Eletricista com 10 anos de experiência em instalações residenciais e comerciais.</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-end gap-3 shrink-0">
-                        <p class="text-blue-950 font-semibold">A partir de R$ 80/h</p>
-                        <div class="flex gap-2">
-                            <button class="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg bg-white hover:border-blue-700 hover:text-blue-700 transition-all duration-150">
-                                Ver Perfil
-                            </button>
-                            <a href="{% url 'nova_solicitacao' %}" class="px-4 py-2 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 active:scale-95 rounded-lg transition-all duration-150">
-                                Contratar
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card profissional 2 -->
-            <div class="profissional-card bg-white rounded-xl border border-gray-200 p-6"
-                data-nome="Roberto Santos" data-categoria="hidraulica" data-disponivel="disponivel" data-avaliacao="4.7">
-                <div class="flex items-start justify-between flex-wrap gap-4">
-                    <div class="flex items-start gap-4">
-                        <div class="bg-blue-100 text-blue-800 w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg shrink-0">R</div>
-                        <div>
-                            <div class="flex items-center gap-2 flex-wrap">
-                                <p class="font-semibold text-blue-950 text-lg">Roberto Santos</p>
-                                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="px-2 py-0.5 text-xs font-semibold bg-green-100 text-green-700 rounded-full">Disponível</span>
-                            </div>
-                            <p class="text-sm text-gray-500 mt-0.5">Encanador · Trindade, Florianópolis</p>
-                            <div class="flex items-center gap-1 mt-1">
-                                <div class="flex gap-0.5">
-                                    {% for i in "12345" %}
-                                    <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                    </svg>
-                                    {% endfor %}
-                                </div>
-                                <span class="text-sm font-semibold text-gray-700">4.7</span>
-                                <span class="text-sm text-gray-400">(89 avaliações)</span>
-                            </div>
-                            <p class="text-sm text-gray-500 mt-2">Especialista em reparos hidráulicos residenciais e desentupimentos.</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-end gap-3 shrink-0">
-                        <p class="text-blue-950 font-semibold">A partir de R$ 90/h</p>
-                        <div class="flex gap-2">
-                            <button class="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg bg-white hover:border-blue-700 hover:text-blue-700 transition-all duration-150">
-                                Ver Perfil
-                            </button>
-                            <a href="{% url 'nova_solicitacao' %}" class="px-4 py-2 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 active:scale-95 rounded-lg transition-all duration-150">
-                                Contratar
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card profissional 3 -->
-            <div class="profissional-card bg-white rounded-xl border border-gray-200 p-6"
-                data-nome="Fernando Costa" data-categoria="pintura" data-disponivel="disponivel" data-avaliacao="4.6">
-                <div class="flex items-start justify-between flex-wrap gap-4">
-                    <div class="flex items-start gap-4">
-                        <div class="bg-green-100 text-green-800 w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg shrink-0">F</div>
-                        <div>
-                            <div class="flex items-center gap-2 flex-wrap">
-                                <p class="font-semibold text-blue-950 text-lg">Fernando Costa</p>
-                                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="px-2 py-0.5 text-xs font-semibold bg-green-100 text-green-700 rounded-full">Disponível</span>
-                            </div>
-                            <p class="text-sm text-gray-500 mt-0.5">Pintor · Ingleses, Florianópolis</p>
-                            <div class="flex items-center gap-1 mt-1">
-                                <div class="flex gap-0.5">
-                                    {% for i in "12345" %}
-                                    <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                    </svg>
-                                    {% endfor %}
-                                </div>
-                                <span class="text-sm font-semibold text-gray-700">4.6</span>
-                                <span class="text-sm text-gray-400">(54 avaliações)</span>
-                            </div>
-                            <p class="text-sm text-gray-500 mt-2">Pintor residencial com acabamento impecável e materiais de qualidade.</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-end gap-3 shrink-0">
-                        <p class="text-blue-950 font-semibold">A partir de R$ 70/h</p>
-                        <div class="flex gap-2">
-                            <button class="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg bg-white hover:border-blue-700 hover:text-blue-700 transition-all duration-150">
-                                Ver Perfil
-                            </button>
-                            <a href="{% url 'nova_solicitacao' %}" class="px-4 py-2 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 active:scale-95 rounded-lg transition-all duration-150">
-                                Contratar
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card profissional 4 - Indisponível -->
-            <div class="profissional-card bg-white rounded-xl border border-gray-200 p-6 opacity-75"
-                data-nome="Marcos Pereira" data-categoria="manutencao" data-disponivel="indisponivel" data-avaliacao="4.3">
-                <div class="flex items-start justify-between flex-wrap gap-4">
-                    <div class="flex items-start gap-4">
-                        <div class="bg-gray-100 text-gray-600 w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg shrink-0">M</div>
-                        <div>
-                            <div class="flex items-center gap-2 flex-wrap">
-                                <p class="font-semibold text-blue-950 text-lg">Marcos Pereira</p>
-                                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                <span class="px-2 py-0.5 text-xs font-semibold bg-gray-100 text-gray-500 rounded-full">Indisponível</span>
-                            </div>
-                            <p class="text-sm text-gray-500 mt-0.5">Técnico de Manutenção · Kobrasol, Florianópolis</p>
-                            <div class="flex items-center gap-1 mt-1">
-                                <div class="flex gap-0.5">
-                                    {% for i in "1234" %}
-                                    <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                    </svg>
-                                    {% endfor %}
-                                    <svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                    </svg>
-                                </div>
-                                <span class="text-sm font-semibold text-gray-700">4.3</span>
-                                <span class="text-sm text-gray-400">(38 avaliações)</span>
-                            </div>
-                            <p class="text-sm text-gray-500 mt-2">Manutenção geral de residências: portas, janelas, telhados e mais.</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-end gap-3 shrink-0">
-                        <p class="text-blue-950 font-semibold">A partir de R$ 65/h</p>
-                        <div class="flex gap-2">
-                            <button class="px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg bg-white hover:border-blue-700 hover:text-blue-700 transition-all duration-150">
-                                Ver Perfil
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- NENHUM RESULTADO -->
-        <div id="no-results" class="hidden text-center py-16">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z"/>
-            </svg>
-            <p class="text-gray-500 font-medium">Nenhum profissional encontrado</p>
-            <p class="text-sm text-gray-400 mt-1">Tente ajustar os filtros de busca</p>
-            <button onclick="limparFiltros()" class="mt-4 px-4 py-2 text-sm font-medium text-blue-700 border border-blue-700 rounded-lg hover:bg-blue-50 transition-all duration-150">
-                Limpar filtros
-            </button>
-        </div>
-
+    {# ===== Search bar ===== #}
+    <div class="search-bar">
+      <div class="search-input-wrap">
+        <span class="icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+        </span>
+        <input id="search-q" class="input" type="text" placeholder="Buscar serviço ou profissional...">
+      </div>
+      <select id="search-bairro" class="select">
+        <option value="">Todos os bairros</option>
+        <option>Trindade</option>
+        <option>Centro</option>
+        <option>Lagoa</option>
+        <option>Itacorubi</option>
+        <option>Ingleses</option>
+      </select>
+      <select id="search-rating" class="select">
+        <option value="0">Avaliação: qualquer</option>
+        <option value="4.5">4.5+ estrelas</option>
+        <option value="4.8">4.8+ estrelas</option>
+      </select>
+      <button type="button" class="btn btn-primary" onclick="applyFilters()">Filtrar</button>
     </div>
-</section>
 
+    {# ===== Category chips ===== #}
+    <div class="chip-group" id="chips">
+      <button type="button" class="chip is-active" data-cat="">Todas as categorias</button>
+      <button type="button" class="chip" data-cat="eletrica">Elétrica</button>
+      <button type="button" class="chip" data-cat="hidraulica">Hidráulica</button>
+      <button type="button" class="chip" data-cat="pintura">Pintura</button>
+      <button type="button" class="chip" data-cat="reparos">Reparos</button>
+      <button type="button" class="chip" data-cat="limpeza">Limpeza</button>
+      <button type="button" class="chip" data-cat="jardinagem">Jardinagem</button>
+    </div>
+
+    {# ===== Result strip ===== #}
+    <div style="margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+      <div style="font-size:14px; color:var(--text-secondary);">
+        <strong style="color:var(--pmf-navy);" id="result-count">6 profissionais</strong>
+        encontrados em Florianópolis
+      </div>
+      <select id="sort" class="select" style="width:auto; min-height:40px;">
+        <option>Mais bem avaliados</option>
+        <option>Mais próximos</option>
+        <option>Menor preço</option>
+      </select>
+    </div>
+
+    {# ===== Grid ===== #}
+    <div id="pros-grid" class="grid-pros">
+      {# Cards demo institucional — substituir por loop {% for pro in pros %} quando contexto disponível #}
+      <article class="pro-card" data-name="Carlos Silva" data-cat="eletrica" data-rating="4.9" data-bairro="Trindade">
+        <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
+        <div class="pro-card-body">
+          <div class="pro-avatar" style="background:#FFCD07; color:#0E1F4D;">CS</div>
+          <h3 class="pro-name">Carlos Silva</h3>
+          <div class="pro-specialty">Eletricista</div>
+          <div class="pro-rating"><span class="stars">★★★★★</span><span class="score">4.9</span><span class="count">(87)</span></div>
+          <div class="pro-location">📍 Trindade</div>
+          <div class="pro-card-footer">
+            <div><div class="pro-price-label">A partir de</div><div class="pro-price">R$ 80</div></div>
+            <a href="{% url 'nova_solicitacao' %}" class="btn btn-sm btn-primary">Contratar</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="pro-card" data-name="Joana Pereira" data-cat="hidraulica" data-rating="4.8" data-bairro="Centro">
+        <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
+        <div class="pro-card-body">
+          <div class="pro-avatar" style="background:#1FA9E0;">JP</div>
+          <h3 class="pro-name">Joana Pereira</h3>
+          <div class="pro-specialty">Encanadora</div>
+          <div class="pro-rating"><span class="stars">★★★★★</span><span class="score">4.8</span><span class="count">(64)</span></div>
+          <div class="pro-location">📍 Centro</div>
+          <div class="pro-card-footer">
+            <div><div class="pro-price-label">A partir de</div><div class="pro-price">R$ 95</div></div>
+            <a href="{% url 'nova_solicitacao' %}" class="btn btn-sm btn-primary">Contratar</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="pro-card" data-name="Rafael Mendes" data-cat="pintura" data-rating="4.7" data-bairro="Lagoa">
+        <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
+        <div class="pro-card-body">
+          <div class="pro-avatar" style="background:#168821;">RM</div>
+          <h3 class="pro-name">Rafael Mendes</h3>
+          <div class="pro-specialty">Pintor</div>
+          <div class="pro-rating"><span class="stars">★★★★★</span><span class="score">4.7</span><span class="count">(52)</span></div>
+          <div class="pro-location">📍 Lagoa</div>
+          <div class="pro-card-footer">
+            <div><div class="pro-price-label">A partir de</div><div class="pro-price">R$ 60</div></div>
+            <a href="{% url 'nova_solicitacao' %}" class="btn btn-sm btn-primary">Contratar</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="pro-card" data-name="Beatriz Lima" data-cat="limpeza" data-rating="5.0" data-bairro="Itacorubi">
+        <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
+        <div class="pro-card-body">
+          <div class="pro-avatar" style="background:#C97D00;">BL</div>
+          <h3 class="pro-name">Beatriz Lima</h3>
+          <div class="pro-specialty">Diarista</div>
+          <div class="pro-rating"><span class="stars">★★★★★</span><span class="score">5.0</span><span class="count">(41)</span></div>
+          <div class="pro-location">📍 Itacorubi</div>
+          <div class="pro-card-footer">
+            <div><div class="pro-price-label">A partir de</div><div class="pro-price">R$ 120</div></div>
+            <a href="{% url 'nova_solicitacao' %}" class="btn btn-sm btn-primary">Contratar</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="pro-card" data-name="André Costa" data-cat="reparos" data-rating="4.6" data-bairro="Ingleses">
+        <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
+        <div class="pro-card-body">
+          <div class="pro-avatar" style="background:#155BCB;">AC</div>
+          <h3 class="pro-name">André Costa</h3>
+          <div class="pro-specialty">Marceneiro</div>
+          <div class="pro-rating"><span class="stars">★★★★★</span><span class="score">4.6</span><span class="count">(33)</span></div>
+          <div class="pro-location">📍 Ingleses</div>
+          <div class="pro-card-footer">
+            <div><div class="pro-price-label">A partir de</div><div class="pro-price">R$ 150</div></div>
+            <a href="{% url 'nova_solicitacao' %}" class="btn btn-sm btn-primary">Contratar</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="pro-card" data-name="Patrícia Rocha" data-cat="jardinagem" data-rating="4.9" data-bairro="Córrego Grande">
+        <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
+        <div class="pro-card-body">
+          <div class="pro-avatar" style="background:#168821;">PR</div>
+          <h3 class="pro-name">Patrícia Rocha</h3>
+          <div class="pro-specialty">Jardineira</div>
+          <div class="pro-rating"><span class="stars">★★★★★</span><span class="score">4.9</span><span class="count">(28)</span></div>
+          <div class="pro-location">📍 Córrego Grande</div>
+          <div class="pro-card-footer">
+            <div><div class="pro-price-label">A partir de</div><div class="pro-price">R$ 70</div></div>
+            <a href="{% url 'nova_solicitacao' %}" class="btn btn-sm btn-primary">Contratar</a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="empty-state" id="empty-pros" style="display:none;">
+      <div class="empty-state-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+      </div>
+      <h3>Nenhum profissional encontrado</h3>
+      <p>Tente ajustar os filtros ou limpar a busca.</p>
+      <button type="button" class="btn btn-secondary" onclick="clearFilters()">Limpar filtros</button>
+    </div>
+
+    <div style="margin-top:32px; text-align:center;">
+      <button type="button" class="btn btn-secondary">Carregar mais profissionais</button>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_scripts %}
 <script>
-    function filterProfissionais() {
-        const searchText = document.getElementById('search-input').value.toLowerCase();
-        const categoria = document.getElementById('filter-categoria').value;
-        const disponivel = document.getElementById('filter-disponivel').value;
-        const minAvaliacao = parseFloat(document.getElementById('filter-avaliacao').value) || 0;
+  // Pre-select category from URL ?cat=...
+  (function () {
+    var urlCat = new URLSearchParams(window.location.search).get('cat') || '';
+    document.querySelectorAll('#chips .chip').forEach(function (c) {
+      c.classList.toggle('is-active', (c.dataset.cat || '') === urlCat);
+    });
+  })();
 
-        const cards = document.querySelectorAll('.profissional-card');
-        let visible = 0;
+  document.querySelectorAll('#chips .chip').forEach(function (c) {
+    c.addEventListener('click', function () {
+      document.querySelectorAll('#chips .chip').forEach(function (x) { x.classList.remove('is-active'); });
+      c.classList.add('is-active');
+      applyFilters();
+    });
+  });
 
-        cards.forEach(card => {
-            const nome = card.dataset.nome.toLowerCase();
-            const cardCategoria = card.dataset.categoria;
-            const cardDisponivel = card.dataset.disponivel;
-            const cardAvaliacao = parseFloat(card.dataset.avaliacao);
+  ['search-q', 'search-bairro', 'search-rating'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('input', applyFilters);
+    if (el) el.addEventListener('change', applyFilters);
+  });
 
-            const matchSearch = !searchText || nome.includes(searchText);
-            const matchCategoria = !categoria || cardCategoria === categoria;
-            const matchDisponivel = !disponivel || cardDisponivel === disponivel;
-            const matchAvaliacao = cardAvaliacao >= minAvaliacao;
+  function applyFilters() {
+    var q = (document.getElementById('search-q').value || '').toLowerCase();
+    var bairro = document.getElementById('search-bairro').value;
+    var minRating = parseFloat(document.getElementById('search-rating').value) || 0;
+    var cat = (document.querySelector('#chips .chip.is-active') || {}).dataset || {};
+    var catFilter = cat.cat || '';
 
-            if (matchSearch && matchCategoria && matchDisponivel && matchAvaliacao) {
-                card.classList.remove('hidden');
-                visible++;
-            } else {
-                card.classList.add('hidden');
-            }
-        });
+    var visible = 0;
+    document.querySelectorAll('#pros-grid .pro-card').forEach(function (card) {
+      var match = true;
+      if (q && !card.dataset.name.toLowerCase().includes(q)) match = false;
+      if (bairro && card.dataset.bairro !== bairro) match = false;
+      if (catFilter && card.dataset.cat !== catFilter) match = false;
+      if (parseFloat(card.dataset.rating) < minRating) match = false;
+      card.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+    document.getElementById('result-count').textContent = visible + ' profissionai' + (visible === 1 ? '' : 's');
+    document.getElementById('empty-pros').style.display = visible === 0 ? 'block' : 'none';
+  }
 
-        document.getElementById('result-count').textContent = visible + ' profissional' + (visible !== 1 ? 'is' : '') + ' encontrado' + (visible !== 1 ? 's' : '');
-        document.getElementById('no-results').classList.toggle('hidden', visible > 0);
-    }
+  function clearFilters() {
+    document.getElementById('search-q').value = '';
+    document.getElementById('search-bairro').value = '';
+    document.getElementById('search-rating').value = '0';
+    document.querySelectorAll('#chips .chip').forEach(function (x, i) { x.classList.toggle('is-active', i === 0); });
+    applyFilters();
+  }
 
-    function limparFiltros() {
-        document.getElementById('search-input').value = '';
-        document.getElementById('filter-categoria').value = '';
-        document.getElementById('filter-disponivel').value = '';
-        document.getElementById('filter-avaliacao').value = '';
-        filterProfissionais();
-    }
+  applyFilters();
 </script>
-
 {% endblock %}

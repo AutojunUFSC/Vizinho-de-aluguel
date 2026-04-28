@@ -1,274 +1,296 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Minha Área{% endblock %}
+{% block title %}Minha área — Vizinho de Aluguel{% endblock %}
 
 {% block content %}
+<main id="main">
 
-<!-- HEADER DA PÁGINA -->
-<section class="bg-blue-900 text-white">
-    <div class="max-w-7xl mx-auto px-8 py-10">
-        <h1 class="text-3xl font-bold">Olá, <span id="user-name">...</span>!</h1>
-        <p class="text-blue-300 mt-1">Gerencie seus serviços e solicitações</p>
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li>Minha área</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Olá, <span id="user-name">cidadão</span></h1>
+          <p class="subtitle">Acompanhe suas solicitações e encontre profissionais para sua casa.</p>
+        </div>
+        <a href="{% url 'nova_solicitacao' %}" class="btn btn-yellow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Nova solicitação
+        </a>
+      </div>
     </div>
-</section>
+  </div>
 
-<!-- CONTEÚDO -->
-<section class="bg-gray-50 min-h-screen">
-    <div class="max-w-7xl mx-auto px-4 py-10">
+  <div class="container" style="padding: 32px 24px 60px;">
 
-        <!-- TABS -->
-        <div class="flex gap-2 mb-8">
-            <button
-                id="tab-solicitacoes"
-                onclick="showTab('solicitacoes')"
-                class="px-5 py-2 text-sm font-semibold rounded-lg border border-blue-900 text-blue-900 bg-white shadow-sm transition-all duration-150">
-                Minhas Solicitações
-            </button>
-            <button
-                id="tab-perfil"
-                onclick="showTab('perfil')"
-                class="px-5 py-2 text-sm font-semibold rounded-lg border border-gray-300 text-gray-500 bg-white hover:border-blue-900 hover:text-blue-900 transition-all duration-150">
-                Meu Perfil
-            </button>
+    {# ===== Stat strip ===== #}
+    <div class="stat-strip">
+      <div class="stat-card">
+        <span class="stat-icon" style="background: var(--status-info-50); color: var(--status-info);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        </span>
+        <div>
+          <div class="number" id="stat-active">4</div>
+          <div class="label">Solicitações ativas</div>
         </div>
-
-        <!-- ABA: MINHAS SOLICITAÇÕES -->
-        <div id="content-solicitacoes">
-
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-bold text-blue-950">Histórico de Serviços</h2>
-                <div class="flex gap-3">
-                    <a href="/minhas_solicitacoes/" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-900 border border-gray-300 rounded-lg bg-white hover:border-blue-700 transition-all duration-150">
-                        Ver Todas
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                    </a>
-                    <a href="{% url 'nova_solicitacao' %}" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 active:scale-95 rounded-lg shadow-sm transition-all duration-150">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                        </svg>
-                        Nova Solicitação
-                    </a>
-                </div>
-            </div>
-
-            <!-- Loading -->
-            <div id="sol-loading" class="text-center py-12 text-gray-400">Carregando...</div>
-
-            <!-- Lista -->
-            <div id="sol-list" class="hidden"></div>
-
-            <!-- Vazio -->
-            <div id="sol-empty" class="hidden text-center py-12">
-                <p class="text-gray-500 mb-4">Você ainda não tem solicitações.</p>
-                <a href="{% url 'nova_solicitacao' %}" class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 rounded-lg shadow-sm transition-all duration-150">
-                    Criar Primeira Solicitação
-                </a>
-            </div>
-
-            <!-- Erro -->
-            <div id="sol-error" class="hidden text-center py-12 text-red-500">
-                Erro ao carregar solicitações.
-            </div>
-
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon" style="background: var(--pmf-cyan-50); color: var(--pmf-navy);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+        </span>
+        <div>
+          <div class="number" id="stat-total">12</div>
+          <div class="label">Total de serviços</div>
         </div>
-
-        <!-- ABA: MEU PERFIL -->
-        <div id="content-perfil" class="hidden">
-            <div class="bg-white rounded-xl border border-gray-200 p-8">
-                <h2 class="text-xl font-bold text-blue-950">Informações Pessoais</h2>
-                <p class="text-gray-500 text-sm mt-1 mb-8">Atualize seus dados cadastrais</p>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
-                        <input id="perfil-nome" type="text"
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-                        <input id="perfil-email" type="email" readonly
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm text-gray-400 bg-gray-50 cursor-not-allowed">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
-                        <input id="perfil-phone" type="tel"
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
-                    </div>
-                </div>
-
-                <div id="perfil-msg" class="hidden mb-4 text-sm rounded-lg px-4 py-2.5"></div>
-
-                <div class="flex gap-3">
-                    <button
-                        id="btn-salvar"
-                        onclick="saveProfile()"
-                        class="px-6 py-2.5 text-sm font-semibold text-white bg-blue-700 hover:bg-blue-800 active:scale-95 rounded-lg shadow-sm transition-all duration-150">
-                        Salvar Alterações
-                    </button>
-                    <button
-                        onclick="logout()"
-                        class="px-6 py-2.5 text-sm font-semibold text-gray-600 border border-gray-300 bg-white hover:border-red-400 hover:text-red-500 rounded-lg transition-all duration-150">
-                        Sair da Conta
-                    </button>
-                </div>
-            </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon" style="background: var(--status-warning-50); color: var(--status-warning);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </span>
+        <div>
+          <div class="number">8</div>
+          <div class="label">Profissionais favoritos</div>
         </div>
-
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon" style="background: var(--status-success-50); color: var(--status-success);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
+        </span>
+        <div>
+          <div class="number">4.9</div>
+          <div class="label">Sua reputação</div>
+        </div>
+      </div>
     </div>
-</section>
 
+    {# ===== Dashboard 2/1 grid ===== #}
+    <div class="dash-grid">
+
+      {# Coluna esquerda #}
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <h2 class="section-h2">Solicitações recentes</h2>
+          <a href="{% url 'minhas_solicitacoes' %}" class="section-link">Ver todas →</a>
+        </div>
+
+        <div id="solicitacoes-list" style="display:grid; gap:12px;">
+          <div class="empty-state" id="solicitacoes-empty" style="display:none;">
+            <div class="empty-state-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+            </div>
+            <h3>Você ainda não tem solicitações</h3>
+            <p>Crie sua primeira solicitação e receba propostas em até 24h.</p>
+            <a href="{% url 'nova_solicitacao' %}" class="btn btn-primary">Solicitar serviço</a>
+          </div>
+        </div>
+
+        <h2 class="section-h2" style="margin-top:36px;">Categorias frequentes</h2>
+        <div class="grid-categories" style="margin-top:14px;">
+          <a href="{% url 'servicos' %}?cat=eletrica" class="service-cat-card">
+            <span class="service-cat-icon cat-eletrica">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h8l-1 8 10-12h-8l1-8z"/></svg>
+            </span>
+            <div><div class="name">Elétrica</div><div class="count">87 profissionais</div></div>
+          </a>
+          <a href="{% url 'servicos' %}?cat=hidraulica" class="service-cat-card">
+            <span class="service-cat-icon cat-hidraulica">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c-3.5 4-7 8.5-7 12a7 7 0 0 0 14 0c0-3.5-3.5-8-7-12z"/></svg>
+            </span>
+            <div><div class="name">Hidráulica</div><div class="count">64 profissionais</div></div>
+          </a>
+          <a href="{% url 'servicos' %}?cat=pintura" class="service-cat-card">
+            <span class="service-cat-icon cat-pintura">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11V5a2 2 0 0 1 4 0v6"/><path d="M5 21h14"/><rect x="7" y="11" width="10" height="6" rx="1"/></svg>
+            </span>
+            <div><div class="name">Pintura</div><div class="count">52 profissionais</div></div>
+          </a>
+          <a href="{% url 'servicos' %}?cat=reparos" class="service-cat-card">
+            <span class="service-cat-icon cat-reparos">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 5 9 10l-1 1 4 4 1-1 5-5z"/><path d="m12 13-7 7"/><path d="M14 5h5v5"/></svg>
+            </span>
+            <div><div class="name">Reparos</div><div class="count">73 profissionais</div></div>
+          </a>
+        </div>
+      </div>
+
+      {# Coluna direita (sidebar) #}
+      <aside class="dash-aside">
+
+        <div class="tip-card">
+          <div class="tip-pill">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h8l-1 8 10-12h-8l1-8z"/></svg>
+            Dica
+          </div>
+          <h3>Adicione fotos à sua solicitação</h3>
+          <p>Solicitações com fotos recebem 3× mais propostas e orçamentos mais precisos.</p>
+          <a href="{% url 'nova_solicitacao' %}" class="btn btn-sm btn-yellow">Solicitar agora</a>
+        </div>
+
+        <div class="card card-pad">
+          <h3 style="font-size:15px; font-weight:700; color:var(--pmf-navy); margin:0 0 14px; display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+            Notificações
+          </h3>
+          <ul class="notif-list">
+            <li class="notif-item">
+              <span class="notif-dot info"></span>
+              <div style="flex:1; min-width:0;">
+                <div class="notif-title">Nova proposta recebida</div>
+                <div class="notif-body">Carlos Silva enviou orçamento de R$ 140 para "Troca de disjuntor"</div>
+                <div class="notif-time">há 2h</div>
+              </div>
+            </li>
+            <li class="notif-item">
+              <span class="notif-dot success"></span>
+              <div style="flex:1; min-width:0;">
+                <div class="notif-title">Serviço concluído</div>
+                <div class="notif-body">Pintura do quarto foi marcada como concluída. Avalie o profissional.</div>
+                <div class="notif-time">ontem</div>
+              </div>
+            </li>
+            <li class="notif-item">
+              <span class="notif-dot warning"></span>
+              <div style="flex:1; min-width:0;">
+                <div class="notif-title">Lembrete</div>
+                <div class="notif-body">Avalie o serviço "Limpeza pós-obra" realizado por Beatriz Lima.</div>
+                <div class="notif-time">2 dias</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card card-pad">
+          <h3 style="font-size:15px; font-weight:700; color:var(--pmf-navy); margin:0 0 12px;">Precisa de ajuda?</h3>
+          <p style="font-size:13px; color:var(--text-secondary); margin:0 0 14px; line-height:1.5;">
+            Central de atendimento da Prefeitura disponível 24h.
+          </p>
+          <a href="tel:156" class="btn btn-secondary btn-sm btn-block">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92V21a1 1 0 0 1-1.1 1A19 19 0 0 1 2 4.1 1 1 0 0 1 3 3h4a1 1 0 0 1 1 .76l1 4a1 1 0 0 1-.27 1L7.21 10.21a16 16 0 0 0 6.58 6.58l1.45-1.52a1 1 0 0 1 1-.27l4 1A1 1 0 0 1 22 17z"/></svg>
+            Ligue 156
+          </a>
+        </div>
+
+      </aside>
+    </div>
+
+    {# ===== Perfil (seção colapsável) ===== #}
+    <section style="margin-top:48px;">
+      <h2 class="section-h2" style="margin-bottom:14px;">Meu perfil</h2>
+      <div class="card card-pad-lg">
+        <form id="form-perfil" onsubmit="event.preventDefault(); saveProfile();" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="field">
+            <label for="perfil-nome">Nome completo</label>
+            <input id="perfil-nome" class="input" type="text">
+          </div>
+          <div class="field">
+            <label for="perfil-email">E-mail</label>
+            <input id="perfil-email" class="input" type="email" readonly style="background:var(--bg-muted);">
+          </div>
+          <div class="field">
+            <label for="perfil-phone">Telefone</label>
+            <input id="perfil-phone" class="input" type="tel" placeholder="(48) 99999-9999">
+          </div>
+          <div style="grid-column:1/-1; display:flex; gap:12px; justify-content:flex-end; margin-top:8px;">
+            <button type="button" class="btn btn-ghost" onclick="if(window.logout)window.logout();">Sair da conta</button>
+            <button type="submit" class="btn btn-primary">Salvar alterações</button>
+          </div>
+          <div id="perfil-msg" style="grid-column:1/-1;"></div>
+        </form>
+      </div>
+    </section>
+
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_scripts %}
 <script>
-    requireAuth();
+  if (typeof requireAuth === 'function') requireAuth();
 
-    const STATUS_MAP = {
-        OPEN:        { label: 'Aguardando Propostas', cls: 'bg-gray-100 text-gray-600' },
-        IN_AUCTION:  { label: 'Recebendo Propostas',  cls: 'bg-blue-100 text-blue-700' },
-        AWARDED:     { label: 'Proposta Aceita',       cls: 'bg-indigo-100 text-indigo-700' },
-        IN_PROGRESS: { label: 'Em Andamento',          cls: 'bg-amber-100 text-amber-700' },
-        COMPLETED:   { label: 'Concluído',             cls: 'bg-green-100 text-green-700' },
-        CANCELLED:   { label: 'Cancelado',             cls: 'bg-red-100 text-red-600' },
+  async function init() {
+    try {
+      var res = await fetch('/api/v1/auth/users/me/', { headers: getAuthHeaders() });
+      if (!res.ok) return;
+      var me = await res.json();
+      document.getElementById('user-name').textContent = (me.full_name || me.email || 'cidadão').split(' ')[0];
+      document.getElementById('perfil-nome').value = me.full_name || '';
+      document.getElementById('perfil-email').value = me.email || '';
+      document.getElementById('perfil-phone').value = me.phone || '';
+    } catch (e) { /* silent */ }
+    loadSolicitacoes();
+  }
+
+  var STATUS_LABEL = {
+    OPEN: { label: 'Aberta',           cls: 'status-open' },
+    IN_AUCTION: { label: 'Recebendo',  cls: 'status-recebendo' },
+    AWARDED: { label: 'Aceita',        cls: 'status-aceita' },
+    IN_PROGRESS: { label: 'Em andamento', cls: 'status-em-andamento' },
+    COMPLETED: { label: 'Concluída',   cls: 'status-concluida' },
+    CANCELLED: { label: 'Cancelada',   cls: 'status-cancelada' },
+  };
+
+  async function loadSolicitacoes() {
+    var box = document.getElementById('solicitacoes-list');
+    var empty = document.getElementById('solicitacoes-empty');
+    try {
+      var res = await fetch('/api/v1/service-requests/mine/', { headers: getAuthHeaders() });
+      if (!res.ok) throw new Error();
+      var list = await res.json();
+      var arr = Array.isArray(list) ? list : (list.results || []);
+      arr = arr.slice(0, 3);
+      if (!arr.length) { empty.style.display = 'block'; return; }
+
+      box.innerHTML = arr.map(function (r) {
+        var st = STATUS_LABEL[r.status] || { label: r.status, cls: 'status-open' };
+        return '<a href="/minhas_solicitacoes/" class="request-card">' +
+          '<div class="request-card-head"><div style="flex:1;min-width:0;">' +
+            '<div class="request-meta">' +
+              '<span class="status-badge ' + st.cls + '"><span class="dot"></span> ' + st.label + '</span>' +
+              (r.category_name ? '<span class="badge badge-cyan">' + escHtml(r.category_name) + '</span>' : '') +
+            '</div>' +
+            '<h3>' + escHtml(r.title || 'Solicitação') + '</h3>' +
+            '<p class="description">' + escHtml(r.description || '') + '</p>' +
+          '</div></div>' +
+          '<div class="request-card-footer">' +
+            (r.address_neighborhood ? '<span class="icon-text">📍 ' + escHtml(r.address_neighborhood) + '</span>' : '') +
+            (r.created_at ? '<span class="icon-text">🕒 ' + new Date(r.created_at).toLocaleDateString('pt-BR') + '</span>' : '') +
+          '</div></a>';
+      }).join('');
+    } catch (e) {
+      empty.style.display = 'block';
+    }
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) { return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; });
+  }
+
+  async function saveProfile() {
+    var msg = document.getElementById('perfil-msg');
+    msg.innerHTML = '';
+    var payload = {
+      full_name: document.getElementById('perfil-nome').value.trim(),
+      phone: document.getElementById('perfil-phone').value.trim(),
     };
-
-    async function init() {
-        try {
-            const res = await fetch('/api/v1/auth/users/me/', { headers: getAuthHeaders() });
-            if (res.status === 401) { logout(); return; }
-            const user = await res.json();
-
-            const firstName = (user.full_name || '').split(' ')[0] || 'Usuário';
-            document.getElementById('user-name').textContent = firstName;
-            document.getElementById('perfil-nome').value  = user.full_name  || '';
-            document.getElementById('perfil-email').value = user.email       || '';
-            document.getElementById('perfil-phone').value = user.phone       || '';
-        } catch {
-            document.getElementById('user-name').textContent = 'Usuário';
-        }
-
-        loadSolicitacoes();
+    try {
+      var res = await fetch('/api/v1/auth/users/me/', {
+        method: 'PATCH',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, getAuthHeaders()),
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error();
+      msg.innerHTML = '<div class="alert alert-success" role="alert"><div class="alert-body">Perfil atualizado com sucesso.</div></div>';
+      setTimeout(function () { msg.innerHTML = ''; }, 4000);
+    } catch (e) {
+      msg.innerHTML = '<div class="alert alert-danger" role="alert"><div class="alert-body">Não foi possível salvar.</div></div>';
     }
+  }
 
-    async function loadSolicitacoes() {
-        try {
-            const res = await fetch('/api/v1/service-requests/mine/', { headers: getAuthHeaders() });
-            if (res.status === 401) { logout(); return; }
-            if (!res.ok) { showSolError(); return; }
-
-            const data  = await res.json();
-            const items = Array.isArray(data) ? data : (data.results || []);
-
-            document.getElementById('sol-loading').classList.add('hidden');
-
-            if (!items.length) {
-                document.getElementById('sol-empty').classList.remove('hidden');
-                return;
-            }
-
-            const recent = items.slice(0, 5);
-            document.getElementById('sol-list').innerHTML = recent.map(buildCard).join('');
-            document.getElementById('sol-list').classList.remove('hidden');
-        } catch {
-            showSolError();
-        }
-    }
-
-    function showSolError() {
-        document.getElementById('sol-loading').classList.add('hidden');
-        document.getElementById('sol-error').classList.remove('hidden');
-    }
-
-    function buildCard(req) {
-        const s    = STATUS_MAP[req.status] || { label: req.status, cls: 'bg-gray-100 text-gray-600' };
-        const date = new Date(req.created_at).toLocaleDateString('pt-BR');
-        const addr = req.address_detail
-            ? escHtml(req.address_detail.neighborhood + ', ' + req.address_detail.city)
-            : '';
-        const dim  = req.status === 'CANCELLED' ? 'opacity-75' : '';
-
-        return `
-        <div class="bg-white rounded-xl border border-gray-200 p-6 mb-4 ${dim}">
-            <div class="flex items-start justify-between">
-                <div>
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="font-semibold text-blue-950 text-lg">${escHtml(req.title)}</span>
-                        <span class="inline-flex items-center px-3 py-1 text-xs font-semibold ${s.cls} rounded-full">${s.label}</span>
-                    </div>
-                    <div class="flex items-center gap-4 text-sm text-gray-500">
-                        <span>${date}</span>
-                        ${addr ? `<span>${addr}</span>` : ''}
-                    </div>
-                </div>
-            </div>
-        </div>`;
-    }
-
-    async function saveProfile() {
-        const full_name = document.getElementById('perfil-nome').value.trim();
-        const phone     = document.getElementById('perfil-phone').value.trim();
-        const msgEl     = document.getElementById('perfil-msg');
-        const btn       = document.getElementById('btn-salvar');
-
-        if (!full_name) {
-            showPerfilMsg('Nome não pode ser vazio.', false);
-            return;
-        }
-
-        btn.disabled    = true;
-        btn.textContent = 'Salvando...';
-
-        try {
-            const res  = await fetch('/api/v1/auth/users/me/', {
-                method: 'PATCH',
-                headers: { ...getAuthHeaders(), 'Content-Type': 'application/json' },
-                body: JSON.stringify({ full_name, phone }),
-            });
-            const data = await res.json();
-
-            if (res.ok) {
-                document.getElementById('user-name').textContent = data.full_name.split(' ')[0];
-                showPerfilMsg('Dados salvos com sucesso!', true);
-            } else {
-                showPerfilMsg(parseApiErrors(data), false);
-            }
-        } catch {
-            showPerfilMsg('Erro de conexão. Tente novamente.', false);
-        } finally {
-            btn.disabled    = false;
-            btn.textContent = 'Salvar Alterações';
-        }
-    }
-
-    function showPerfilMsg(msg, success) {
-        const el = document.getElementById('perfil-msg');
-        el.textContent = msg;
-        el.className = 'mb-4 text-sm rounded-lg px-4 py-2.5 ' +
-            (success ? 'bg-green-50 text-green-700 border border-green-200'
-                     : 'bg-red-50 text-red-600 border border-red-200');
-        el.classList.remove('hidden');
-        setTimeout(() => el.classList.add('hidden'), 4000);
-    }
-
-    function showTab(tab) {
-        const isSolicitacoes = tab === 'solicitacoes';
-        document.getElementById('content-solicitacoes').classList.toggle('hidden', !isSolicitacoes);
-        document.getElementById('content-perfil').classList.toggle('hidden', isSolicitacoes);
-
-        const active   = ['border-blue-900', 'text-blue-900', 'shadow-sm'];
-        const inactive = ['border-gray-300', 'text-gray-500', 'hover:border-blue-900', 'hover:text-blue-900'];
-        const btnSol   = document.getElementById('tab-solicitacoes');
-        const btnPerf  = document.getElementById('tab-perfil');
-
-        if (isSolicitacoes) {
-            btnSol.classList.add(...active);   btnSol.classList.remove(...inactive);
-            btnPerf.classList.remove(...active); btnPerf.classList.add(...inactive);
-        } else {
-            btnPerf.classList.add(...active);  btnPerf.classList.remove(...inactive);
-            btnSol.classList.remove(...active);  btnSol.classList.add(...inactive);
-        }
-    }
-
-    init();
+  init();
 </script>
-
 {% endblock %}
