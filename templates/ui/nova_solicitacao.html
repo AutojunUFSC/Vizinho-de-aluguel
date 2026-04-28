@@ -209,6 +209,13 @@
   var currentStep = 1;
   var totalSteps = 3;
   var selectedCat = 'eletrica';
+  var categories = [];
+
+  fetch('/api/v1/categories/').then(function (r) {
+    return r.ok ? r.json() : [];
+  }).then(function (data) {
+    categories = Array.isArray(data) ? data : (data.results || []);
+  }).catch(function () {});
 
   // Categorias
   document.querySelectorAll('#cat-grid .cat-pick').forEach(function (b) {
@@ -288,22 +295,56 @@
     var orig = btn.innerHTML;
     btn.textContent = 'Publicando...';
     try {
-      var payload = {
-        category: selectedCat,
+      var catObj = categories.find(function (c) { return c.slug === selectedCat; });
+      if (!catObj) throw new Error('Categoria não encontrada. Recarregue a página.');
+
+      var addrRes = await fetch('/api/v1/auth/addresses/', {
+        method: 'POST',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, getAuthHeaders()),
+        body: JSON.stringify({
+          label: 'Solicitação',
+          cep: document.getElementById('cep').value.replace(/\D/g, ''),
+          street: document.getElementById('endereco').value.trim() || 'S/N',
+          number: 'S/N',
+          neighborhood: document.getElementById('bairro').value.trim() || 'Centro',
+          city: 'Florianópolis',
+          state: 'SC',
+        }),
+      });
+      if (!addrRes.ok) throw new Error('Endereço inválido');
+      var addr = await addrRes.json();
+
+      var body = {
+        category: catObj.id,
+        address: addr.id,
         title: document.getElementById('titulo').value.trim(),
         description: document.getElementById('descricao').value.trim(),
         urgency: (document.querySelector('input[name=urgency]:checked') || { value: 'MEDIA' }).value,
-        budget_max: document.getElementById('orcamento').value.trim(),
-        neighborhood: document.getElementById('bairro').value.trim(),
-        street: document.getElementById('endereco').value.trim(),
-        cep: document.getElementById('cep').value.trim(),
       };
-      var res = await fetch('/api/v1/service-requests/', {
+      var budget = document.getElementById('orcamento').value.trim();
+      if (budget) body.budget_max = budget;
+
+      var reqRes = await fetch('/api/v1/service-requests/', {
         method: 'POST',
         headers: Object.assign({ 'Content-Type': 'application/json' }, getAuthHeaders()),
-        body: JSON.stringify(payload),
+        body: JSON.stringify(body),
       });
-      if (!res.ok) throw new Error();
+      if (!reqRes.ok) throw new Error('Falha ao criar solicitação');
+      var req = await reqRes.json();
+
+      var fotos = document.getElementById('fotos').files;
+      for (var i = 0; i < Math.min(fotos.length, 5); i++) {
+        var fd = new FormData();
+        fd.append('file', fotos[i]);
+        fd.append('media_type', 'IMAGE');
+        fd.append('order', i + 1);
+        await fetch('/api/v1/service-requests/' + req.id + '/media/', {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: fd,
+        });
+      }
+
       window.location.href = "{% url 'minhas_solicitacoes' %}";
     } catch (e) {
       btn.disabled = false;
