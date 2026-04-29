@@ -23,3 +23,12 @@ def servicos(request):
 
 def institucional(request):
     return render(request, "ui/institucional.html")
+
+def propostas_solicitacao(request, pk):
+    return render(request, "ui/propostas_solicitacao.html", {"pk": pk})
+
+def fazer_proposta(request, pk):
+    return render(request, "ui/fazer_proposta.html", {"pk": pk})
+
+def acompanhamento_pedido(request, pk):
+    return render(request, "ui/acompanhamento_pedido.html", {"pk": pk})
