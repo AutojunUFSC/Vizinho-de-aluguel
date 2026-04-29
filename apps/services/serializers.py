@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import ServiceCategory, ServiceRequest, ServiceRequestMedia
+from apps.accounts.serializers import AddressSerializer
 
 
 class ServiceCategorySerializer(serializers.ModelSerializer):
@@ -28,12 +29,13 @@ class ServiceRequestMediaSerializer(serializers.ModelSerializer):
 class ServiceRequestSerializer(serializers.ModelSerializer):
     media = ServiceRequestMediaSerializer(many=True, read_only=True)
     category_detail = ServiceCategorySerializer(source='category', read_only=True)
+    address_detail = AddressSerializer(source='address', read_only=True)
 
     class Meta:
         model = ServiceRequest
         fields = (
             'id', 'title', 'description', 'category', 'category_detail',
-            'address', 'urgency', 'status', 'budget_max',
+            'address', 'address_detail', 'urgency', 'status', 'budget_max',
             'auction_end_at', 'desired_deadline', 'created_at',
             'awarded_at', 'media'
         )

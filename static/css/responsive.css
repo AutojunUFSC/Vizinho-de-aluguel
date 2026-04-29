@@ -1,0 +1,86 @@
+/* ============================================================
+   VIZINHO DE ALUGUEL — Responsive (mobile-first breakpoints)
+   ============================================================ */
+
+/* Helpers */
+.show-md { display: none; }
+
+/* ===== md (≤ 900px) ===== */
+@media (max-width: 900px) {
+  .hide-md { display: none !important; }
+  .show-md { display: inline-flex !important; }
+
+  .menu-toggle { display: inline-flex; }
+
+  .main-nav { display: none; }
+  .main-nav.is-open { display: block; }
+
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 48px 24px 60px;
+  }
+
+  .mei-cta-inner { grid-template-columns: 1fr; }
+
+  .dash-grid { grid-template-columns: 1fr; }
+
+  .search-bar { grid-template-columns: 1fr; }
+
+  .container-narrow .stepper li:not(:last-child)::after {
+    left: 55%; right: -45%;
+  }
+}
+
+/* ===== sm (≤ 640px) ===== */
+@media (max-width: 640px) {
+  .hide-sm { display: none !important; }
+
+  .gov-bar-inner { height: auto; padding: 6px 0; flex-wrap: wrap; }
+  .gov-bar .gov-text { display: none; }
+
+  .brand-vizinho {
+    border-left: none;
+    padding-left: 0;
+    margin-left: 12px;
+  }
+  .brand-pmf img { height: 40px; }
+  .brand-vizinho img { height: 32px; }
+
+  .page-header { padding: 24px 0 28px; }
+  .page-header h1 { font-size: 24px; }
+  .page-header .subtitle { font-size: 14px; }
+
+  .section-pad { padding: 40px 0; }
+
+  .hero-title { font-size: 30px; }
+  .hero-subtitle { font-size: 15px; }
+  .hero-actions .btn { width: 100%; justify-content: center; }
+
+  .stepper-label { font-size: 11px; }
+
+  .stat-strip { grid-template-columns: 1fr 1fr; }
+
+  .request-card-head { flex-direction: column; gap: 8px; }
+
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+}
+
+/* ===== xs (≤ 420px) ===== */
+@media (max-width: 420px) {
+  .hide-xs { display: none !important; }
+
+  .stat-strip { grid-template-columns: 1fr; }
+
+  .auth-toggle-btn { font-size: 13px; padding: 8px 12px; }
+
+  .type-chooser { grid-template-columns: 1fr; }
+
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+}
+
+/* ===== Print (basic) ===== */
+@media print {
+  .site-header, .site-footer, .btn, .tabs, .chip-group { display: none; }
+  body { background: white; }
+}

@@ -1,279 +1,384 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Início{% endblock %}
+{% block title %}Início — Vizinho de Aluguel · PMF{% endblock %}
 
 {% block content %}
+<main id="main">
 
-<!-- HERO -->
-<section class="bg-blue-900 text-white">
-    <div class="max-w-7xl mx-auto px-8 py-20">
-        <h1 class="text-5xl text-center font-bold leading-tight">
-            Encontre Profissionais de <br>
-            Confiança para sua Casa
+  {# ===================== HERO ===================== #}
+  <section class="hero">
+    <div class="hero-photo" style="background-image: url('{% static 'images/hero-floripa.jpg' %}');" aria-hidden="true"></div>
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="hero-pattern" aria-hidden="true"></div>
+    <div class="hero-shape" aria-hidden="true"></div>
+
+    <div class="container hero-inner">
+      <div>
+        <div class="hero-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
+          Plataforma Pública Municipal
+        </div>
+
+        <h1 class="hero-title">
+          Serviços para sua casa,<br>
+          <span class="accent">com vizinhos verificados.</span>
         </h1>
-        <p class="mt-6 text-center text-blue-200 max-w-2xl mx-auto text-lg">
-            Conectamos você aos melhores prestadores de serviços domésticos de Florianópolis.<br>
-            Rápido, seguro e confiável.
+
+        <p class="hero-subtitle">
+          Conectamos cidadãos de Florianópolis a profissionais MEI da sua região.
+          Solicite um serviço gratuitamente e receba propostas em até 24 horas.
         </p>
-        <div class="mt-16 grid grid-cols-3 text-center gap-8 border-t border-blue-800 pt-12 hidden">
-            <div>
-                <p class="text-4xl font-bold">500+</p>
-                <p class="text-blue-300 mt-1">Profissionais</p>
-            </div>
-            <div>
-                <p class="text-4xl font-bold">10.000+</p>
-                <p class="text-blue-300 mt-1">Serviços Realizados</p>
-            </div>
-            <div>
-                <p class="text-4xl font-bold">4.8</p>
-                <p class="text-blue-300 mt-1">Avaliação Média</p>
-            </div>
+
+        <div class="hero-actions">
+          <a href="{% url 'nova_solicitacao' %}" class="btn btn-yellow btn-lg">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            Solicitar um serviço
+          </a>
+          <a href="{% url 'servicos' %}" class="btn btn-outline-light btn-lg">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+            Buscar profissionais
+          </a>
         </div>
-    </div>
-</section>
 
-<!-- CATEGORIAS -->
-<section class="bg-white">
-    <div class="max-w-7xl mx-auto px-4 py-20 text-blue-950">
-        <h2 class="text-4xl text-center font-bold leading-tight">Categoria de Serviços</h2>
-        <p class="mt-4 text-center max-w-2xl mx-auto text-gray-500">
-            Escolha a categoria do serviço que você precisa e encontre profissionais qualificados
-        </p>
-        <div class="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-
-            <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer">
-                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                </div>
-                <div class="font-semibold text-base">Elétrica</div>
-                <div class="text-gray-500 text-xs mt-1 leading-snug">Instalações, reparos e manutenção elétrica</div>
-            </div>
-
-            <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer">
-                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 2C6 8 4 12 4 15a8 8 0 0016 0c0-3-2-7-8-13z" />
-                    </svg>
-                </div>
-                <div class="font-semibold text-base">Hidráulica</div>
-                <div class="text-gray-500 text-xs mt-1 leading-snug">Encanamento, vazamentos e instalações</div>
-            </div>
-
-            <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer">
-                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h10a2 2 0 012 2v3M7 21h10a2 2 0 002-2v-3M7 21H5m14-7h2a2 2 0 110 4h-2" />
-                    </svg>
-                </div>
-                <div class="font-semibold text-base">Pintura</div>
-                <div class="text-gray-500 text-xs mt-1 leading-snug">Pintura residencial e comercial</div>
-            </div>
-
-            <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer">
-                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                </div>
-                <div class="font-semibold text-base">Manutenção</div>
-                <div class="text-gray-500 text-xs mt-1 leading-snug">Reparos gerais e pequenos consertos</div>
-            </div>
-
-            <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer">
-                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                </div>
-                <div class="font-semibold text-base">Montagem</div>
-                <div class="text-gray-500 text-xs mt-1 leading-snug">Móveis, prateleiras e estruturas</div>
-            </div>
-
-            <div class="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 cursor-pointer">
-                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
-                    </svg>
-                </div>
-                <div class="font-semibold text-base">Outros</div>
-                <div class="text-gray-500 text-xs mt-1 leading-snug">Diversos serviços domésticos</div>
-            </div>
-
+        <div class="hero-stats">
+          <div>
+            <div class="stat-num">345</div>
+            <div>profissionais MEI</div>
+          </div>
+          <div>
+            <div class="stat-num">1.2k</div>
+            <div>serviços concluídos</div>
+          </div>
+          <div>
+            <div class="stat-num">4.8</div>
+            <div>avaliação média</div>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
 
-<!-- POR QUE ESCOLHER -->
-<section class="bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 py-20">
-        <h2 class="text-4xl text-center font-bold text-blue-950 leading-tight">
-            Por que escolher o Vizinho de Aluguel?
-        </h2>
-        <p class="mt-4 text-center max-w-2xl mx-auto text-gray-500">
-            Uma plataforma desenvolvida pensando na sua segurança e conveniência
-        </p>
-        <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            <div class="bg-white p-6 rounded-xl border border-gray-200 transition-shadow duration-200">
-                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                </div>
-                <div class="font-semibold text-lg text-blue-950">Profissionais Verificados</div>
-                <div class="text-gray-500 text-sm mt-2 leading-relaxed">Todos os prestadores passam por verificação de documentos e antecedentes.</div>
-            </div>
-
-            <div class="bg-white p-6 rounded-xl border border-gray-200 transition-shadow duration-200">
-                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-                <div class="font-semibold text-lg text-blue-950">Atendimento Rápido</div>
-                <div class="text-gray-500 text-sm mt-2 leading-relaxed">Encontre profissionais disponíveis para atendimento no mesmo dia.</div>
-            </div>
-
-            <div class="bg-white p-6 rounded-xl border border-gray-200 transition-shadow duration-200">
-                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                    </svg>
-                </div>
-                <div class="font-semibold text-lg text-blue-950">Avaliações Reais</div>
-                <div class="text-gray-500 text-sm mt-2 leading-relaxed">Veja avaliações de clientes anteriores antes de contratar.</div>
-            </div>
-
-            <div class="bg-white p-6 rounded-xl border border-gray-200 transition-shadow duration-200">
-                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                    </svg>
-                </div>
-                <div class="font-semibold text-lg text-blue-950">Pagamento Seguro</div>
-                <div class="text-gray-500 text-sm mt-2 leading-relaxed">Diversas formas de pagamento com total segurança.</div>
-            </div>
-
-            <div class="bg-white p-6 rounded-xl border border-gray-200 transition-shadow duration-200">
-                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-                    </svg>
-                </div>
-                <div class="font-semibold text-lg text-blue-950">Suporte Dedicado</div>
-                <div class="text-gray-500 text-sm mt-2 leading-relaxed">Equipe de suporte pronta para ajudar em qualquer etapa.</div>
-            </div>
-
-            <div class="bg-white p-6 rounded-xl border border-gray-200 transition-shadow duration-200">
-                <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                    </svg>
-                </div>
-                <div class="font-semibold text-lg text-blue-950">Garantia de Qualidade</div>
-                <div class="text-gray-500 text-sm mt-2 leading-relaxed">Satisfação garantida ou seu dinheiro de volta.</div>
-            </div>
-
+      {# Hero card preview #}
+      <aside class="hero-card hide-md" aria-hidden="true">
+        <div class="hero-card-head">
+          <span class="hero-card-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h8l-1 8 10-12h-8l1-8z"/></svg>
+          </span>
+          <div style="flex:1;">
+            <div class="hero-card-meta">Solicitação · #0142</div>
+            <div class="hero-card-title">Troca de disjuntor</div>
+          </div>
+          <span class="status-badge status-recebendo"><span class="dot"></span> Recebendo</span>
         </div>
-    </div>
-</section>
-
-<!-- CTA DUPLO -->
-<section class="bg-white">
-    <div class="max-w-7xl mx-auto px-4 py-20">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-            <!-- Precisa de um Serviço? -->
-            <div class="bg-blue-900 text-white p-8 rounded-2xl flex flex-col justify-between shadow-lg">
-                <div>
-                    <div class="w-14 h-14 bg-blue-800 rounded-xl flex items-center justify-center mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                    </div>
-                    <h2 class="text-2xl font-bold mb-3">Precisa de um Serviço?</h2>
-                    <p class="text-blue-200 mb-6 leading-relaxed">
-                        <span class="text-blue-400 font-semibold">Encontre</span> profissionais qualificados para qualquer serviço doméstico. Rápido, fácil e seguro.
-                    </p>
-                    <ul class="space-y-3 mb-8">
-                        <li class="flex items-center gap-2 text-blue-100 text-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                            Cadastro gratuito
-                        </li>
-                        <li class="flex items-center gap-2 text-blue-100 text-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                            Orçamentos sem compromisso
-                        </li>
-                        <li class="flex items-center gap-2 text-blue-100 text-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                            Profissionais verificados
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <button class="bg-white text-blue-900 font-semibold px-6 py-3 rounded-lg inline-flex items-center gap-2 hover:bg-blue-50 hover:shadow-md active:scale-95 transition-all duration-150">
-                        Solicitar Serviço
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- É Profissional? -->
-            <div class="bg-blue-500 text-white p-8 rounded-2xl flex flex-col justify-between shadow-lg">
-                <div>
-                    <div class="w-14 h-14 bg-blue-400 rounded-xl flex items-center justify-center mb-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                    <h2 class="text-2xl font-bold mb-3">É Profissional?</h2>
-                    <p class="text-blue-100 mb-6 leading-relaxed">
-                        Cadastre-se e comece a receber solicitações de serviços na sua região. Aumente sua renda!
-                    </p>
-                    <ul class="space-y-3 mb-8">
-                        <li class="flex items-center gap-2 text-blue-100 text-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-200 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                            Mais visibilidade
-                        </li>
-                        <li class="flex items-center gap-2 text-blue-100 text-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-200 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                            Gerencie sua agenda
-                        </li>
-                        <li class="flex items-center gap-2 text-blue-100 text-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-200 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                            Receba avaliações
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <button class="border-2 border-white text-white font-semibold px-6 py-3 rounded-lg inline-flex items-center gap-2 hover:bg-blue-400 hover:shadow-md active:scale-95 transition-all duration-150">
-                        Cadastrar como Profissional
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
+        <div style="font-size:13px; color:var(--text-secondary); margin-bottom:14px;">
+          4 propostas recebidas · Trindade
         </div>
+        <div class="proposal-row">
+          <span class="proposal-avatar" style="background:#FFCD07;">CS</span>
+          <div style="flex:1;min-width:0;">
+            <div class="proposal-name">Carlos Silva</div>
+            <div class="proposal-rating">★ 4.9 · MEI</div>
+          </div>
+          <div class="proposal-price">R$ 140</div>
+        </div>
+        <div class="proposal-row">
+          <span class="proposal-avatar" style="background:#1FA9E0;color:white;">MA</span>
+          <div style="flex:1;min-width:0;">
+            <div class="proposal-name">Marcos Andrade</div>
+            <div class="proposal-rating">★ 4.7 · MEI</div>
+          </div>
+          <div class="proposal-price">R$ 165</div>
+        </div>
+        <div class="proposal-row">
+          <span class="proposal-avatar" style="background:#168821;color:white;">PH</span>
+          <div style="flex:1;min-width:0;">
+            <div class="proposal-name">Pedro Henrique</div>
+            <div class="proposal-rating">★ 4.5 · MEI</div>
+          </div>
+          <div class="proposal-price">R$ 120</div>
+        </div>
+      </aside>
     </div>
-</section>
 
+    <div class="hero-stripe"></div>
+  </section>
+
+  {# ===================== CATEGORIAS ===================== #}
+  <section class="section-pad section-bg-page">
+    <div class="container">
+      <div class="section-head">
+        <div class="kicker">O que você precisa?</div>
+        <h2>Serviços disponíveis</h2>
+        <p>Profissionais MEI cadastrados nas principais categorias de serviços domésticos em Florianópolis.</p>
+      </div>
+
+      <div class="grid-categories" style="margin-top:32px;">
+        <a href="{% url 'servicos' %}?cat=eletrica" class="service-cat-card">
+          <span class="service-cat-icon cat-eletrica">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h8l-1 8 10-12h-8l1-8z"/></svg>
+          </span>
+          <div>
+            <div class="name">Elétrica</div>
+            <div class="count">87 profissionais</div>
+          </div>
+        </a>
+        <a href="{% url 'servicos' %}?cat=hidraulica" class="service-cat-card">
+          <span class="service-cat-icon cat-hidraulica">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c-3.5 4-7 8.5-7 12a7 7 0 0 0 14 0c0-3.5-3.5-8-7-12z"/></svg>
+          </span>
+          <div>
+            <div class="name">Hidráulica</div>
+            <div class="count">64 profissionais</div>
+          </div>
+        </a>
+        <a href="{% url 'servicos' %}?cat=pintura" class="service-cat-card">
+          <span class="service-cat-icon cat-pintura">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11V5a2 2 0 0 1 4 0v6"/><path d="M5 21h14"/><rect x="7" y="11" width="10" height="6" rx="1"/></svg>
+          </span>
+          <div>
+            <div class="name">Pintura</div>
+            <div class="count">52 profissionais</div>
+          </div>
+        </a>
+        <a href="{% url 'servicos' %}?cat=reparos" class="service-cat-card">
+          <span class="service-cat-icon cat-reparos">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 5 9 10l-1 1 4 4 1-1 5-5z"/><path d="m12 13-7 7"/><path d="M14 5h5v5"/></svg>
+          </span>
+          <div>
+            <div class="name">Reparos</div>
+            <div class="count">73 profissionais</div>
+          </div>
+        </a>
+        <a href="{% url 'servicos' %}?cat=limpeza" class="service-cat-card">
+          <span class="service-cat-icon cat-limpeza">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+          </span>
+          <div>
+            <div class="name">Limpeza</div>
+            <div class="count">41 profissionais</div>
+          </div>
+        </a>
+        <a href="{% url 'servicos' %}?cat=jardinagem" class="service-cat-card">
+          <span class="service-cat-icon cat-jardinagem">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </span>
+          <div>
+            <div class="name">Jardinagem</div>
+            <div class="count">28 profissionais</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {# ===================== HOW IT WORKS ===================== #}
+  <section class="section-pad section-bg-white">
+    <div class="container">
+      <div class="section-head">
+        <div class="kicker">Como funciona</div>
+        <h2>Três passos simples</h2>
+        <p>Sem taxa de cadastro, sem comissão. A plataforma é gratuita para cidadãos e profissionais.</p>
+      </div>
+
+      <div class="grid-howit" style="margin-top:40px;">
+        <div class="howit-card">
+          <div class="howit-card-head">
+            <span class="howit-num">01</span>
+            <span class="howit-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </span>
+          </div>
+          <h3>Descreva o serviço</h3>
+          <p>Conte o que precisa: categoria, descrição, fotos e seu bairro. Sem custos.</p>
+        </div>
+
+        <div class="howit-card">
+          <div class="howit-card-head">
+            <span class="howit-num">02</span>
+            <span class="howit-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7L22 7"/></svg>
+            </span>
+          </div>
+          <h3>Receba propostas</h3>
+          <p>Profissionais MEI verificados enviam orçamentos em até 24h. Você compara preços e avaliações.</p>
+        </div>
+
+        <div class="howit-card">
+          <div class="howit-card-head">
+            <span class="howit-num">03</span>
+            <span class="howit-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+          </div>
+          <h3>Aceite e contrate</h3>
+          <p>Escolha o profissional. O contato é direto — sem intermediários, sem taxas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ===================== PROFISSIONAIS ===================== #}
+  <section class="section-pad section-bg-page">
+    <div class="container">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px; margin-bottom:32px;">
+        <div class="section-head is-left">
+          <div class="kicker">Em destaque</div>
+          <h2>Profissionais bem avaliados</h2>
+          <p>MEI verificados e com nota acima de 4.5 nas avaliações dos cidadãos.</p>
+        </div>
+        <a href="{% url 'servicos' %}" class="btn btn-secondary">
+          Ver todos
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+
+      <div class="grid-pros">
+        {# Cards demo — substituir por loop {% for pro in destaque_pros %} quando a view fornecer dados #}
+        <article class="pro-card">
+          <div class="pro-card-banner">
+            <span class="status-badge badge-yellow verified-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
+              MEI Verificado
+            </span>
+          </div>
+          <div class="pro-card-body">
+            <div class="pro-avatar" style="background:#FFCD07; color:#0E1F4D;">CS</div>
+            <h3 class="pro-name">Carlos Silva</h3>
+            <div class="pro-specialty">Eletricista</div>
+            <div class="pro-rating">
+              <span class="stars">★★★★★</span>
+              <span class="score">4.9</span>
+              <span class="count">(87 avaliações)</span>
+            </div>
+            <div class="pro-location">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Trindade
+            </div>
+            <div class="pro-card-footer">
+              <div>
+                <div class="pro-price-label">A partir de</div>
+                <div class="pro-price">R$ 80</div>
+              </div>
+              <span class="btn btn-sm btn-secondary" style="pointer-events:none;">Ver perfil →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="pro-card">
+          <div class="pro-card-banner">
+            <span class="status-badge badge-yellow verified-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
+              MEI Verificado
+            </span>
+          </div>
+          <div class="pro-card-body">
+            <div class="pro-avatar" style="background:#1FA9E0;">JP</div>
+            <h3 class="pro-name">Joana Pereira</h3>
+            <div class="pro-specialty">Encanadora</div>
+            <div class="pro-rating">
+              <span class="stars">★★★★★</span>
+              <span class="score">4.8</span>
+              <span class="count">(64 avaliações)</span>
+            </div>
+            <div class="pro-location">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Centro
+            </div>
+            <div class="pro-card-footer">
+              <div>
+                <div class="pro-price-label">A partir de</div>
+                <div class="pro-price">R$ 95</div>
+              </div>
+              <span class="btn btn-sm btn-secondary" style="pointer-events:none;">Ver perfil →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="pro-card">
+          <div class="pro-card-banner">
+            <span class="status-badge badge-yellow verified-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
+              MEI Verificado
+            </span>
+          </div>
+          <div class="pro-card-body">
+            <div class="pro-avatar" style="background:#168821;">RM</div>
+            <h3 class="pro-name">Rafael Mendes</h3>
+            <div class="pro-specialty">Pintor</div>
+            <div class="pro-rating">
+              <span class="stars">★★★★★</span>
+              <span class="score">4.7</span>
+              <span class="count">(52 avaliações)</span>
+            </div>
+            <div class="pro-location">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Lagoa
+            </div>
+            <div class="pro-card-footer">
+              <div>
+                <div class="pro-price-label">A partir de</div>
+                <div class="pro-price">R$ 60</div>
+              </div>
+              <span class="btn btn-sm btn-secondary" style="pointer-events:none;">Ver perfil →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="pro-card">
+          <div class="pro-card-banner">
+            <span class="status-badge badge-yellow verified-badge">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
+              MEI Verificado
+            </span>
+          </div>
+          <div class="pro-card-body">
+            <div class="pro-avatar" style="background:#C97D00;">BL</div>
+            <h3 class="pro-name">Beatriz Lima</h3>
+            <div class="pro-specialty">Diarista</div>
+            <div class="pro-rating">
+              <span class="stars">★★★★★</span>
+              <span class="score">5.0</span>
+              <span class="count">(41 avaliações)</span>
+            </div>
+            <div class="pro-location">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Itacorubi
+            </div>
+            <div class="pro-card-footer">
+              <div>
+                <div class="pro-price-label">A partir de</div>
+                <div class="pro-price">R$ 120</div>
+              </div>
+              <span class="btn btn-sm btn-secondary" style="pointer-events:none;">Ver perfil →</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  {# ===================== CTA MEI ===================== #}
+  <section class="mei-cta">
+    <div class="mei-cta-shape" aria-hidden="true"></div>
+    <div class="container mei-cta-inner">
+      <div>
+        <div class="mei-cta-pill">Para Profissionais</div>
+        <h2>É MEI? Cadastre-se e amplie sua clientela.</h2>
+        <p>Sem mensalidade, sem comissão sobre serviços. A Prefeitura conecta você diretamente a clientes do seu bairro.</p>
+        <a href="{% url 'cadastro' %}" class="btn btn-yellow btn-lg">
+          Cadastrar como profissional
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+
+      <ul class="mei-bullets hide-md">
+        <li><span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg></span> Cadastro 100% gratuito</li>
+        <li><span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg></span> Validação CNPJ MEI automática</li>
+        <li><span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg></span> Receba pedidos do seu bairro</li>
+        <li><span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg></span> Sem comissão sobre serviços</li>
+        <li><span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg></span> Construa sua reputação com avaliações</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
 {% endblock %}

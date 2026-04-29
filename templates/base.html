@@ -1,29 +1,75 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="description" content="Plataforma pública municipal de Florianópolis que conecta cidadãos a profissionais MEI verificados.">
+    <meta name="theme-color" content="#0E1F4D">
+    <title>{% block title %}Vizinho de Aluguel — Prefeitura de Florianópolis{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/tokens.css' %}">
+    <link rel="stylesheet" href="{% static 'css/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+
+    {% block extra_head %}{% endblock %}
 </head>
 <body>
 
+    <a href="#main" class="skip-link">Pular para o conteúdo</a>
+
     {% include "partials/header.html" %}
+
+    {% if messages %}
+      <div class="container" style="padding-top: 16px;">
+        <div class="messages">
+          {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}" role="alert">
+              <div class="alert-body">{{ message }}</div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
 
     {% block content %}{% endblock %}
 
     {% include "partials/footer.html" %}
 
-    <!-- É melhor deixar o script de animar botão do header mobile aqui -->
-    <script>
-      const menuBtn = document.getElementById("menuBtn");
-      const mobileMenu = document.getElementById("mobileMenu");
+    <script src="{% static 'js/auth.js' %}"></script>
 
-      menuBtn.addEventListener("click", () => {
-        mobileMenu.classList.toggle("max-h-0");
-        mobileMenu.classList.toggle("max-h-screen");
-      });
+    <script>
+      // Mobile menu toggle
+      (function () {
+        var btn = document.getElementById('menuBtn');
+        var menu = document.getElementById('mobileMenu');
+        if (btn && menu) {
+          btn.addEventListener('click', function () {
+            var open = menu.classList.toggle('is-open');
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          });
+        }
+
+        // User menu dropdown
+        var userBtn = document.getElementById('userMenuBtn');
+        var userMenu = document.getElementById('userMenu');
+        if (userBtn && userMenu) {
+          userBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            userMenu.classList.toggle('is-open');
+          });
+          document.addEventListener('click', function (e) {
+            if (!userMenu.contains(e.target)) userMenu.classList.remove('is-open');
+          });
+        }
+      })();
     </script>
 
+    {% block extra_scripts %}{% endblock %}
 </body>
 </html>
