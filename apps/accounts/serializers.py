@@ -6,10 +6,11 @@ from .models import User, CitizenProfile, MEIProfile, Address
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=6)
     password_confirm = serializers.CharField(write_only=True)
+    cnpj = serializers.CharField(write_only=True, required=False, allow_blank=True, default='')
 
     class Meta:
         model = User
-        fields = ('email', 'full_name', 'phone', 'cpf', 'user_type', 'password', 'password_confirm')
+        fields = ('email', 'full_name', 'phone', 'cpf', 'user_type', 'password', 'password_confirm', 'cnpj')
         extra_kwargs = {
             'cpf': {'write_only': True},
         }
@@ -19,14 +20,19 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'password': 'As senhas não coincidem.'})
         if data['user_type'] == User.UserType.ADMIN:
             raise serializers.ValidationError({'user_type': 'Não é possível se cadastrar como admin.'})
+        if data['user_type'] == User.UserType.MEI and not data.get('cnpj'):
+            raise serializers.ValidationError({'cnpj': 'CNPJ é obrigatório para MEI.'})
         return data
 
     def create(self, validated_data):
         validated_data.pop('password_confirm')
+        cnpj = validated_data.pop('cnpj', '')
         password = validated_data.pop('password')
         user = User.objects.create(**validated_data)
         user.set_password(password)
         user.save()
+        if user.user_type == User.UserType.MEI:
+            MEIProfile.objects.create(user=user, cnpj=cnpj, razao_social='', nome_fantasia='')
         return user
 
 

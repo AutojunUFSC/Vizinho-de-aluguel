@@ -64,9 +64,9 @@
 
         <div class="or-divider"><span>ou</span></div>
 
-        <button type="button" class="btn btn-govbr">
+        <button type="button" class="btn btn-govbr" disabled title="Em breve: integração GOV.br" style="opacity:.5; cursor:not-allowed;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
-          Entrar com gov.br
+          Entrar com gov.br <small style="font-size:11px;">(em breve)</small>
         </button>
       </form>
 
@@ -207,6 +207,10 @@
     btn.textContent = loading ? 'Aguarde...' : defaultText;
   }
 
+  async function safeJson(res) {
+    try { return await res.json(); } catch (_) { return {}; }
+  }
+
   async function doLogin() {
     hideError('login-error');
     var email = document.getElementById('login-email').value.trim();
@@ -219,15 +223,15 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email, password: password }),
       });
-      var data = await res.json();
+      var data = await safeJson(res);
       if (!res.ok) { showError('login-error', (typeof parseApiErrors === 'function') ? parseApiErrors(data) : 'Falha no login.'); return; }
       localStorage.setItem('vda_token', data.access);
       var meRes = await fetch('/api/v1/auth/users/me/', { headers: getAuthHeaders() });
-      var meData = await meRes.json();
+      var meData = await safeJson(meRes);
       localStorage.setItem('vda_user_type', meData.user_type);
       redirectByUserType(meData.user_type);
     } catch (e) {
-      showError('login-error', 'Erro de conexão. Tente novamente.');
+      showError('login-error', 'Erro de conexão. Verifique se o servidor está rodando.');
     } finally {
       setLoading('btn-entrar', false, 'Entrar');
     }
@@ -257,13 +261,13 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      var data = await res.json();
+      var data = await safeJson(res);
       if (!res.ok) { showError('reg-error', (typeof parseApiErrors === 'function') ? parseApiErrors(data) : 'Falha no cadastro.'); return; }
       localStorage.setItem('vda_token', data.tokens ? data.tokens.access : data.access);
       localStorage.setItem('vda_user_type', userType);
       redirectByUserType(userType);
     } catch (e) {
-      showError('reg-error', 'Erro de conexão. Tente novamente.');
+      showError('reg-error', 'Erro de conexão. Verifique se o servidor está rodando.');
     } finally {
       setLoading('btn-cadastrar', false, 'Criar conta');
     }
