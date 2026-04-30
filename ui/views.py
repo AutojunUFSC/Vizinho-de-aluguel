@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 def home(request):
     return render(request, "ui/home.html")
+
 def contato(request):
     return render(request, "ui/contato.html")
 
@@ -34,3 +35,6 @@ def fazer_proposta(request, pk):
 
 def acompanhamento_pedido(request, pk):
     return render(request, "ui/acompanhamento_pedido.html", {"pk": pk})
+
+def sitemap(request):
+    return render(request, "ui/sitemap.html")

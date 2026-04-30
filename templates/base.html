@@ -16,6 +16,18 @@
     <link rel="stylesheet" href="{% static 'css/layout.css' %}">
     <link rel="stylesheet" href="{% static 'css/components.css' %}">
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/high-contrast.css' %}">
+
+    <script>
+      // Anti-FOUC: aplica alto contraste antes de renderizar o body
+      (function () {
+        try {
+          if (localStorage.getItem('vda_contrast') === 'on') {
+            document.documentElement.classList.add('high-contrast');
+          }
+        } catch (e) { /* localStorage pode estar bloqueado */ }
+      })();
+    </script>
 
     {% block extra_head %}{% endblock %}
 </head>
@@ -67,7 +79,29 @@
             if (!userMenu.contains(e.target)) userMenu.classList.remove('is-open');
           });
         }
+
+        // Sincroniza visual do botão de alto contraste com o estado atual
+        syncContrastButton();
       })();
+
+      // Toggle global de alto contraste — chamada pelo botão na GovBar
+      function toggleContrast() {
+        var on = document.documentElement.classList.toggle('high-contrast');
+        try {
+          localStorage.setItem('vda_contrast', on ? 'on' : 'off');
+        } catch (e) { /* ignore */ }
+        syncContrastButton();
+      }
+
+      function syncContrastButton() {
+        var btns = document.querySelectorAll('.contrast-toggle');
+        var on = document.documentElement.classList.contains('high-contrast');
+        btns.forEach(function (b) {
+          b.classList.toggle('is-on', on);
+          b.setAttribute('aria-pressed', on ? 'true' : 'false');
+          b.setAttribute('title', on ? 'Desativar alto contraste' : 'Ativar alto contraste');
+        });
+      }
     </script>
 
     {% block extra_scripts %}{% endblock %}
