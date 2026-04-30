@@ -1,168 +1,129 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Contato - Vizinho de Aluguel{% endblock %}
+{% block title %}Contato — Vizinho de Aluguel{% endblock %}
 
 {% block content %}
 
-<!--Banner-->
-
-<div class="bg-blue-900 text-white px-4 py-12">
-    <div class = "max-w-7xl mx-auto">
-  <h1 class="text-3xl font-bold mb-2">Fale Conosco</h1>
-  <p class="text-blue-200">Estamos aqui para ajudar. Entre em contato!</p>
-    </div>
+<div class="page-header">
+  <div class="container">
+    <ul class="breadcrumb">
+      <li><a href="{% url 'home' %}">Início</a></li>
+      <li class="sep">›</li>
+      <li>Contato</li>
+    </ul>
+    <h1>Fale Conosco</h1>
+    <p class="subtitle">Estamos aqui para ajudar. Entre em contato com a nossa equipe.</p>
+  </div>
 </div>
 
-<!--Principal-->
+<main id="main">
+  <div class="container" style="padding: 48px 24px 80px;">
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 32px; align-items: start;">
 
-<div class="max-w-7xl mx-auto px-4 py-12">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        
-        
-        <div class= "flex flex-col gap-4">
-            <!--Telefone-->
-            <div class="border border-gray-200 rounded-lg p-6 flex items-start gap-4">
-                <div class="bg-blue-100 text-blue-900 p-3 rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"  style="
-                    width: 100px;
-                    ">
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-gray-900">Telefone</h3>
-                    <p class="text-gray-600 text-sm mt-1">(48) 3000-0000</p>
-                    <p class="text-gray-400 text-sm">Segunda a Sexta, 8h às 18h</p>
-                </div>
-                    
-            </div>
+      <!-- Informações de contato -->
+      <div style="display: flex; flex-direction: column; gap: 16px;">
 
-            <!--E-mail-->
-            <div class="border border-gray-200 rounded-lg p-6 flex items-start gap-4">
-                <div class="bg-blue-100 text-blue-900 p-3 rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="
-                    width: 100px;
-                    ">
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-gray-900">E-mail</h3>
-                    <p class="text-gray-600 text-sm mt-1">contato@vizinhodealuguel.com.br</p>
-                    <p class="text-gray-400 text-sm">Resposta em até 24h úteis</p>
-                </div>
-            </div>
-
-            <!--Endereço-->
-            <div class="border border-gray-200 rounded-lg p-6 flex items-start gap-4">
-                <div class="bg-blue-100 text-blue-900 p-3 rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"  style="
-                    width: 100px;
-                    ">
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-gray-900">Endereço</h3>
-                    <p class="text-gray-600 text-sm mt-1">Vizinho de Aluguel</p>
-                    <p class="text-gray-400 text-sm">Centro, Florianópolis - SC</p>
-                </div>
-            </div>
-            <!--Horario de Atendimento-->
-            <div class="border border-gray-200 rounded-lg p-6 flex items-start gap-4">
-                <div class="bg-blue-100 text-blue-900 p-3 rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"  style="
-                    width: 100px;
-                    ">
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-gray-900">Horário de Atendimento</h3>
-                    <p class="text-gray-600 text-sm mt-1">Segunda a Sexta</p>
-                    <p class="text-gray-400 text-sm">08:00 às 18:00</p>
-                </div>
-            </div>
-
-
+        <div class="card card-pad" style="display: flex; align-items: flex-start; gap: 16px;">
+          <div class="stat-icon" style="background: var(--pmf-cyan-50); color: var(--pmf-navy); flex-shrink: 0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92V21a1 1 0 0 1-1.1 1A19 19 0 0 1 2 4.1 1 1 0 0 1 3 3h4a1 1 0 0 1 1 .76l1 4a1 1 0 0 1-.27 1L7.21 10.21a16 16 0 0 0 6.58 6.58l1.45-1.52a1 1 0 0 1 1-.27l4 1A1 1 0 0 1 22 17z"/></svg>
+          </div>
+          <div>
+            <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 4px;">Telefone</h3>
+            <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">(48) 3000-0000</p>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Segunda a Sexta, 8h às 18h</p>
+          </div>
         </div>
-        <div class="lg:col-span-2">
-            <div class="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
-                <h2 class="text-2xl font-bold text-gray-900 mb-2">Envie sua Mensagem</h2>
-                <p class="text-gray-500 text-sm mb-8">Preencha o formulário abaixo e entraremos em contato o mais breve possível.</p>
-                
-                <form class="flex flex-col gap-5">
 
-                    <!--Nome e Email-->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="flex flex-col gap-1">
-                            <label class="text-sm font-medium text-gray-700">
-                Nome completo <span class="text-red-500">*</span></label>
-                            <input type="text" placeholder="Seu nome"
-                class="border border-gray-300 bg-gray-100 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <label class="text-sm font-medium text-gray-700">E-mail <span class="text-red-500">*</span></label>
-                            <input type="email" placeholder="seu@email.com"
-                                    class="border border-gray-300 bg-gray-100 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                        </div>
-                    </div>
-
-                    
-                    <!--Telefone e Assunto-->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="flex flex-col gap-1">
-                            <label class="text-sm font-medium text-gray-700">
-                        Telefone</label>
-                            <input type="tel" placeholder="(48) 99999-9999"
-                            class="border border-gray-300 bg-gray-100 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <label class="text-sm font-medium text-gray-700">Assunto <span class="text-red-500">*</span></label>
-                            <select class="border border-gray-300 bg-gray-100 rounded-md px-4 py-2 text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="">Selecione o assunto</option>
-                                <option value="duvida">Dúvida sobre serviços</option>
-                                <option value="suporte">Problema com pedido</option>
-                                <option value="parceria">Quero ser profissional</option>
-                                <option value="feedback">Sugestão</option>
-                                <option value="outros">Outro</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!--Mensagem-->
-                    <div class="flex flex-col gap-1">
-                        <label class="text-sm font-medium text-gray-700">Mensagem <span class="text-red-500">*</span></label>
-                        <textarea placeholder="Descreva sua mensagem detalhadamente..." rows="5"
-                            class="border border-gray-300 bg-gray-100 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"></textarea>
-                    </div>
-
-                    <!--Botão e aviso-->
-                    <div class="flex items-center gap-4">
-                        <button type="submit" class="bg-blue-900 text-white px-6 py-3 rounded-md hover:bg-blue-800 flex items-center gap-2 text-sm font-medium">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 12L3.269 3.125A59.769 59.769 0 0121.485 12 59.768 59.768 0 013.27 20.875L5.999 12Zm0 0h7.5" />
-</svg>
-                            Enviar Mensagem
-                        </button>
-                        <p class="text-gray-500 text-sm"> Campos com <span class="text-red-500 text-sm">*</span> são obrigatórios</p>
-                    </div>
-
-                </form>
-            </div>
-
-                <form action="{% url 'contato' %}" method="POST" class="flex flex-col gap-5">
-                
-                    {% csrf_token %}
-
-                </form>
+        <div class="card card-pad" style="display: flex; align-items: flex-start; gap: 16px;">
+          <div class="stat-icon" style="background: var(--pmf-cyan-50); color: var(--pmf-navy); flex-shrink: 0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7L22 7"/></svg>
+          </div>
+          <div>
+            <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 4px;">E-mail</h3>
+            <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">vizinho@pmf.sc.gov.br</p>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Resposta em até 24h úteis</p>
+          </div>
         </div>
+
+        <div class="card card-pad" style="display: flex; align-items: flex-start; gap: 16px;">
+          <div class="stat-icon" style="background: var(--pmf-cyan-50); color: var(--pmf-navy); flex-shrink: 0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 4px;">Endereço</h3>
+            <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Centro, Florianópolis — SC</p>
+          </div>
+        </div>
+
+        <div class="card card-pad" style="display: flex; align-items: flex-start; gap: 16px;">
+          <div class="stat-icon" style="background: var(--pmf-cyan-50); color: var(--pmf-navy); flex-shrink: 0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <div>
+            <h3 style="font-size: 15px; font-weight: 700; margin: 0 0 4px;">Horário de Atendimento</h3>
+            <p style="font-size: 14px; color: var(--text-secondary); margin: 0;">Segunda a Sexta</p>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 0;">08:00 às 18:00</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Formulário de contato -->
+      <div class="card card-pad-lg">
+        <h2 style="font-size: 22px; font-weight: 700; margin: 0 0 6px;">Envie sua Mensagem</h2>
+        <p style="font-size: 14px; color: var(--text-muted); margin: 0 0 28px;">Preencha o formulário e entraremos em contato o mais breve possível.</p>
+
+        <form action="{% url 'contato' %}" method="POST" style="display: flex; flex-direction: column; gap: 0;">
+          {% csrf_token %}
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="field">
+              <label for="nome">Nome completo <span class="required-mark">*</span></label>
+              <input id="nome" name="nome" type="text" class="input" placeholder="Seu nome completo" required>
+            </div>
+            <div class="field">
+              <label for="email">E-mail <span class="required-mark">*</span></label>
+              <input id="email" name="email" type="email" class="input" placeholder="seu@email.com" required>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="field">
+              <label for="telefone">Telefone</label>
+              <input id="telefone" name="telefone" type="tel" class="input" placeholder="(48) 99999-9999">
+            </div>
+            <div class="field">
+              <label for="assunto">Assunto <span class="required-mark">*</span></label>
+              <select id="assunto" name="assunto" class="select" required>
+                <option value="">Selecione o assunto</option>
+                <option value="duvida">Dúvida sobre serviços</option>
+                <option value="suporte">Problema com pedido</option>
+                <option value="parceria">Quero ser profissional</option>
+                <option value="feedback">Sugestão</option>
+                <option value="outros">Outro</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="mensagem">Mensagem <span class="required-mark">*</span></label>
+            <textarea id="mensagem" name="mensagem" class="textarea" rows="5" placeholder="Descreva sua mensagem detalhadamente..." required></textarea>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 8px;">
+            <button type="submit" class="btn btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2 15 22 11 13 2 9l20-7z"/></svg>
+              Enviar Mensagem
+            </button>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 0;">Campos com <span class="required-mark">*</span> são obrigatórios</p>
+          </div>
+
+        </form>
+      </div>
+
     </div>
-</div>
-
-
-
+  </div>
+</main>
 
 {% endblock %}

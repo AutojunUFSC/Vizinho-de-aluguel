@@ -230,10 +230,10 @@
 
         <div class="card card-pad">
           <h3 style="font-size:15px; font-weight:700; color:var(--pmf-navy); margin:0 0 12px;">Disponibilidade</h3>
-          <p style="font-size:13px; color:var(--text-secondary); margin:0 0 14px;">
+          <p id="disponibilidade-texto" style="font-size:13px; color:var(--text-secondary); margin:0 0 14px;">
             Você está aceitando novos pedidos.
           </p>
-          <button type="button" class="btn btn-secondary btn-sm btn-block">Pausar disponibilidade</button>
+          <button id="btn-disponibilidade" type="button" class="btn btn-secondary btn-sm btn-block" onclick="toggleDisponibilidade()">Pausar disponibilidade</button>
         </div>
 
       </aside>
@@ -290,7 +290,47 @@
       if (mp.bio) document.getElementById('mei-bio').value = mp.bio;
       var spec = document.getElementById('pro-specialty');
       if (mp.razao_social) spec.textContent = mp.razao_social;
+      syncDisponibilidade(mp.is_available !== false);
     } catch (e) { /* silent */ }
+  }
+
+  var _isAvailable = true;
+
+  function syncDisponibilidade(available) {
+    _isAvailable = available;
+    var texto = document.getElementById('disponibilidade-texto');
+    var btn = document.getElementById('btn-disponibilidade');
+    if (available) {
+      texto.textContent = 'Você está aceitando novos pedidos.';
+      texto.style.color = 'var(--status-success)';
+      btn.textContent = 'Pausar disponibilidade';
+      btn.classList.remove('btn-danger');
+      btn.classList.add('btn-secondary');
+    } else {
+      texto.textContent = 'Você está pausado e não receberá novos pedidos.';
+      texto.style.color = 'var(--status-danger)';
+      btn.textContent = 'Retomar disponibilidade';
+      btn.classList.remove('btn-secondary');
+      btn.classList.add('btn-danger');
+    }
+  }
+
+  async function toggleDisponibilidade() {
+    var btn = document.getElementById('btn-disponibilidade');
+    btn.disabled = true;
+    try {
+      var res = await fetch('/api/v1/auth/mei-profiles/me/', {
+        method: 'PATCH',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, getAuthHeaders()),
+        body: JSON.stringify({ is_available: !_isAvailable }),
+      });
+      if (res.ok) {
+        var mp = await res.json();
+        syncDisponibilidade(mp.is_available);
+      }
+    } catch (e) { /* silent */ } finally {
+      btn.disabled = false;
+    }
   }
 
   async function saveMeiProfile() {

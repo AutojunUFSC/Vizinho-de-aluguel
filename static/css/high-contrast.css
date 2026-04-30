@@ -379,6 +379,28 @@ html.high-contrast .or-divider span { background: #000 !important; color: #fff !
 /* ===== Skip link ===== */
 html.high-contrast .skip-link { background: #FFD600; color: #000; }
 
+/* ===== Request card footer — textos que usam --pmf-navy ===== */
+html.high-contrast .request-card-footer .proposals { color: #fff !important; }
+html.high-contrast .request-card-footer .budget { color: #FFD600 !important; }
+html.high-contrast .request-card h3 { color: #fff !important; }
+
+/* ===== Stat card ===== */
+html.high-contrast .stat-card .number { color: #fff !important; }
+html.high-contrast .stat-card .label { color: #DDDDDD !important; }
+
+/* ===== Dashboard e seções ===== */
+html.high-contrast .section-h2 { color: #fff !important; }
+
+/* ===== Pro card ===== */
+html.high-contrast .pro-name { color: #fff !important; }
+html.high-contrast .pro-price { color: #FFD600 !important; }
+html.high-contrast .pro-specialty,
+html.high-contrast .pro-location { color: #DDDDDD !important; }
+
+/* ===== Service category card ===== */
+html.high-contrast .service-cat-card .name { color: #fff !important; }
+html.high-contrast .service-cat-card .count { color: #DDDDDD !important; }
+
 /* ===== Notification list ===== */
 html.high-contrast .notif-title { color: #fff !important; }
 html.high-contrast .notif-body { color: #DDDDDD !important; }
