@@ -24,16 +24,11 @@
 
   <div class="container container-auth" style="padding: 40px 24px 60px;">
 
-    {# ===== Toggle Entrar / Cadastrar ===== #}
     <div class="auth-toggle" role="tablist">
       <button id="tab-entrar" type="button" role="tab" aria-selected="true"
-              class="auth-toggle-btn is-active" onclick="showTab('entrar')">
-        Entrar
-      </button>
+              class="auth-toggle-btn is-active" onclick="showTab('entrar')">Entrar</button>
       <button id="tab-cadastrar" type="button" role="tab" aria-selected="false"
-              class="auth-toggle-btn" onclick="showTab('cadastrar')">
-        Cadastrar-se
-      </button>
+              class="auth-toggle-btn" onclick="showTab('cadastrar')">Cadastrar-se</button>
     </div>
 
     <div class="card card-pad-lg">
@@ -44,7 +39,6 @@
           <label for="login-email">E-mail</label>
           <input id="login-email" name="email" type="email" class="input" placeholder="seu@email.com" autocomplete="email">
         </div>
-
         <div class="field">
           <label for="login-password">Senha</label>
           <input id="login-password" name="password" type="password" class="input" placeholder="••••••••" autocomplete="current-password">
@@ -52,19 +46,15 @@
             <a href="#" style="font-size:13px; color:var(--pmf-cyan-600); font-weight:600;">Esqueci minha senha</a>
           </div>
         </div>
-
-        <div id="login-error" class="alert alert-danger hidden" role="alert" style="display:none; margin-bottom:16px;">
+        <div id="login-error" class="alert alert-danger" role="alert" style="display:none; margin-bottom:16px;">
           <div class="alert-body"></div>
         </div>
-
         <button id="btn-entrar" type="submit" class="btn btn-primary btn-block btn-lg">
           Entrar
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
-
         <div class="or-divider"><span>ou</span></div>
-
-        <button type="button" class="btn btn-govbr" disabled title="Em breve: integração GOV.br" style="opacity:.5; cursor:not-allowed;">
+        <button type="button" class="btn btn-govbr" disabled style="opacity:.5; cursor:not-allowed;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
           Entrar com gov.br <small style="font-size:11px;">(em breve)</small>
         </button>
@@ -100,10 +90,16 @@
 
         <div id="cnpj-field" class="field" style="display:none;">
           <label for="reg-cnpj">CNPJ MEI <span class="required-mark">*</span></label>
-          <input id="reg-cnpj" name="cnpj" type="text" class="input" placeholder="00.000.000/0001-00">
-          <div class="field-help">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-            Validamos automaticamente seu CNPJ na Receita Federal.
+          <div style="position:relative;">
+            <input id="reg-cnpj" name="cnpj" type="text" class="input"
+                   placeholder="00.000.000/0001-00"
+                   maxlength="18"
+                   oninput="onCnpjInput(this)"
+                   onblur="validateCnpjField()">
+            <span id="cnpj-ok" style="display:none; position:absolute; right:12px; top:50%; transform:translateY(-50%); color:var(--status-success); font-size:16px;">✓</span>
+          </div>
+          <div id="cnpj-feedback" style="font-size:12px; margin-top:5px; color:var(--text-muted);">
+            Informe o CNPJ. A situação ativa é verificada pelo servidor.
           </div>
         </div>
 
@@ -113,8 +109,14 @@
         </div>
 
         <div class="field">
-          <label for="reg-phone">Telefone</label>
-          <input id="reg-phone" name="phone" type="tel" class="input" placeholder="(48) 99999-9999" autocomplete="tel">
+          <label for="reg-phone">Telefone <span style="font-size:11px; color:var(--text-muted); font-weight:400;">(com DDD)</span></label>
+          <input id="reg-phone" name="phone" type="tel" class="input"
+                 placeholder="(48) 99999-9999"
+                 maxlength="15"
+                 oninput="onPhoneInput(this)"
+                 onblur="validatePhoneField()"
+                 autocomplete="tel">
+          <div id="phone-feedback" style="display:none; font-size:12px; margin-top:5px;"></div>
         </div>
 
         <div class="field">
@@ -138,7 +140,7 @@
         </div>
 
         <div id="reg-error" class="alert alert-danger" role="alert" style="display:none; margin-bottom:16px;">
-          <div class="alert-body"></div>
+          <div class="alert-body" style="white-space:pre-line;"></div>
         </div>
 
         <button id="btn-cadastrar" type="submit" class="btn btn-primary btn-block btn-lg">
@@ -169,28 +171,29 @@
 <script>
   if (typeof redirectIfLogged === 'function') redirectIfLogged();
 
-  var userType = 'CIDADAO';
+  var userType  = 'CIDADAO';
+  var phoneValid = true;
 
   function setUserType(t) {
     userType = t;
     document.getElementById('type-cidadao').classList.toggle('is-active', t === 'CIDADAO');
-    document.getElementById('type-cidadao').setAttribute('aria-checked', t === 'CIDADAO' ? 'true' : 'false');
+    document.getElementById('type-cidadao').setAttribute('aria-checked', t === 'CIDADAO');
     document.getElementById('type-mei').classList.toggle('is-active', t === 'MEI');
-    document.getElementById('type-mei').setAttribute('aria-checked', t === 'MEI' ? 'true' : 'false');
+    document.getElementById('type-mei').setAttribute('aria-checked', t === 'MEI');
     document.getElementById('cnpj-field').style.display = t === 'MEI' ? 'block' : 'none';
+    resetCnpjUI();
   }
 
   function showTab(tab) {
     var isEntrar = tab === 'entrar';
-    document.getElementById('form-entrar').style.display = isEntrar ? 'block' : 'none';
-    document.getElementById('form-cadastrar').style.display = isEntrar ? 'none' : 'block';
+    document.getElementById('form-entrar').style.display    = isEntrar ? 'block' : 'none';
+    document.getElementById('form-cadastrar').style.display = isEntrar ? 'none'  : 'block';
     document.getElementById('tab-entrar').classList.toggle('is-active', isEntrar);
-    document.getElementById('tab-entrar').setAttribute('aria-selected', isEntrar ? 'true' : 'false');
+    document.getElementById('tab-entrar').setAttribute('aria-selected', isEntrar);
     document.getElementById('tab-cadastrar').classList.toggle('is-active', !isEntrar);
-    document.getElementById('tab-cadastrar').setAttribute('aria-selected', !isEntrar ? 'true' : 'false');
-
-    document.getElementById('auth-title').textContent = isEntrar ? 'Acesse sua conta' : 'Crie sua conta';
-    document.getElementById('breadcrumb-mode').textContent = isEntrar ? 'Acessar conta' : 'Criar conta';
+    document.getElementById('tab-cadastrar').setAttribute('aria-selected', !isEntrar);
+    document.getElementById('auth-title').textContent      = isEntrar ? 'Acesse sua conta' : 'Crie sua conta';
+    document.getElementById('breadcrumb-mode').textContent = isEntrar ? 'Acessar conta'    : 'Criar conta';
   }
 
   function showError(elId, msg) {
@@ -198,35 +201,136 @@
     el.querySelector('.alert-body').textContent = msg;
     el.style.display = 'flex';
   }
-  function hideError(elId) {
-    document.getElementById(elId).style.display = 'none';
-  }
-  function setLoading(btnId, loading, defaultText) {
+  function hideError(elId) { document.getElementById(elId).style.display = 'none'; }
+
+  function setLoading(btnId, loading, label) {
     var btn = document.getElementById(btnId);
-    btn.disabled = loading;
-    btn.textContent = loading ? 'Aguarde...' : defaultText;
+    btn.disabled    = loading;
+    btn.textContent = loading ? 'Aguarde...' : label;
   }
 
   async function safeJson(res) {
     try { return await res.json(); } catch (_) { return {}; }
   }
 
+  function parseApiErrors(data) {
+    if (!data || typeof data === 'string') return data || 'Erro desconhecido.';
+    var msgs = [];
+    function extract(obj) {
+      for (var key in obj) {
+        var val = obj[key];
+        if (Array.isArray(val)) msgs.push(val.join(' '));
+        else if (val && typeof val === 'object') extract(val);
+        else msgs.push(String(val));
+      }
+    }
+    extract(data);
+    return msgs.join('\n') || 'Erro desconhecido.';
+  }
+
+  // ── Algoritmo oficial de dígitos verificadores do CNPJ ────
+  // Pesos: de 2 a 9 aplicados da direita para esquerda, ciclicamente
+  function cnpjDigitsOk(d) {
+    if (d.length !== 14 || /^(\d)\1+$/.test(d)) return false;
+    function calc(str, n) {
+      var weights = [];
+      var p = 2;
+      for (var i = n - 1; i >= 0; i--) {
+        weights[i] = p;
+        p = p === 9 ? 2 : p + 1;
+      }
+      var sum = 0;
+      for (var k = 0; k < n; k++) sum += parseInt(str[k]) * weights[k];
+      var r = sum % 11;
+      return r < 2 ? 0 : 11 - r;
+    }
+    return calc(d, 12) === parseInt(d[12]) && calc(d, 13) === parseInt(d[13]);
+  }
+
+  // ── Máscara CNPJ ──────────────────────────────────────────
+  function onCnpjInput(el) {
+    var v = el.value.replace(/\D/g, '').substring(0, 14);
+    v = v
+      .replace(/^(\d{2})(\d)/, '$1.$2')
+      .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+      .replace(/\.(\d{3})(\d)/, '.$1/$2')
+      .replace(/(\d{4})(\d)/, '$1-$2');
+    el.value = v;
+    resetCnpjUI();
+  }
+
+  function resetCnpjUI() {
+    document.getElementById('cnpj-ok').style.display = 'none';
+    var fb = document.getElementById('cnpj-feedback');
+    fb.style.color = 'var(--text-muted)';
+    fb.textContent = 'Informe o CNPJ. A situação ativa é verificada pelo servidor.';
+    document.getElementById('reg-cnpj').style.borderColor = '';
+  }
+
+  function validateCnpjField() {
+    var input  = document.getElementById('reg-cnpj');
+    var digits = input.value.replace(/\D/g, '');
+    var fb     = document.getElementById('cnpj-feedback');
+    if (!digits) return;
+    if (!cnpjDigitsOk(digits)) {
+      input.style.borderColor = 'var(--status-danger)';
+      fb.style.color          = 'var(--status-danger)';
+      fb.textContent          = '✗ CNPJ inválido. Verifique os dígitos.';
+    } else {
+      input.style.borderColor = 'var(--status-success)';
+      fb.style.color          = 'var(--status-success)';
+      fb.textContent          = '✓ Formato válido. A situação ativa é confirmada pelo servidor.';
+      document.getElementById('cnpj-ok').style.display = 'inline';
+    }
+  }
+
+  // ── Máscara e validação de telefone ───────────────────────
+  function onPhoneInput(el) {
+    var v = el.value.replace(/\D/g, '').substring(0, 11);
+    v = v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d{1,4})$/, '$1-$2');
+    el.value = v;
+    document.getElementById('phone-feedback').style.display = 'none';
+    el.style.borderColor = '';
+    phoneValid = true;
+  }
+
+  function validatePhoneField() {
+    var input  = document.getElementById('reg-phone');
+    var digits = input.value.replace(/\D/g, '');
+    var fb     = document.getElementById('phone-feedback');
+    if (!digits) { phoneValid = true; return; }
+    if (digits.length < 10 || digits.length > 11 || parseInt(digits.substring(0, 2)) < 11) {
+      input.style.borderColor = 'var(--status-danger)';
+      fb.style.color   = 'var(--status-danger)';
+      fb.textContent   = '✗ Telefone inválido. Use o formato (48) 99999-9999.';
+      fb.style.display = 'block';
+      phoneValid = false;
+    } else {
+      input.style.borderColor = 'var(--status-success)';
+      fb.style.color   = 'var(--status-success)';
+      fb.textContent   = '✓ Telefone válido.';
+      fb.style.display = 'block';
+      phoneValid = true;
+    }
+  }
+
+  // ── Login ─────────────────────────────────────────────────
   async function doLogin() {
     hideError('login-error');
-    var email = document.getElementById('login-email').value.trim();
+    var email    = document.getElementById('login-email').value.trim();
     var password = document.getElementById('login-password').value;
     if (!email || !password) { showError('login-error', 'Preencha e-mail e senha.'); return; }
     setLoading('btn-entrar', true, 'Entrar');
     try {
-      var res = await fetch('/api/v1/auth/login/', {
+      var res  = await fetch('/api/v1/auth/login/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email, password: password }),
       });
       var data = await safeJson(res);
-      if (!res.ok) { showError('login-error', (typeof parseApiErrors === 'function') ? parseApiErrors(data) : 'Falha no login.'); return; }
+      if (!res.ok) { showError('login-error', parseApiErrors(data)); return; }
       localStorage.setItem('vda_token', data.access);
-      var meRes = await fetch('/api/v1/auth/users/me/', { headers: getAuthHeaders() });
+      var meRes  = await fetch('/api/v1/auth/users/me/', { headers: getAuthHeaders() });
       var meData = await safeJson(meRes);
       localStorage.setItem('vda_user_type', meData.user_type);
       redirectByUserType(meData.user_type);
@@ -237,32 +341,61 @@
     }
   }
 
+  // ── Cadastro ──────────────────────────────────────────────
   async function doRegister() {
     hideError('reg-error');
-    var full_name = document.getElementById('reg-name').value.trim();
-    var email = document.getElementById('reg-email').value.trim();
-    var phone = document.getElementById('reg-phone').value.trim();
-    var password = document.getElementById('reg-password').value;
+
+    var full_name        = document.getElementById('reg-name').value.trim();
+    var email            = document.getElementById('reg-email').value.trim();
+    var phone            = document.getElementById('reg-phone').value.trim();
+    var password         = document.getElementById('reg-password').value;
     var password_confirm = document.getElementById('reg-password-confirm').value;
+
     if (!full_name || !email || !password || !password_confirm) {
-      showError('reg-error', 'Preencha todos os campos obrigatórios.');
-      return;
+      showError('reg-error', 'Preencha todos os campos obrigatórios.'); return;
     }
-    var payload = { email: email, full_name: full_name, phone: phone, password: password, password_confirm: password_confirm, user_type: userType };
+    if (password !== password_confirm) {
+      showError('reg-error', 'As senhas não coincidem.'); return;
+    }
+    if (password.length < 6) {
+      showError('reg-error', 'A senha deve ter pelo menos 6 caracteres.'); return;
+    }
+    if (phone && !phoneValid) {
+      showError('reg-error', 'Telefone inválido. Corrija antes de continuar.'); return;
+    }
+    if (!document.getElementById('termos').checked) {
+      showError('reg-error', 'Você precisa aceitar os Termos de Uso para continuar.'); return;
+    }
+
+    var payload = {
+      email: email, full_name: full_name, phone: phone,
+      password: password, password_confirm: password_confirm,
+      user_type: userType,
+    };
+
     if (userType === 'MEI') {
-      var cnpj = document.getElementById('reg-cnpj').value.trim();
-      if (!cnpj) { showError('reg-error', 'Informe o CNPJ MEI.'); return; }
-      payload.cnpj = cnpj;
+      var cnpjRaw    = document.getElementById('reg-cnpj').value.trim();
+      var cnpjDigits = cnpjRaw.replace(/\D/g, '');
+      if (!cnpjRaw) {
+        showError('reg-error', 'Informe o CNPJ MEI.'); return;
+      }
+      if (!cnpjDigitsOk(cnpjDigits)) {
+        showError('reg-error', 'CNPJ inválido. Verifique os dígitos.'); return;
+      }
+      payload.cnpj = cnpjDigits;
     }
+
     setLoading('btn-cadastrar', true, 'Criar conta');
     try {
-      var res = await fetch('/api/v1/auth/register/', {
+      var res  = await fetch('/api/v1/auth/register/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
       var data = await safeJson(res);
-      if (!res.ok) { showError('reg-error', (typeof parseApiErrors === 'function') ? parseApiErrors(data) : 'Falha no cadastro.'); return; }
+      if (!res.ok) {
+        showError('reg-error', parseApiErrors(data)); return;
+      }
       localStorage.setItem('vda_token', data.tokens ? data.tokens.access : data.access);
       localStorage.setItem('vda_user_type', userType);
       redirectByUserType(userType);

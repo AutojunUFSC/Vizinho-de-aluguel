@@ -16,9 +16,9 @@
       <div class="page-header-row">
         <div>
           <h1>Olá, <span id="pro-name">profissional</span></h1>
-          <p class="subtitle"><span id="pro-specialty">MEI</span> · Florianópolis</p>
+          <p class="subtitle"><span id="pro-specialty">MEI</span> · <span id="pro-city">Florianópolis</span></p>
         </div>
-        <span class="status-badge badge-yellow" style="padding:6px 12px; font-weight:700;">
+        <span id="pro-badge" class="status-badge badge-yellow" style="padding:6px 12px; font-weight:700; display:none;">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
           MEI Verificado
         </span>
@@ -63,7 +63,7 @@
         </span>
         <div>
           <div class="number" id="stat-rating">—</div>
-          <div class="label">Avaliação média</div>
+          <div class="label">Avaliação média</div>    
         </div>
       </div>
     </div>
@@ -71,160 +71,55 @@
     {# ===== Dashboard 2/1 ===== #}
     <div class="dash-grid">
 
+      {# Coluna esquerda: pedidos #}
       <div>
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; gap:12px; flex-wrap:wrap;">
           <h2 class="section-h2">Pedidos disponíveis na sua área</h2>
           <div style="display:flex; gap:8px;">
-            <select class="select" style="min-height:36px; padding:6px 12px; font-size:13px; width:auto;">
-              <option>Todas as categorias</option>
-              <option>Elétrica</option>
-              <option>Hidráulica</option>
+            <select id="filtro-categoria" class="select" style="min-height:36px; padding:6px 12px; font-size:13px; width:auto;" onchange="loadPedidos()">
+              <option value="">Todas as categorias</option>
             </select>
-            <select class="select" style="min-height:36px; padding:6px 12px; font-size:13px; width:auto;">
-              <option>Trindade + 5 km</option>
-              <option>+ 10 km</option>
+            <select id="filtro-raio" class="select" style="min-height:36px; padding:6px 12px; font-size:13px; width:auto;" onchange="loadPedidos()">
+              <option value="5">+ 5 km</option>
+              <option value="10">+ 10 km</option>
+              <option value="20">+ 20 km</option>
+              <option value="50">+ 50 km</option>
             </select>
           </div>
         </div>
 
         <div id="pedidos-list" style="display:grid; gap:12px;">
-          {# Cards demo (renderizados via JS quando contexto disponível) #}
-          <article class="request-card">
-            <div class="request-card-head">
-              <div style="flex:1; min-width:0;">
-                <div class="request-meta">
-                  <span class="badge badge-muted">#0142</span>
-                  <span class="status-badge status-recebendo"><span class="dot"></span> Recebendo</span>
-                  <span class="badge badge-cyan">Elétrica</span>
-                </div>
-                <h3>Troca de disjuntor no quadro elétrico</h3>
-                <p class="description">Disjuntor da cozinha disparando com frequência. Preciso de eletricista para diagnóstico e troca.</p>
-              </div>
+          <div class="empty-state" id="pedidos-empty" style="display:none;">
+            <div class="empty-state-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
             </div>
-            <div class="request-card-footer">
-              <span class="icon-text">📍 Trindade · 0.8 km</span>
-              <span class="icon-text">🕒 há 2 horas</span>
-              <span class="proposals">4 propostas</span>
-              <span class="budget">R$ 120-180</span>
-              <a href="{% url 'fazer_proposta' pk='0142' %}" class="btn btn-sm btn-yellow" style="margin-left:auto;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                Enviar lance
-              </a>
-            </div>
-          </article>
-
-          <article class="request-card">
-            <div class="request-card-head">
-              <div style="flex:1; min-width:0;">
-                <div class="request-meta">
-                  <span class="badge badge-muted">#0145</span>
-                  <span class="status-badge status-recebendo"><span class="dot"></span> Recebendo</span>
-                  <span class="badge badge-cyan">Elétrica</span>
-                </div>
-                <h3>Instalação de chuveiro elétrico</h3>
-                <p class="description">Apartamento novo, fiação preparada. Chuveiro 7500W já comprado.</p>
-              </div>
-            </div>
-            <div class="request-card-footer">
-              <span class="icon-text">📍 Itacorubi · 2.3 km</span>
-              <span class="icon-text">🕒 há 5 horas</span>
-              <span class="proposals">2 propostas</span>
-              <span class="budget">R$ 90-130</span>
-              <a href="{% url 'fazer_proposta' pk='0145' %}" class="btn btn-sm btn-yellow" style="margin-left:auto;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                Enviar lance
-              </a>
-            </div>
-          </article>
-
-          <article class="request-card">
-            <div class="request-card-head">
-              <div style="flex:1; min-width:0;">
-                <div class="request-meta">
-                  <span class="badge badge-muted">#0149</span>
-                  <span class="status-badge status-recebendo"><span class="dot"></span> Recebendo</span>
-                  <span class="badge badge-cyan">Elétrica</span>
-                </div>
-                <h3>Tomadas com mau contato</h3>
-                <p class="description">Três tomadas da sala desligando sozinhas. Precisa diagnóstico.</p>
-              </div>
-            </div>
-            <div class="request-card-footer">
-              <span class="icon-text">📍 Centro · 4.1 km</span>
-              <span class="icon-text">🕒 hoje</span>
-              <span class="proposals">1 proposta</span>
-              <span class="budget">R$ 80-150</span>
-              <a href="{% url 'fazer_proposta' pk='0149' %}" class="btn btn-sm btn-yellow" style="margin-left:auto;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                Enviar lance
-              </a>
-            </div>
-          </article>
+            <h3>Nenhum pedido disponível</h3>
+            <p>Não há pedidos na sua área com os filtros selecionados.</p>
+          </div>
         </div>
       </div>
 
-      {# Coluna direita #}
+      {# Coluna direita (aside) #}
       <aside class="dash-aside">
 
         <div class="card card-pad">
           <h3 style="font-size:15px; font-weight:700; color:var(--pmf-navy); margin:0 0 14px;">Sua reputação</h3>
           <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-            <div style="font-size:32px; font-weight:800; color:var(--pmf-navy); line-height:1;">4.9</div>
+            <div id="rep-score" style="font-size:32px; font-weight:800; color:var(--pmf-navy); line-height:1;">—</div>
             <div>
-              <div style="color:var(--vda-yellow-600); font-size:16px;">★★★★★</div>
-              <div style="font-size:12px; color:var(--text-muted);">87 avaliações</div>
+              <div id="rep-stars" style="color:var(--vda-yellow-600); font-size:16px;">☆☆☆☆☆</div>
+              <div id="rep-total" style="font-size:12px; color:var(--text-muted);">0 avaliações</div>
             </div>
           </div>
-          <div style="display:grid; gap:6px;">
-            <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-muted);">
-              <span style="width:12px;">5★</span>
-              <div style="flex:1; height:6px; background:var(--bg-muted); border-radius:3px; overflow:hidden;">
-                <div style="height:100%; width:82%; background:var(--vda-yellow-600);"></div>
-              </div>
-              <span style="width:24px; text-align:right;">71</span>
-            </div>
-            <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-muted);">
-              <span style="width:12px;">4★</span>
-              <div style="flex:1; height:6px; background:var(--bg-muted); border-radius:3px; overflow:hidden;">
-                <div style="height:100%; width:14%; background:var(--vda-yellow-600);"></div>
-              </div>
-              <span style="width:24px; text-align:right;">12</span>
-            </div>
-            <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-muted);">
-              <span style="width:12px;">3★</span>
-              <div style="flex:1; height:6px; background:var(--bg-muted); border-radius:3px; overflow:hidden;">
-                <div style="height:100%; width:3%; background:var(--vda-yellow-600);"></div>
-              </div>
-              <span style="width:24px; text-align:right;">3</span>
-            </div>
-            <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-muted);">
-              <span style="width:12px;">2★</span>
-              <div style="flex:1; height:6px; background:var(--bg-muted); border-radius:3px; overflow:hidden;">
-                <div style="height:100%; width:1%; background:var(--vda-yellow-600);"></div>
-              </div>
-              <span style="width:24px; text-align:right;">1</span>
-            </div>
-            <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-muted);">
-              <span style="width:12px;">1★</span>
-              <div style="flex:1; height:6px; background:var(--bg-muted); border-radius:3px; overflow:hidden;">
-                <div style="height:100%; width:0%; background:var(--vda-yellow-600);"></div>
-              </div>
-              <span style="width:24px; text-align:right;">0</span>
-            </div>
+          <div id="rep-bars" style="display:grid; gap:6px;">
+            {# Barras preenchidas via JS #}
           </div>
         </div>
 
         <div class="card card-pad">
           <h3 style="font-size:15px; font-weight:700; color:var(--pmf-navy); margin:0 0 14px;">Próximos serviços</h3>
-          <div style="font-size:13px; color:var(--text-secondary); line-height:1.6;">
-            <div style="padding:10px 0; border-bottom:1px solid var(--border);">
-              <div style="font-weight:700; color:var(--pmf-navy);">Pintura - sala 25m²</div>
-              <div style="font-size:12px;">Hoje, 14:00 · Beira-Mar Norte</div>
-            </div>
-            <div style="padding:10px 0;">
-              <div style="font-weight:700; color:var(--pmf-navy);">Reparo torneira cozinha</div>
-              <div style="font-size:12px;">Amanhã, 09:00 · Trindade</div>
-            </div>
+          <div id="proximos-list" style="font-size:13px; color:var(--text-secondary); line-height:1.6;">
+            <p style="color:var(--text-muted); font-size:13px;">Carregando...</p>
           </div>
         </div>
 
@@ -244,12 +139,30 @@
       <h2 class="section-h2" style="margin-bottom:14px;">Meu perfil profissional</h2>
       <div class="card card-pad-lg">
         <form id="form-perfil-mei" onsubmit="event.preventDefault(); saveMeiProfile();" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-          <div class="field"><label for="mei-nome">Nome completo</label><input id="mei-nome" class="input" type="text"></div>
-          <div class="field"><label for="mei-email">E-mail</label><input id="mei-email" class="input" type="email" readonly style="background:var(--bg-muted);"></div>
-          <div class="field"><label for="mei-phone">Telefone</label><input id="mei-phone" class="input" type="tel"></div>
-          <div class="field"><label for="mei-cnpj">CNPJ MEI</label><input id="mei-cnpj" class="input" type="text" readonly style="background:var(--bg-muted);"></div>
-          <div class="field"><label for="mei-cidade">Cidade</label><input id="mei-cidade" class="input" type="text" placeholder="Florianópolis"></div>
-          <div class="field"><label for="mei-radius">Raio de atendimento (km)</label><input id="mei-radius" class="input" type="number" min="1" max="50" value="5"></div>
+          <div class="field">
+            <label for="mei-nome">Nome completo</label>
+            <input id="mei-nome" class="input" type="text">
+          </div>
+          <div class="field">
+            <label for="mei-email">E-mail</label>
+            <input id="mei-email" class="input" type="email" readonly style="background:var(--bg-muted);">
+          </div>
+          <div class="field">
+            <label for="mei-phone">Telefone</label>
+            <input id="mei-phone" class="input" type="tel" placeholder="(48) 99999-9999">
+          </div>
+          <div class="field">
+            <label for="mei-cnpj">CNPJ MEI</label>
+            <input id="mei-cnpj" class="input" type="text" readonly style="background:var(--bg-muted);">
+          </div>
+          <div class="field">
+            <label for="mei-cidade">Cidade</label>
+            <input id="mei-cidade" class="input" type="text" placeholder="Florianópolis">
+          </div>
+          <div class="field">
+            <label for="mei-radius">Raio de atendimento (km)</label>
+            <input id="mei-radius" class="input" type="number" min="1" max="50" value="5">
+          </div>
           <div class="field" style="grid-column:1/-1;">
             <label for="mei-bio">Apresentação</label>
             <textarea id="mei-bio" class="textarea" rows="3" placeholder="Conte um pouco da sua experiência e especialidades..."></textarea>
@@ -269,49 +182,261 @@
 
 {% block extra_scripts %}
 <script>
+  if (typeof requireAuth === 'function') requireAuth();
 
+  // ── Estado global ──────────────────────────────────────────
+  var meiProfile = null;   // dados do MEIProfile vindos da API
+  var isAvailable = true;  // estado de disponibilidade
+
+  // ── Utilitários ────────────────────────────────────────────
+  function escHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, function (c) {
+      return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[c];
+    });
+  }
+
+  function timeAgo(dateStr) {
+    if (!dateStr) return '';
+    var diff = Math.floor((Date.now() - new Date(dateStr)) / 60000);
+    if (diff < 1)   return 'agora';
+    if (diff < 60)  return 'há ' + diff + ' min';
+    if (diff < 1440) return 'há ' + Math.floor(diff / 60) + 'h';
+    return 'há ' + Math.floor(diff / 1440) + ' dia(s)';
+  }
+
+  function shortId(uuid) {
+    return (uuid || '').slice(-4).toUpperCase();
+  }
+
+  // ── Init ───────────────────────────────────────────────────
   async function init() {
     try {
       var res = await fetch('/api/v1/auth/users/me/', { headers: getAuthHeaders() });
       if (!res.ok) return;
       var me = await res.json();
       document.getElementById('pro-name').textContent = (me.full_name || me.email || 'profissional').split(' ')[0];
-      document.getElementById('mei-nome').value = me.full_name || '';
+      document.getElementById('mei-nome').value  = me.full_name || '';
       document.getElementById('mei-email').value = me.email || '';
       document.getElementById('mei-phone').value = me.phone || '';
     } catch (e) { /* silent */ }
+
     try {
       var res2 = await fetch('/api/v1/auth/mei-profiles/me/', { headers: getAuthHeaders() });
       if (!res2.ok) return;
-      var mp = await res2.json();
-      if (mp.cnpj) document.getElementById('mei-cnpj').value = mp.cnpj;
-      if (mp.city) document.getElementById('mei-cidade').value = mp.city;
-      if (mp.service_radius_km != null) document.getElementById('mei-radius').value = mp.service_radius_km;
-      if (mp.bio) document.getElementById('mei-bio').value = mp.bio;
-      var spec = document.getElementById('pro-specialty');
-      if (mp.razao_social) spec.textContent = mp.razao_social;
-      syncDisponibilidade(mp.is_available !== false);
+      meiProfile = await res2.json();
+
+      // Header
+      if (meiProfile.razao_social) document.getElementById('pro-specialty').textContent = meiProfile.razao_social;
+      if (meiProfile.city)         document.getElementById('pro-city').textContent       = meiProfile.city;
+
+      // Badge verificado
+      if (meiProfile.verification_status === 'VERIFIED') {
+        document.getElementById('pro-badge').style.display = 'inline-flex';
+      }
+
+      // Formulário
+      if (meiProfile.cnpj)              document.getElementById('mei-cnpj').value   = meiProfile.cnpj;
+      if (meiProfile.city)              document.getElementById('mei-cidade').value  = meiProfile.city;
+      if (meiProfile.service_radius_km) document.getElementById('mei-radius').value  = meiProfile.service_radius_km;
+      if (meiProfile.bio)               document.getElementById('mei-bio').value     = meiProfile.bio;
+
+      // Stats
+      document.getElementById('stat-realizados').textContent = meiProfile.total_services_completed || 0;
+      document.getElementById('stat-rating').textContent     = meiProfile.rating_avg ? parseFloat(meiProfile.rating_avg).toFixed(1) : '—';
+
+      // Disponibilidade
+      isAvailable = meiProfile.is_available !== false;
+      updateDispBadge();
+
+      // Filtro de raio: preenche cidade
+      var opts = document.getElementById('filtro-raio').options;
+      for (var i = 0; i < opts.length; i++) {
+        opts[i].text = (meiProfile.city || 'Florianópolis') + ' + ' + opts[i].value + ' km';
+      }
+    } catch (e) { /* silent */ }
+
+    loadCategorias();
+    loadPedidos();
+    loadStats();
+    loadReputacao();
+    loadProximosServicos();
+  }
+
+  // ── Categorias (select) ────────────────────────────────────
+  async function loadCategorias() {
+    try {
+      var res = await fetch('/api/v1/services/categories/', { headers: getAuthHeaders() });
+      if (!res.ok) return;
+      var data = await res.json();
+      var arr  = Array.isArray(data) ? data : (data.results || []);
+      var sel  = document.getElementById('filtro-categoria');
+      arr.forEach(function (cat) {
+        var opt = document.createElement('option');
+        opt.value       = cat.slug;
+        opt.textContent = cat.name;
+        sel.appendChild(opt);
+      });
     } catch (e) { /* silent */ }
   }
 
-  var _isAvailable = true;
+  // ── Pedidos disponíveis ────────────────────────────────────
+  async function loadPedidos() {
+    var box     = document.getElementById('pedidos-list');
+    var empty   = document.getElementById('pedidos-empty');
+    var catFiltro  = document.getElementById('filtro-categoria').value;
+    var raioFiltro = document.getElementById('filtro-raio').value;
 
-  function syncDisponibilidade(available) {
-    _isAvailable = available;
-    var texto = document.getElementById('disponibilidade-texto');
-    var btn = document.getElementById('btn-disponibilidade');
-    if (available) {
+    empty.style.display = 'none';
+    box.innerHTML = '<p style="font-size:13px; color:var(--text-muted); padding:16px 0;">Carregando...</p>';
+
+    var params = new URLSearchParams({ status: 'OPEN,IN_AUCTION', radius_km: raioFiltro });
+    if (catFiltro) params.append('category', catFiltro);
+
+    try {
+      var res = await fetch('/api/v1/services/requests/available/?' + params.toString(), { headers: getAuthHeaders() });
+      if (!res.ok) throw new Error();
+      var data = await res.json();
+      var arr  = Array.isArray(data) ? data : (data.results || []);
+
+      // Atualiza stat de pedidos disponíveis
+      document.getElementById('stat-pedidos').textContent = arr.length;
+
+      if (!arr.length) {
+        box.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+      }
+
+      box.innerHTML = arr.map(function (p) {
+        var statusLabel = p.status === 'IN_AUCTION' ? 'Em leilão' : 'Recebendo';
+        var urgBadge = (p.urgency === 'ALTA' || p.urgency === 'EMERGENCIA')
+          ? '<span class="badge badge-danger">' + escHtml(p.urgency_display || p.urgency) + '</span>'
+          : '';
+        var catBadge = p.category_name
+          ? '<span class="badge badge-cyan">' + escHtml(p.category_name) + '</span>'
+          : '';
+        var bairro = p.address_neighborhood
+          ? '<span class="icon-text">📍 ' + escHtml(p.address_neighborhood) + '</span>'
+          : '';
+        var budget = p.budget_max
+          ? '<span class="budget">Até R$ ' + parseFloat(p.budget_max).toFixed(0) + '</span>'
+          : '';
+        var bids = typeof p.bids_count !== 'undefined'
+          ? '<span class="proposals">' + p.bids_count + ' proposta' + (p.bids_count !== 1 ? 's' : '') + '</span>'
+          : '';
+        var idCurto = '#' + shortId(p.id);
+
+        return '<article class="request-card">' +
+          '<div class="request-card-head">' +
+            '<div style="flex:1; min-width:0;">' +
+              '<div class="request-meta">' +
+                '<span class="badge badge-muted">' + idCurto + '</span>' +
+                '<span class="status-badge status-recebendo"><span class="dot"></span> ' + statusLabel + '</span>' +
+                catBadge + urgBadge +
+              '</div>' +
+              '<h3>' + escHtml(p.title) + '</h3>' +
+              '<p class="description">' + escHtml((p.description || '').substring(0, 120)) + '</p>' +
+            '</div>' +
+          '</div>' +
+          '<div class="request-card-footer">' +
+            bairro +
+            '<span class="icon-text">🕒 ' + timeAgo(p.created_at) + '</span>' +
+            bids + budget +
+          '</div>' +
+        '</article>';
+      }).join('');
+    } catch (e) {
+      box.innerHTML = '';
+      empty.style.display = 'block';
+    }
+  }
+
+  // ── Stats de ordens ────────────────────────────────────────
+  async function loadStats() {
+    try {
+      var res = await fetch('/api/v1/orders/mei/stats/', { headers: getAuthHeaders() });
+      if (!res.ok) return;
+      var data = await res.json();
+      if (data.em_andamento != null) document.getElementById('stat-andamento').textContent = data.em_andamento;
+    } catch (e) { /* silent */ }
+  }
+
+  // ── Reputação ──────────────────────────────────────────────
+  async function loadReputacao() {
+    try {
+      var res = await fetch('/api/v1/reviews/mei/summary/', { headers: getAuthHeaders() });
+      if (!res.ok) return;
+      var data = await res.json();
+
+      var avg   = parseFloat(data.rating_avg || 0);
+      var total = data.total || 0;
+
+      document.getElementById('rep-score').textContent = avg ? avg.toFixed(1) : '—';
+      document.getElementById('rep-total').textContent = total + ' avaliação' + (total !== 1 ? 'ões' : 'ão');
+
+      // Estrelas
+      var filled = Math.round(avg);
+      document.getElementById('rep-stars').textContent = '★'.repeat(filled) + '☆'.repeat(5 - filled);
+
+      // Barras 5→1
+      var dist = data.distribution || {};
+      var barsHtml = '';
+      for (var nota = 5; nota >= 1; nota--) {
+        var count = dist[nota] || 0;
+        var pct   = total ? Math.round(count / total * 100) : 0;
+        barsHtml +=
+          '<div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--text-muted);">' +
+            '<span style="width:12px;">' + nota + '★</span>' +
+            '<div style="flex:1; height:6px; background:var(--bg-muted); border-radius:3px; overflow:hidden;">' +
+              '<div style="height:100%; width:' + pct + '%; background:var(--vda-yellow-600);"></div>' +
+            '</div>' +
+            '<span style="width:24px; text-align:right;">' + count + '</span>' +
+          '</div>';
+      }
+      document.getElementById('rep-bars').innerHTML = barsHtml;
+    } catch (e) { /* silent */ }
+  }
+
+  // ── Próximos serviços ──────────────────────────────────────
+  async function loadProximosServicos() {
+    var box = document.getElementById('proximos-list');
+    try {
+      var res = await fetch('/api/v1/orders/mei/upcoming/', { headers: getAuthHeaders() });
+      if (!res.ok) throw new Error();
+      var data = await res.json();
+      var arr  = Array.isArray(data) ? data : (data.results || []);
+
+      if (!arr.length) {
+        box.innerHTML = '<p style="font-size:13px; color:var(--text-muted);">Nenhum serviço agendado.</p>';
+        return;
+      }
+
+      box.innerHTML = arr.slice(0, 5).map(function (o, i) {
+        var border = i < arr.length - 1 ? 'border-bottom:1px solid var(--border);' : '';
+        var prazo  = o.agreed_deadline
+          ? new Date(o.agreed_deadline).toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' })
+          : '';
+        var local  = o.address_neighborhood ? ' · ' + escHtml(o.address_neighborhood) : '';
+        return '<div style="padding:10px 0; ' + border + '">' +
+          '<div style="font-weight:700; color:var(--pmf-navy);">' + escHtml((o.title || '').substring(0, 35)) + '</div>' +
+          '<div style="font-size:12px;">Prazo: ' + prazo + local + '</div>' +
+        '</div>';
+      }).join('');
+    } catch (e) {
+      box.innerHTML = '<p style="font-size:13px; color:var(--text-muted);">Nenhum serviço agendado.</p>';
+    }
+  }
+
+  // ── Disponibilidade ────────────────────────────────────────
+  function updateDispBadge() {
+    var texto = document.getElementById('disp-texto');
+    var btn   = document.getElementById('btn-disp');
+    if (isAvailable) {
       texto.textContent = 'Você está aceitando novos pedidos.';
-      texto.style.color = 'var(--status-success)';
-      btn.textContent = 'Pausar disponibilidade';
-      btn.classList.remove('btn-danger');
-      btn.classList.add('btn-secondary');
+      btn.textContent   = 'Pausar disponibilidade';
     } else {
-      texto.textContent = 'Você está pausado e não receberá novos pedidos.';
-      texto.style.color = 'var(--status-danger)';
-      btn.textContent = 'Retomar disponibilidade';
-      btn.classList.remove('btn-secondary');
-      btn.classList.add('btn-danger');
+      texto.textContent = 'Você está pausado e não aparece nas buscas.';
+      btn.textContent   = 'Retomar disponibilidade';
     }
   }
 
@@ -342,16 +467,16 @@
         headers: Object.assign({ 'Content-Type': 'application/json' }, getAuthHeaders()),
         body: JSON.stringify({
           full_name: document.getElementById('mei-nome').value.trim(),
-          phone: document.getElementById('mei-phone').value.trim(),
+          phone:     document.getElementById('mei-phone').value.trim(),
         }),
       });
       await fetch('/api/v1/auth/mei-profiles/me/', {
         method: 'PATCH',
         headers: Object.assign({ 'Content-Type': 'application/json' }, getAuthHeaders()),
         body: JSON.stringify({
-          city: document.getElementById('mei-cidade').value.trim(),
-          service_radius_km: parseInt(document.getElementById('mei-radius').value, 10) || 5,
-          bio: document.getElementById('mei-bio').value.trim(),
+          city:               document.getElementById('mei-cidade').value.trim(),
+          service_radius_km:  parseInt(document.getElementById('mei-radius').value, 10) || 5,
+          bio:                document.getElementById('mei-bio').value.trim(),
         }),
       });
       msg.innerHTML = '<div class="alert alert-success" role="alert"><div class="alert-body">Perfil atualizado com sucesso.</div></div>';
