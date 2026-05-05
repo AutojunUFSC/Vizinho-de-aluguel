@@ -56,10 +56,10 @@
 .section-head { max-width: 720px; margin: 0 auto; text-align: center; }
 .section-head.is-left { text-align: left; margin: 0; max-width: none; }
 .section-head .kicker {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--pmf-cyan-600);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   margin-bottom: 8px;
 }
