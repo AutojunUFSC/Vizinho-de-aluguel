@@ -247,7 +247,8 @@
 
       box.innerHTML = arr.map(function (r) {
         var st = STATUS_LABEL[r.status] || { label: r.status, cls: 'status-open' };
-        return '<a href="/minhas_solicitacoes/" class="request-card">' +
+        var href = '/solicitacao/' + encodeURIComponent(r.id) + '/propostas/';
+        return '<a href="' + href + '" class="request-card">' +
           '<div class="request-card-head"><div style="flex:1;min-width:0;">' +
             '<div class="request-meta">' +
               '<span class="status-badge ' + st.cls + '"><span class="dot"></span> ' + st.label + '</span>' +

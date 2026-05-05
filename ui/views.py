@@ -51,3 +51,7 @@ def fazer_proposta(request, pk):
 
 def acompanhamento_pedido(request, pk):
     return render(request, "ui/acompanhamento_pedido.html", {"pk": pk})
+
+
+def sitemap(request):
+    return render(request, "ui/sitemap.html")

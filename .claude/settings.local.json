@@ -10,7 +10,10 @@
       "Bash(tar -xzf \"/c/Users/rafab/.claude/projects/c--Users-rafab-OneDrive-Anexos-Autojun-Vizinho-de-aluguel-Vizinho-de-aluguel/9d405ef3-2dde-4daa-995e-13cb14def6ed/tool-results/webfetch-1777351637728-xgc9ay.bin\" --strip-components=2 marketplace-vizinho-de-aluguel-identidade-visual/project/assets/)",
       "Bash(tar -xzOf \"/c/Users/rafab/.claude/projects/c--Users-rafab-OneDrive-Anexos-Autojun-Vizinho-de-aluguel-Vizinho-de-aluguel/9d405ef3-2dde-4daa-995e-13cb14def6ed/tool-results/webfetch-1777351637728-xgc9ay.bin\" \"marketplace-vizinho-de-aluguel-identidade-visual/project/app/page-other.jsx\")",
       "Read(//c/c/Users/rafab/OneDrive/Anexos/Autojun/Vizinho_de_aluguel/Vizinho-de-aluguel/**)",
-      "Read(//c/c/Users/rafab/OneDrive/Anexos/Autojun/Vizinho_de_aluguel/Vizinho-de-aluguel/static/**)"
+      "Read(//c/c/Users/rafab/OneDrive/Anexos/Autojun/Vizinho_de_aluguel/Vizinho-de-aluguel/static/**)",
+      "Bash(where python *)",
+      "Bash(/c/Users/rafab/OneDrive/Anexos/Autojun/Vizinho_de_aluguel/Vizinho-de-aluguel/venv/Scripts/python.exe --version)",
+      "Bash(/c/Users/rafab/OneDrive/Anexos/Autojun/Vizinho_de_aluguel/Vizinho-de-aluguel/venv/Scripts/python.exe -m pip list)"
     ]
   }
 }

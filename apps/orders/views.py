@@ -3,68 +3,79 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
+from apps.accounts.models import User
 from .models import ServiceOrder
 from .serializers import ServiceOrderSerializer
 
 
 class ServiceOrderViewSet(viewsets.ModelViewSet):
     """
-    Gerencia ordens de serviço. Ordens são criadas automaticamente pela action award
-    em ServiceRequestViewSet e não devem ser criadas ou editadas diretamente.
-
-    - mine: retorna as ordens do usuário autenticado (filtra por citizen ou mei_profile conforme user_type).
-    - start: transição PENDING_START → IN_PROGRESS; registra started_at.
-    - complete: transição IN_PROGRESS → COMPLETED; registra completed_at.
-    - confirm: registra citizen_confirmed_at em uma ordem COMPLETED.
-    - cancel: cancela a ordem independentemente do status atual.
+    Ordens são criadas automaticamente pela action award em ServiceRequestViewSet.
     """
 
-    queryset = ServiceOrder.objects.all()
     serializer_class = ServiceOrderSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        user = self.request.user
+        qs = ServiceOrder.objects.select_related('citizen__user', 'mei_profile__user')
+        if user.user_type == User.UserType.CIDADAO:
+            return qs.filter(citizen__user=user)
+        if user.user_type == User.UserType.MEI:
+            return qs.filter(mei_profile__user=user)
+        return ServiceOrder.objects.none()
+
     @action(detail=False, methods=['get'])
     def mine(self, request):
-        user = request.user
-        if getattr(user, 'user_type', None) == 'CIDADAO':
-            orders = self.queryset.filter(citizen__user=user)
-        else:
-            orders = self.queryset.filter(mei_profile__user=user)
-        serializer = self.get_serializer(orders, many=True)
-        return Response(serializer.data)
+        return self.list(request)
+
+    def _transition(self, order, owner, required_status, new_status, timestamp_field, message, error_msg):
+        if owner != self.request.user:
+            return Response({'error': error_msg}, status=status.HTTP_403_FORBIDDEN)
+        if order.status != required_status:
+            return Response({'error': 'Status inválido para esta operação.'}, status=status.HTTP_400_BAD_REQUEST)
+        order.status = new_status
+        setattr(order, timestamp_field, timezone.now())
+        order.save()
+        return Response({'status': message})
 
     @action(detail=True, methods=['post'])
     def start(self, request, pk=None):
         order = self.get_object()
-        if order.status == 'PENDING_START':
-            order.status = 'IN_PROGRESS'
-            order.started_at = timezone.now()
-            order.save()
-            return Response({'status': 'Serviço iniciado com sucesso!'})
-        return Response({'error': 'Não é possível iniciar esta ordem.'}, status=status.HTTP_400_BAD_REQUEST)
+        return self._transition(
+            order, order.mei_profile.user,
+            ServiceOrder.Status.PENDING_START, ServiceOrder.Status.IN_PROGRESS,
+            'started_at', 'Serviço iniciado com sucesso!',
+            'Apenas o MEI responsável pode iniciar o serviço.',
+        )
 
     @action(detail=True, methods=['post'])
     def complete(self, request, pk=None):
         order = self.get_object()
-        if order.status == 'IN_PROGRESS':
-            order.status = 'COMPLETED'
-            order.completed_at = timezone.now()
-            order.save()
-            return Response({'status': 'Serviço concluído com sucesso!'})
-        return Response({'error': 'Não é possível concluir esta ordem.'}, status=status.HTTP_400_BAD_REQUEST)
+        return self._transition(
+            order, order.mei_profile.user,
+            ServiceOrder.Status.IN_PROGRESS, ServiceOrder.Status.COMPLETED,
+            'completed_at', 'Serviço concluído com sucesso!',
+            'Apenas o MEI responsável pode concluir o serviço.',
+        )
 
     @action(detail=True, methods=['post'])
     def confirm(self, request, pk=None):
         order = self.get_object()
-        if order.status == 'COMPLETED':
-            order.citizen_confirmed_at = timezone.now()
-            order.save()
-            return Response({'status': 'Serviço confirmado pelo cidadão!'})
-        return Response({'error': 'Não é possível confirmar esta ordem.'}, status=status.HTTP_400_BAD_REQUEST)
+        return self._transition(
+            order, order.citizen.user,
+            ServiceOrder.Status.COMPLETED, ServiceOrder.Status.COMPLETED,
+            'citizen_confirmed_at', 'Serviço confirmado pelo cidadão!',
+            'Apenas o cidadão pode confirmar o serviço.',
+        )
 
     @action(detail=True, methods=['post'])
     def cancel(self, request, pk=None):
         order = self.get_object()
-        order.status = 'CANCELLED'
+        if order.citizen.user != request.user and order.mei_profile.user != request.user:
+            return Response({'error': 'Sem permissão para cancelar esta ordem.'}, status=status.HTTP_403_FORBIDDEN)
+        if order.status in (ServiceOrder.Status.COMPLETED, ServiceOrder.Status.CANCELLED):
+            return Response({'error': 'Não é possível cancelar esta ordem.'}, status=status.HTTP_400_BAD_REQUEST)
+        order.status = ServiceOrder.Status.CANCELLED
         order.save()
         return Response({'status': 'Serviço cancelado!'})
