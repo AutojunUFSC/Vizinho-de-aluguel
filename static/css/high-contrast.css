@@ -1,0 +1,439 @@
+/* ============================================================
+   VIZINHO DE ALUGUEL — Alto Contraste (WCAG AAA)
+   Ativado quando <html> recebe a classe .high-contrast
+   ============================================================ */
+
+html.high-contrast {
+  /* Remapeia tokens base — TODO o sistema que usa var(--*) muda automaticamente */
+  --pmf-navy:        #000000;
+  --pmf-navy-700:    #000000;
+  --pmf-navy-600:    #000000;
+  --pmf-cyan:        #00E5FF;
+  --pmf-cyan-600:    #00E5FF;
+  --pmf-cyan-50:     #003040;
+  --pmf-cyan-100:    #004050;
+
+  --vda-yellow:      #FFD600;
+  --vda-yellow-600:  #FFEA00;
+  --vda-yellow-50:   #2A2400;
+  --vda-yellow-100:  #3A3000;
+
+  --status-success:    #00FF66;
+  --status-success-50: #003318;
+  --status-warning:    #FFD600;
+  --status-warning-50: #3A2E00;
+  --status-danger:     #FF5C5C;
+  --status-danger-50:  #3A0000;
+  --status-info:       #00E5FF;
+  --status-info-50:    #003040;
+
+  --bg-page:        #000000;
+  --bg-surface:     #000000;
+  --bg-muted:       #1A1A1A;
+  --border:         #FFFFFF;
+  --border-strong:  #FFFFFF;
+  --text-primary:   #FFFFFF;
+  --text-secondary: #FFFFFF;
+  --text-muted:     #DDDDDD;
+  --text-inverse:   #000000;
+
+  --shadow-sm: none;
+  --shadow:    none;
+  --shadow-md: none;
+
+  --focus-ring: 0 0 0 4px #FFD600;
+
+  background: #000;
+  color: #fff;
+}
+
+html.high-contrast body {
+  background: #000;
+  color: #fff;
+}
+
+/* ===== Texto — força branco em headings também ===== */
+html.high-contrast h1,
+html.high-contrast h2,
+html.high-contrast h3,
+html.high-contrast h4,
+html.high-contrast h5,
+html.high-contrast h6 {
+  color: #fff;
+}
+
+/* ===== Links — sublinhado forçado, cor única em destaque ===== */
+html.high-contrast a {
+  color: #FFD600;
+  text-decoration: underline !important;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+html.high-contrast a:hover,
+html.high-contrast a:focus {
+  color: #FFEA00;
+  background: #1A1A1A;
+}
+
+/* Botões NÃO devem ser sublinhados (são clicáveis óbvios pela borda) */
+html.high-contrast a.btn,
+html.high-contrast .btn,
+html.high-contrast button.btn {
+  text-decoration: none !important;
+}
+
+/* ===== Botões — bordas reforçadas, sem sombra ===== */
+html.high-contrast .btn {
+  border: 2px solid currentColor !important;
+  box-shadow: none !important;
+}
+html.high-contrast .btn-primary {
+  background: #000;
+  color: #fff;
+  border-color: #fff !important;
+}
+html.high-contrast .btn-primary:hover {
+  background: #fff;
+  color: #000;
+}
+html.high-contrast .btn-secondary {
+  background: #000;
+  color: #FFD600;
+  border-color: #FFD600 !important;
+}
+html.high-contrast .btn-secondary:hover {
+  background: #FFD600;
+  color: #000;
+}
+html.high-contrast .btn-yellow {
+  background: #FFD600;
+  color: #000;
+  border-color: #FFD600 !important;
+  font-weight: 800;
+}
+html.high-contrast .btn-yellow:hover {
+  background: #FFEA00;
+  color: #000;
+}
+html.high-contrast .btn-ghost {
+  background: transparent;
+  color: #fff;
+  border-color: #fff !important;
+}
+html.high-contrast .btn-ghost:hover { background: #1A1A1A; }
+html.high-contrast .btn-outline-light {
+  background: transparent;
+  color: #fff;
+  border-color: #fff !important;
+}
+html.high-contrast .btn-danger {
+  background: #FF5C5C;
+  color: #000;
+  border-color: #FF5C5C !important;
+}
+html.high-contrast .btn-govbr {
+  background: #00E5FF;
+  color: #000;
+  border-color: #00E5FF !important;
+}
+
+/* ===== Inputs / Select / Textarea — bordas grossas ===== */
+html.high-contrast .input,
+html.high-contrast .select,
+html.high-contrast .textarea,
+html.high-contrast input[type="text"],
+html.high-contrast input[type="email"],
+html.high-contrast input[type="tel"],
+html.high-contrast input[type="password"],
+html.high-contrast input[type="number"],
+html.high-contrast input[type="search"],
+html.high-contrast textarea,
+html.high-contrast select {
+  background: #000 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+}
+html.high-contrast .input::placeholder,
+html.high-contrast .textarea::placeholder,
+html.high-contrast textarea::placeholder,
+html.high-contrast input::placeholder {
+  color: #BBBBBB;
+}
+html.high-contrast .input:focus,
+html.high-contrast .select:focus,
+html.high-contrast .textarea:focus {
+  border-color: #FFD600 !important;
+  box-shadow: 0 0 0 3px #FFD600 !important;
+}
+html.high-contrast label {
+  color: #fff;
+}
+
+/* ===== Cards — sem sombra, borda branca forte ===== */
+html.high-contrast .card,
+html.high-contrast .stat-card,
+html.high-contrast .howit-card,
+html.high-contrast .request-card,
+html.high-contrast .pro-card,
+html.high-contrast .service-cat-card {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  box-shadow: none !important;
+}
+
+/* ===== Hero — substitui gradient por preto sólido, oculta foto e padrões ===== */
+html.high-contrast .hero {
+  background: #000 !important;
+}
+html.high-contrast .hero-photo,
+html.high-contrast .hero-overlay,
+html.high-contrast .hero-pattern,
+html.high-contrast .hero-shape,
+html.high-contrast .mei-cta-shape {
+  display: none !important;
+}
+html.high-contrast .hero-stripe,
+html.high-contrast .footer-stripe {
+  background: #FFD600 !important;
+  height: 6px !important;
+}
+html.high-contrast .hero-title { color: #fff; }
+html.high-contrast .hero-title .accent { color: #FFD600; }
+html.high-contrast .hero-subtitle,
+html.high-contrast .hero-stats { color: #fff; }
+html.high-contrast .hero-stats .stat-num { color: #FFD600; }
+
+/* ===== Hero card preview ===== */
+html.high-contrast .hero-card { background: #000 !important; border: 2px solid #fff !important; }
+html.high-contrast .hero-card-meta,
+html.high-contrast .hero-card-title,
+html.high-contrast .hero-card .proposal-name,
+html.high-contrast .hero-card .proposal-price {
+  color: #fff;
+}
+html.high-contrast .hero-card .proposal-rating { color: #DDDDDD; }
+html.high-contrast .hero-card .proposal-avatar { background: #FFD600 !important; color: #000 !important; }
+html.high-contrast .hero-card-icon { background: #003040 !important; color: #00E5FF !important; }
+
+/* ===== Page header (gradient navy) ===== */
+html.high-contrast .page-header {
+  background: #000 !important;
+  border-bottom: 4px solid #FFD600;
+}
+html.high-contrast .page-header::after { display: none; }
+html.high-contrast .page-header h1,
+html.high-contrast .page-header .subtitle { color: #fff; }
+html.high-contrast .breadcrumb,
+html.high-contrast .breadcrumb a { color: #FFD600; }
+
+/* ===== Tip card (gradient) ===== */
+html.high-contrast .tip-card {
+  background: #000 !important;
+  border: 2px solid #FFD600 !important;
+}
+html.high-contrast .tip-card h3,
+html.high-contrast .tip-card p { color: #fff; }
+
+/* ===== MEI CTA section ===== */
+html.high-contrast .mei-cta { background: #000 !important; }
+html.high-contrast .mei-cta h2,
+html.high-contrast .mei-cta p { color: #fff; }
+html.high-contrast .mei-bullets li {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+}
+html.high-contrast .mei-bullets .check { background: #FFD600 !important; color: #000 !important; }
+
+/* ===== Header (gov-bar / brand-bar / main-nav) ===== */
+html.high-contrast .gov-bar { background: #000 !important; border-bottom: 4px solid #FFD600 !important; }
+html.high-contrast .brand-bar { background: #000 !important; border-bottom: 2px solid #fff !important; }
+html.high-contrast .main-nav { background: #000 !important; border-top: 2px solid #fff; }
+html.high-contrast .main-nav-link { color: #fff !important; }
+html.high-contrast .main-nav-link.is-active {
+  background: #FFD600 !important;
+  color: #000 !important;
+  border-bottom-color: #FFD600 !important;
+}
+html.high-contrast .main-nav-link:hover { background: #1A1A1A !important; color: #FFD600 !important; }
+html.high-contrast .menu-toggle { color: #fff !important; }
+html.high-contrast .badge-oficial { background: #FFD600 !important; color: #000 !important; }
+
+/* User menu */
+html.high-contrast .user-menu-trigger { background: #1A1A1A !important; border-color: #fff !important; }
+html.high-contrast .user-menu-dropdown { background: #000 !important; border: 2px solid #fff !important; }
+html.high-contrast .user-menu-item:hover { background: #1A1A1A !important; }
+html.high-contrast .user-avatar-mini { background: #FFD600 !important; color: #000 !important; }
+
+/* Mobile menu */
+html.high-contrast .mobile-menu { background: #000 !important; border-color: #fff !important; }
+html.high-contrast .mobile-menu-link { color: #fff !important; }
+html.high-contrast .mobile-menu-link.is-active { background: #FFD600 !important; color: #000 !important; }
+
+/* ===== Footer ===== */
+html.high-contrast .site-footer { background: #000 !important; border-top: 4px solid #FFD600; }
+html.high-contrast .footer-col h3,
+html.high-contrast .footer-brand p,
+html.high-contrast .footer-col ul,
+html.high-contrast .footer-bottom { color: #fff !important; }
+html.high-contrast .footer-col a { color: #FFD600 !important; }
+
+/* ===== Status badges ===== */
+html.high-contrast .status-badge { border: 2px solid currentColor; }
+html.high-contrast .status-aberta, html.high-contrast .status-open { background: #003040; color: #00E5FF; }
+html.high-contrast .status-recebendo, html.high-contrast .status-in-auction { background: #003040; color: #00E5FF; }
+html.high-contrast .status-aceita, html.high-contrast .status-awarded,
+html.high-contrast .status-concluida, html.high-contrast .status-completed { background: #003318; color: #00FF66; }
+html.high-contrast .status-em-andamento, html.high-contrast .status-in-progress { background: #3A2E00; color: #FFD600; }
+html.high-contrast .status-cancelada, html.high-contrast .status-cancelled { background: #3A0000; color: #FF5C5C; }
+
+/* Badges genéricos */
+html.high-contrast .badge { border: 2px solid currentColor; }
+html.high-contrast .badge-yellow { background: #FFD600 !important; color: #000 !important; }
+html.high-contrast .badge-cyan { background: #003040 !important; color: #00E5FF !important; }
+html.high-contrast .badge-muted { background: #1A1A1A !important; color: #fff !important; }
+
+/* ===== Categorias coloridas — viram amarelo de alto contraste ===== */
+html.high-contrast .cat-eletrica,
+html.high-contrast .cat-hidraulica,
+html.high-contrast .cat-pintura,
+html.high-contrast .cat-reparos,
+html.high-contrast .cat-limpeza,
+html.high-contrast .cat-jardinagem,
+html.high-contrast .cat-default {
+  background: #FFD600 !important;
+  color: #000 !important;
+}
+
+/* Pro card avatar override */
+html.high-contrast .pro-avatar { border-color: #FFD600 !important; }
+
+/* ===== Alerts ===== */
+html.high-contrast .alert { border-left-width: 6px !important; background: #1A1A1A !important; color: #fff !important; }
+html.high-contrast .alert-info { border-left-color: #00E5FF !important; }
+html.high-contrast .alert-success { border-left-color: #00FF66 !important; }
+html.high-contrast .alert-warning { border-left-color: #FFD600 !important; }
+html.high-contrast .alert-danger { border-left-color: #FF5C5C !important; }
+html.high-contrast .alert .alert-title,
+html.high-contrast .alert .alert-body { color: #fff !important; }
+
+/* ===== Tabs ===== */
+html.high-contrast .tab-btn { color: #fff !important; }
+html.high-contrast .tab-btn.is-active {
+  border-bottom-color: #FFD600 !important;
+  color: #FFD600 !important;
+}
+html.high-contrast .tab-count { background: #1A1A1A !important; color: #fff !important; }
+html.high-contrast .tab-btn.is-active .tab-count { background: #FFD600 !important; color: #000 !important; }
+
+/* ===== Stepper ===== */
+html.high-contrast .stepper-circle { background: #000 !important; color: #fff !important; border: 2px solid #fff !important; }
+html.high-contrast .stepper li.is-active .stepper-circle { background: #FFD600 !important; color: #000 !important; border-color: #FFD600 !important; }
+html.high-contrast .stepper li.is-done .stepper-circle { background: #00FF66 !important; color: #000 !important; border-color: #00FF66 !important; }
+html.high-contrast .stepper li.is-active .stepper-label { color: #FFD600 !important; }
+html.high-contrast .stepper li:not(:last-child)::after { background: #fff !important; }
+html.high-contrast .stepper li.is-done:not(:last-child)::after { background: #00FF66 !important; }
+
+/* ===== Chips (filter) ===== */
+html.high-contrast .chip { background: #000 !important; color: #FFD600 !important; border: 2px solid #FFD600 !important; }
+html.high-contrast .chip.is-active { background: #FFD600 !important; color: #000 !important; }
+
+/* ===== Auth toggle ===== */
+html.high-contrast .auth-toggle { background: #1A1A1A !important; border: 2px solid #fff !important; }
+html.high-contrast .auth-toggle-btn { color: #fff !important; }
+html.high-contrast .auth-toggle-btn.is-active { background: #FFD600 !important; color: #000 !important; }
+
+/* ===== Type chooser cards ===== */
+html.high-contrast .type-card { background: #000 !important; border: 2px solid #fff !important; }
+html.high-contrast .type-card.is-active { background: #1A1A1A !important; border: 3px solid #FFD600 !important; }
+html.high-contrast .type-card .label { color: #fff !important; }
+html.high-contrast .type-card .sub { color: #DDDDDD !important; }
+html.high-contrast .type-card .icon-box { background: #1A1A1A !important; color: #fff !important; }
+html.high-contrast .type-card.is-active .icon-box { background: #FFD600 !important; color: #000 !important; }
+
+/* ===== Cat-pick (wizard) e urgency-card ===== */
+html.high-contrast .cat-pick,
+html.high-contrast .urgency-card { background: #000 !important; border: 2px solid #fff !important; }
+html.high-contrast .cat-pick.is-active,
+html.high-contrast .urgency-card.is-active { background: #1A1A1A !important; border: 3px solid #FFD600 !important; }
+html.high-contrast .cat-pick .label,
+html.high-contrast .urgency-card .ti { color: #fff !important; }
+
+/* ===== Side nav (institucional) ===== */
+html.high-contrast .side-nav a { color: #fff !important; }
+html.high-contrast .side-nav a:hover,
+html.high-contrast .side-nav a.is-active { background: #FFD600 !important; color: #000 !important; }
+
+/* ===== FAQ ===== */
+html.high-contrast .faq summary { color: #fff !important; }
+html.high-contrast .faq summary:hover { background: #1A1A1A !important; }
+html.high-contrast .faq .faq-body { color: #DDDDDD !important; }
+
+/* ===== Empty state ===== */
+html.high-contrast .empty-state { background: #000 !important; border: 2px dashed #fff !important; }
+html.high-contrast .empty-state-icon { background: #1A1A1A !important; color: #fff !important; }
+
+/* ===== Or divider ===== */
+html.high-contrast .or-divider::before { border-color: #fff !important; }
+html.high-contrast .or-divider span { background: #000 !important; color: #fff !important; }
+
+/* ===== Skip link ===== */
+html.high-contrast .skip-link { background: #FFD600; color: #000; }
+
+/* ===== Request card footer — textos que usam --pmf-navy ===== */
+html.high-contrast .request-card-footer .proposals { color: #fff !important; }
+html.high-contrast .request-card-footer .budget { color: #FFD600 !important; }
+html.high-contrast .request-card h3 { color: #fff !important; }
+
+/* ===== Stat card ===== */
+html.high-contrast .stat-card .number { color: #fff !important; }
+html.high-contrast .stat-card .label { color: #DDDDDD !important; }
+
+/* ===== Dashboard e seções ===== */
+html.high-contrast .section-h2 { color: #fff !important; }
+
+/* ===== Pro card ===== */
+html.high-contrast .pro-name { color: #fff !important; }
+html.high-contrast .pro-price { color: #FFD600 !important; }
+html.high-contrast .pro-specialty,
+html.high-contrast .pro-location { color: #DDDDDD !important; }
+
+/* ===== Service category card ===== */
+html.high-contrast .service-cat-card .name { color: #fff !important; }
+html.high-contrast .service-cat-card .count { color: #DDDDDD !important; }
+
+/* ===== Notification list ===== */
+html.high-contrast .notif-title { color: #fff !important; }
+html.high-contrast .notif-body { color: #DDDDDD !important; }
+html.high-contrast .notif-time { color: #AAAAAA !important; }
+
+/* ===== Foco visível extra-forte ===== */
+html.high-contrast :focus-visible {
+  outline: 4px solid #FFD600 !important;
+  outline-offset: 3px !important;
+}
+
+/* ===== Botão de toggle do contraste — estado ativo ===== */
+.contrast-toggle {
+  background: transparent;
+  color: white;
+  border: none;
+  font: inherit;
+  font-size: 12px;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 0.9;
+}
+.contrast-toggle:hover { text-decoration: underline; opacity: 1; }
+.contrast-toggle.is-on {
+  background: var(--vda-yellow);
+  color: var(--pmf-navy);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+html.high-contrast .contrast-toggle { color: #FFD600; }
+html.high-contrast .contrast-toggle.is-on {
+  background: #FFD600;
+  color: #000;
+}

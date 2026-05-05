@@ -63,7 +63,7 @@
         </span>
         <div>
           <div class="number" id="stat-rating">—</div>
-          <div class="label">Avaliação média</div>
+          <div class="label">Avaliação média</div>    
         </div>
       </div>
     </div>
@@ -125,12 +125,10 @@
 
         <div class="card card-pad">
           <h3 style="font-size:15px; font-weight:700; color:var(--pmf-navy); margin:0 0 12px;">Disponibilidade</h3>
-          <p id="disp-texto" style="font-size:13px; color:var(--text-secondary); margin:0 0 14px;">
+          <p id="disponibilidade-texto" style="font-size:13px; color:var(--text-secondary); margin:0 0 14px;">
             Você está aceitando novos pedidos.
           </p>
-          <button type="button" id="btn-disp" class="btn btn-secondary btn-sm btn-block" onclick="toggleDisponibilidade()">
-            Pausar disponibilidade
-          </button>
+          <button id="btn-disponibilidade" type="button" class="btn btn-secondary btn-sm btn-block" onclick="toggleDisponibilidade()">Pausar disponibilidade</button>
         </div>
 
       </aside>
@@ -443,21 +441,23 @@
   }
 
   async function toggleDisponibilidade() {
+    var btn = document.getElementById('btn-disponibilidade');
+    btn.disabled = true;
     try {
       var res = await fetch('/api/v1/auth/mei-profiles/me/', {
         method: 'PATCH',
         headers: Object.assign({ 'Content-Type': 'application/json' }, getAuthHeaders()),
-        body: JSON.stringify({ is_available: !isAvailable }),
+        body: JSON.stringify({ is_available: !_isAvailable }),
       });
-      if (!res.ok) throw new Error();
-      isAvailable = !isAvailable;
-      updateDispBadge();
-    } catch (e) {
-      alert('Não foi possível atualizar a disponibilidade.');
+      if (res.ok) {
+        var mp = await res.json();
+        syncDisponibilidade(mp.is_available);
+      }
+    } catch (e) { /* silent */ } finally {
+      btn.disabled = false;
     }
   }
 
-  // ── Salvar perfil MEI ──────────────────────────────────────
   async function saveMeiProfile() {
     var msg = document.getElementById('mei-msg');
     msg.innerHTML = '';

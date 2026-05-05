@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Mapa do site — Vizinho de Aluguel · PMF{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li>Mapa do site</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Mapa do site</h1>
+          <p class="subtitle">Lista completa de todas as páginas e seções do Vizinho de Aluguel. Use este mapa como alternativa ao menu principal.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container container-narrow" style="padding: 40px 24px 60px;">
+
+    <nav aria-label="Mapa do site">
+
+      {# ===== Páginas públicas ===== #}
+      <section style="margin-bottom: 32px;">
+        <h2 style="font-size:20px; font-weight:700; color:var(--pmf-navy); margin:0 0 12px;">
+          Páginas públicas
+        </h2>
+        <ul style="list-style: disc; padding-left: 24px; line-height: 2;">
+          <li><a href="{% url 'home' %}">Início</a></li>
+          <li>
+            <a href="{% url 'servicos' %}">Encontrar profissionais</a>
+            <ul style="list-style: circle; padding-left: 24px;">
+              <li><a href="{% url 'servicos' %}?cat=eletrica">Elétrica</a></li>
+              <li><a href="{% url 'servicos' %}?cat=hidraulica">Hidráulica</a></li>
+              <li><a href="{% url 'servicos' %}?cat=pintura">Pintura</a></li>
+              <li><a href="{% url 'servicos' %}?cat=reparos">Reparos</a></li>
+              <li><a href="{% url 'servicos' %}?cat=limpeza">Limpeza</a></li>
+              <li><a href="{% url 'servicos' %}?cat=jardinagem">Jardinagem</a></li>
+            </ul>
+          </li>
+          <li><a href="{% url 'nova_solicitacao' %}">Solicitar um serviço</a></li>
+          <li>
+            <a href="{% url 'institucional' %}">Sobre a plataforma</a>
+            <ul style="list-style: circle; padding-left: 24px;">
+              <li><a href="{% url 'institucional' %}#sobre">Sobre o Vizinho de Aluguel</a></li>
+              <li><a href="{% url 'institucional' %}#termos">Termos de Uso</a></li>
+              <li><a href="{% url 'institucional' %}#privacidade">Política de Privacidade (LGPD)</a></li>
+              <li><a href="{% url 'institucional' %}#faq">Perguntas Frequentes</a></li>
+            </ul>
+          </li>
+          <li><a href="{% url 'contato' %}">Contato</a></li>
+        </ul>
+      </section>
+
+      {# ===== Acesso e cadastro ===== #}
+      <section style="margin-bottom: 32px;">
+        <h2 style="font-size:20px; font-weight:700; color:var(--pmf-navy); margin:0 0 12px;">
+          Acesso e cadastro
+        </h2>
+        <ul style="list-style: disc; padding-left: 24px; line-height: 2;">
+          <li><a href="{% url 'cadastro' %}">Acessar conta (login)</a></li>
+          <li><a href="{% url 'cadastro' %}">Cadastrar como cidadão</a></li>
+          <li><a href="{% url 'cadastro' %}">Cadastrar como profissional MEI</a></li>
+        </ul>
+      </section>
+
+      {# ===== Área do cidadão ===== #}
+      <section style="margin-bottom: 32px;">
+        <h2 style="font-size:20px; font-weight:700; color:var(--pmf-navy); margin:0 0 12px;">
+          Área do cidadão <span style="font-size:13px; font-weight:500; color:var(--text-muted);">(requer login)</span>
+        </h2>
+        <ul style="list-style: disc; padding-left: 24px; line-height: 2;">
+          <li><a href="{% url 'home_usuario' %}">Minha área</a></li>
+          <li><a href="{% url 'nova_solicitacao' %}">Nova solicitação</a></li>
+          <li>
+            <a href="{% url 'minhas_solicitacoes' %}">Minhas solicitações</a>
+            <ul style="list-style: circle; padding-left: 24px;">
+              <li>Propostas recebidas <span style="font-size:13px; color:var(--text-muted);">(via card de cada solicitação)</span></li>
+              <li>Acompanhamento de pedido <span style="font-size:13px; color:var(--text-muted);">(após aceitar uma proposta)</span></li>
+            </ul>
+          </li>
+          <li><a href="{% url 'home_usuario' %}#perfil">Meu perfil</a></li>
+        </ul>
+      </section>
+
+      {# ===== Área do profissional MEI ===== #}
+      <section style="margin-bottom: 32px;">
+        <h2 style="font-size:20px; font-weight:700; color:var(--pmf-navy); margin:0 0 12px;">
+          Área do profissional MEI <span style="font-size:13px; font-weight:500; color:var(--text-muted);">(requer login)</span>
+        </h2>
+        <ul style="list-style: disc; padding-left: 24px; line-height: 2;">
+          <li>
+            <a href="{% url 'home_profissional' %}">Painel do profissional</a>
+            <ul style="list-style: circle; padding-left: 24px;">
+              <li>Pedidos disponíveis no seu bairro</li>
+              <li>Enviar lance em um pedido <span style="font-size:13px; color:var(--text-muted);">(via botão "Enviar lance" no card)</span></li>
+              <li>Acompanhar serviço aceito <span style="font-size:13px; color:var(--text-muted);">(após cliente aceitar seu lance)</span></li>
+            </ul>
+          </li>
+          <li><a href="{% url 'home_profissional' %}#perfil">Meu perfil profissional</a></li>
+        </ul>
+      </section>
+
+      {# ===== Acessibilidade ===== #}
+      <section id="acessibilidade" style="margin-bottom: 32px;">
+        <h2 style="font-size:20px; font-weight:700; color:var(--pmf-navy); margin:0 0 12px;">
+          Acessibilidade
+        </h2>
+        <p style="font-size:14px; color:var(--text-secondary); line-height:1.6; margin:0 0 12px;">
+          A plataforma segue as diretrizes <strong>WCAG 2.1 nível AA</strong> e oferece os seguintes recursos:
+        </p>
+        <ul style="list-style: disc; padding-left: 24px; line-height: 2;">
+          <li>
+            <strong>Alto contraste</strong> —
+            <button type="button" class="contrast-toggle" onclick="toggleContrast()" style="color:var(--pmf-cyan-600); text-decoration:underline; cursor:pointer; padding:0;" aria-pressed="false">
+              ativar/desativar agora
+            </button>.
+            Inverte a paleta para fundo escuro com texto luminoso, sombras desativadas e bordas reforçadas.
+            Sua preferência fica salva no navegador.
+          </li>
+          <li>
+            <strong>Mapa do site</strong> — esta página, lista hierárquica de todas as URLs do sistema, otimizada para leitores de tela.
+          </li>
+          <li>
+            <strong>Navegação por teclado</strong> — todas as interações são acessíveis via Tab/Enter/Espaço, com indicador de foco amarelo visível.
+          </li>
+          <li>
+            <strong>Pular para o conteúdo</strong> — link de skip-navigation aparece ao primeiro Tab, levando direto à área principal de cada página.
+          </li>
+          <li>
+            <strong>Movimento reduzido</strong> — animações são respeitam a preferência do sistema (<code>prefers-reduced-motion</code>).
+          </li>
+          <li>
+            <strong>Texto escalável</strong> — interface se adapta a aumento de fonte do navegador (Ctrl + +).
+          </li>
+        </ul>
+      </section>
+
+      {# ===== Suporte e ouvidoria ===== #}
+      <section style="margin-bottom: 32px;">
+        <h2 style="font-size:20px; font-weight:700; color:var(--pmf-navy); margin:0 0 12px;">
+          Suporte e ouvidoria
+        </h2>
+        <ul style="list-style: disc; padding-left: 24px; line-height: 2;">
+          <li><a href="tel:156">Central de Atendimento da PMF — 156</a></li>
+          <li><a href="mailto:vizinho@pmf.sc.gov.br">vizinho@pmf.sc.gov.br</a></li>
+          <li><a href="mailto:privacidade@pmf.sc.gov.br">privacidade@pmf.sc.gov.br (LGPD)</a></li>
+          <li><a href="{% url 'institucional' %}#faq">Perguntas frequentes</a></li>
+        </ul>
+      </section>
+
+    </nav>
+
+    <div class="alert alert-info" role="status" style="margin-top:32px;">
+      <span class="alert-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      </span>
+      <div>
+        <div class="alert-title">Não encontrou o que procura?</div>
+        <div class="alert-body">
+          Entre em contato pelo <a href="tel:156">156</a> ou pelo e-mail
+          <a href="mailto:vizinho@pmf.sc.gov.br">vizinho@pmf.sc.gov.br</a>.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+{% endblock %}
