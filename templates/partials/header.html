@@ -22,11 +22,13 @@
   <div class="brand-bar">
     <div class="container brand-bar-inner">
       <a href="{% url 'home' %}" class="brand-link brand-pmf" aria-label="Página inicial - Prefeitura de Florianópolis">
-        <img src="{% static 'images/logo-pmf-color.png' %}" alt="Prefeitura de Florianópolis">
+        <img src="{% static 'images/logo-pmf-color.png' %}" class="logo-color" alt="Prefeitura de Florianópolis">
+        <img src="{% static 'images/logo-pmf-branco.png' %}" class="logo-contrast" alt="Prefeitura de Florianópolis">
       </a>
 
       <a href="{% url 'home' %}" class="brand-link brand-vizinho hide-md">
-        <img src="{% static 'images/logo-vizinho-color.png' %}" alt="Vizinho de Aluguel">
+        <img src="{% static 'images/logo-vizinho-color.png' %}" class="logo-color" alt="Vizinho de Aluguel">
+        <img src="{% static 'images/logo-vizinho-branco.png' %}" class="logo-contrast" alt="Vizinho de Aluguel">
       </a>
 
       <button id="menuBtn" class="menu-toggle show-md" aria-label="Abrir menu" aria-expanded="false">

@@ -437,3 +437,14 @@ html.high-contrast .contrast-toggle.is-on {
   background: #FFD600;
   color: #000;
 }
+
+/* ===== Logo toggle rules (swaps color and white logos in high contrast) ===== */
+.logo-contrast {
+  display: none !important;
+}
+html.high-contrast .logo-color {
+  display: none !important;
+}
+html.high-contrast .logo-contrast {
+  display: block !important;
+}
