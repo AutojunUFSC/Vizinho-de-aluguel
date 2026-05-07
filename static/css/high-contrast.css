@@ -5,9 +5,9 @@
 
 html.high-contrast {
   /* Remapeia tokens base — TODO o sistema que usa var(--*) muda automaticamente */
-  --pmf-navy:        #000000;
-  --pmf-navy-700:    #000000;
-  --pmf-navy-600:    #000000;
+  --pmf-navy:        #FFFFFF;
+  --pmf-navy-700:    #FFFFFF;
+  --pmf-navy-600:    #FFFFFF;
   --pmf-cyan:        #00E5FF;
   --pmf-cyan-600:    #00E5FF;
   --pmf-cyan-50:     #003040;
@@ -436,4 +436,15 @@ html.high-contrast .contrast-toggle { color: #FFD600; }
 html.high-contrast .contrast-toggle.is-on {
   background: #FFD600;
   color: #000;
+}
+
+/* ===== Logo toggle rules (swaps color and white logos in high contrast) ===== */
+.logo-contrast {
+  display: none !important;
+}
+html.high-contrast .logo-color {
+  display: none !important;
+}
+html.high-contrast .logo-contrast {
+  display: block !important;
 }
