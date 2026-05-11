@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Meus endereços — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li><a href="{% url 'accounts:profile' %}">Minha conta</a></li>
+        <li class="sep">›</li>
+        <li>Meus endereços</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Meus endereços</h1>
+          <p class="subtitle">Gerencie seus endereços salvos.</p>
+        </div>
+        <a href="{% url 'accounts:address_create' %}" class="btn btn-yellow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Novo endereço
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding: 32px 24px 60px;">
+    <div style="display:grid; gap:14px;">
+      {% for addr in addresses %}
+        <div class="card card-pad">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+            <div style="flex:1; min-width:200px;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                <strong style="font-size:15px; color:var(--pmf-navy);">{{ addr.label }}</strong>
+                {% if addr.is_primary %}<span class="badge badge-cyan">Principal</span>{% endif %}
+              </div>
+              <div style="font-size:13px; color:var(--text-secondary); line-height:1.6;">
+                {{ addr.street }}, {{ addr.number }}{% if addr.complement %} — {{ addr.complement }}{% endif %}<br>
+                {{ addr.neighborhood }}, {{ addr.city }} — {{ addr.state }} · CEP: {{ addr.cep }}
+              </div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <a href="{% url 'accounts:address_update' pk=addr.pk %}" class="btn btn-secondary btn-sm">Editar</a>
+              <form method="post" action="{% url 'accounts:address_delete' pk=addr.pk %}" style="margin:0;"
+                    onsubmit="return confirm('Remover este endereço?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary btn-sm" style="border-color:var(--status-danger); color:var(--status-danger);">Excluir</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="empty-state">
+          <div class="empty-state-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <h3>Nenhum endereço cadastrado</h3>
+          <p>Adicione um endereço para agilizar suas solicitações.</p>
+          <a href="{% url 'accounts:address_create' %}" class="btn btn-primary">Adicionar endereço</a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</main>
+{% endblock %}

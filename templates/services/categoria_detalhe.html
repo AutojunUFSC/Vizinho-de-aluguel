@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ category.name }} — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li><a href="{% url 'services:category_list' %}">Categorias</a></li>
+        <li class="sep">›</li>
+        <li>{{ category.name }}</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>{{ category.name }}</h1>
+          <p class="subtitle">Veja os serviços disponíveis nesta categoria.</p>
+        </div>
+        {% if request.user.is_authenticated and request.user.user_type == 'CIDADAO' %}
+          <a href="{% url 'services:service_request_create' %}" class="btn btn-yellow">Nova solicitação</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding: 32px 24px 60px;">
+    <div class="card card-pad">
+      {% if category.icon %}
+        <div style="font-size:48px; margin-bottom:16px;">{{ category.icon }}</div>
+      {% endif %}
+      <h2 style="color:var(--pmf-navy); margin:0 0 12px;">{{ category.name }}</h2>
+      <p style="font-size:14px; color:var(--text-secondary); line-height:1.7;">
+        Profissionais MEI verificados estão prontos para atender suas solicitações nesta categoria.
+        Crie uma solicitação e receba propostas de profissionais da região de Florianópolis.
+      </p>
+      {% if request.user.is_authenticated and request.user.user_type == 'CIDADAO' %}
+        <a href="{% url 'services:service_request_create' %}" class="btn btn-primary" style="margin-top:16px;">
+          Solicitar serviço nesta categoria
+        </a>
+      {% else %}
+        <a href="{% url 'cadastro' %}" class="btn btn-primary" style="margin-top:16px;">
+          Cadastre-se para solicitar
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</main>
+{% endblock %}

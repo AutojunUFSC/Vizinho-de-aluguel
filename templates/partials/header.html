@@ -68,7 +68,7 @@
               <span class="user-avatar-mini">
                 {% if user.full_name %}{{ user.full_name|slice:":1"|upper }}{% else %}{{ user.email|slice:":1"|upper }}{% endif %}
               </span>
-              <span class="hide-md">{{ user.full_name|default:user.email }}</span>
+              <span class="hide-md">{{ user.first_name }}</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
             </button>
             <div class="user-menu-dropdown" role="menu">
@@ -81,25 +81,23 @@
                   {% endif %}
                 </div>
               </div>
-              {% if user.user_type == 'MEI' %}
-                <a href="{% url 'home_profissional' %}" class="user-menu-item" role="menuitem">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
-                  Painel do Profissional
-                </a>
-              {% else %}
-                <a href="{% url 'home_usuario' %}" class="user-menu-item" role="menuitem">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
-                  Minha Área
-                </a>
+              <a href="{% url 'accounts:profile' %}" class="user-menu-item" role="menuitem">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>
+                Meu Perfil
+              </a>
+              {% if user.user_type == 'CIDADAO' %}
                 <a href="{% url 'minhas_solicitacoes' %}" class="user-menu-item" role="menuitem">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
                   Minhas Solicitações
                 </a>
               {% endif %}
-              <a href="{% url 'cadastro' %}?logout=1" class="user-menu-item is-danger" role="menuitem" onclick="if(window.logout){window.logout();return false;}">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
-                Sair
-              </a>
+              <form method="post" action="{% url 'accounts:logout' %}" style="margin:0;">
+                {% csrf_token %}
+                <button type="submit" class="user-menu-item is-danger" role="menuitem" style="background:none; border:none; cursor:pointer; width:100%; text-align:left; font:inherit; padding:inherit;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                  Sair
+                </button>
+              </form>
             </div>
           </div>
         {% else %}
@@ -138,13 +136,14 @@
     <div class="mobile-menu-divider"></div>
 
     {% if user.is_authenticated %}
-      {% if user.user_type == 'MEI' %}
-        <a href="{% url 'home_profissional' %}" class="mobile-menu-link">Painel do Profissional</a>
-      {% else %}
-        <a href="{% url 'home_usuario' %}" class="mobile-menu-link">Minha Área</a>
+      <a href="{% url 'accounts:profile' %}" class="mobile-menu-link">Meu Perfil</a>
+      {% if user.user_type == 'CIDADAO' %}
         <a href="{% url 'minhas_solicitacoes' %}" class="mobile-menu-link">Minhas Solicitações</a>
       {% endif %}
-      <a href="{% url 'cadastro' %}?logout=1" class="btn btn-block btn-secondary" style="margin-top:8px; border-color: var(--status-danger); color: var(--status-danger);">Sair</a>
+      <form method="post" action="{% url 'accounts:logout' %}" style="margin:0;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-block btn-secondary" style="margin-top:8px; border-color: var(--status-danger); color: var(--status-danger); cursor:pointer;">Sair</button>
+      </form>
     {% else %}
       <a href="{% url 'cadastro' %}" class="btn btn-block btn-secondary" style="margin-bottom:8px;">Entrar / Cadastrar</a>
       <a href="{% url 'nova_solicitacao' %}" class="btn btn-block btn-yellow">Solicitar Serviço</a>

@@ -1,26 +1,27 @@
 from django.urls import path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import (
-    RegisterView, UserMeView, CitizenProfileMeView,
-    MEIProfileMeView, MEIProfileDetailView, MEIProfileListView,
-    AddressViewSet
-)
+
+from . import views
+
+app_name = 'accounts'
 
 urlpatterns = [
     # Auth
-    path('register/', RegisterView.as_view(), name='register'),
-    path('login/', TokenObtainPairView.as_view(), name='login'),
-    path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
 
-    # User
-    path('users/me/', UserMeView.as_view(), name='user_me'),
-
-    # Perfis
-    path('citizen-profiles/me/', CitizenProfileMeView.as_view(), name='citizen_profile_me'),
-    path('mei-profiles/me/', MEIProfileMeView.as_view(), name='mei_profile_me'),
-    path('mei-profiles/', MEIProfileListView.as_view(), name='mei_profile_list'),
-    path('mei-profiles/<uuid:pk>/', MEIProfileDetailView.as_view(), name='mei_profile_detail'),
+    # Perfil do usuário autenticado
+    path('usuario/perfil/', views.profile_view, name='profile'),
 
     # Endereços
-    path('addresses/', AddressViewSet.as_view(), name='addresses'),
+    path('usuario/enderecos/', views.address_list, name='address_list'),
+    path('usuario/enderecos/novo/', views.address_create, name='address_create'),
+    path('usuario/enderecos/<uuid:pk>/editar/', views.address_update, name='address_update'),
+    path('usuario/enderecos/<uuid:pk>/excluir/', views.address_delete, name='address_delete'),
+
+    # Diretório público de MEIs
+    path('mei/', views.mei_list, name='mei_list'),
+    path('mei/<uuid:pk>/', views.mei_detail, name='mei_detail'),
+
+    # Configurações do Profissional
+    path('profissional/disponibilidade/toggle/', views.toggle_availability, name='toggle_availability'),
 ]

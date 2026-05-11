@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Avaliar serviço — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li><a href="{% url 'acompanhamento_pedido' pk=order.pk %}">Pedido</a></li>
+        <li class="sep">›</li>
+        <li>Avaliar</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Avaliar serviço</h1>
+          <p class="subtitle">
+            {% if review_type == 'CITIZEN_TO_MEI' %}
+              Sua avaliação ajuda outros vizinhos a escolherem bons profissionais.
+            {% else %}
+              Sua avaliação ajuda outros profissionais a entenderem o perfil deste cliente.
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container container-narrow" style="padding: 32px 24px 60px;">
+
+    <div class="card card-pad-lg" style="margin-bottom:16px;">
+      <h2 style="font-size:18px; font-weight:700; color:var(--pmf-navy); margin:0 0 8px;">
+        {{ order.service_request.title }}
+      </h2>
+      <p class="muted" style="margin:0 0 4px;">
+        Concluído em {{ order.completed_at|date:"d/m/Y"|default:"—" }}
+      </p>
+      <p class="muted" style="margin:0;">
+        Valor combinado: <strong>R$ {{ order.agreed_amount }}</strong>
+      </p>
+    </div>
+
+    <div class="card card-pad-lg">
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger" role="alert" style="margin-bottom:16px;">
+            <div class="alert-body">{{ form.non_field_errors.0 }}</div>
+          </div>
+        {% endif %}
+
+        <fieldset class="field" style="border:0; padding:0; margin-bottom:20px;">
+          <legend style="font-weight:600; margin-bottom:10px;">Sua nota (1 a 5 estrelas)</legend>
+          <div class="rating-radios" style="display:flex; gap:12px;">
+            {% for value in "12345" %}
+              <label style="display:flex; flex-direction:column; align-items:center; cursor:pointer; padding:8px 12px; border:1px solid var(--border); border-radius:8px;">
+                <input type="radio" name="rating" value="{{ value }}"
+                       {% if form.rating.value|stringformat:'s' == value %}checked{% endif %}
+                       required style="margin-bottom:4px;">
+                <span style="font-size:18px;">{{ value }}★</span>
+              </label>
+            {% endfor %}
+          </div>
+          {% if form.rating.errors %}
+            <div class="field-help" style="color:var(--status-danger); margin-top:8px;">
+              {{ form.rating.errors.0 }}
+            </div>
+          {% endif %}
+        </fieldset>
+
+        <div class="field">
+          <label for="id_comment">Comentário (opcional)</label>
+          <textarea id="id_comment" name="comment" class="textarea" rows="4"
+                    placeholder="Conte como foi sua experiência…">{{ form.comment.value|default:'' }}</textarea>
+          {% if form.comment.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ form.comment.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-actions" style="display:flex; gap:12px; justify-content:flex-end; margin-top:16px;">
+          <a href="{% url 'acompanhamento_pedido' pk=order.pk %}" class="btn btn-ghost">Cancelar</a>
+          <button type="submit" class="btn btn-primary">Enviar avaliação</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock %}

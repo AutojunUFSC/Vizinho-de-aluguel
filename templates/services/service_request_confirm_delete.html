@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Cancelar solicitação — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li><a href="{% url 'minhas_solicitacoes' %}">Minhas solicitações</a></li>
+        <li class="sep">›</li>
+        <li>Cancelar</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Cancelar solicitação</h1>
+          <p class="subtitle">Esta ação não pode ser desfeita.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container container-narrow" style="padding: 32px 24px 60px;">
+
+    <div class="card card-pad-lg">
+      <div class="alert alert-warning" role="alert" style="margin-bottom:16px;">
+        <span class="alert-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+        </span>
+        <div>
+          <div class="alert-title">Tem certeza que deseja cancelar?</div>
+          <div class="alert-body">
+            Esta solicitação receberá status <strong>Cancelada</strong>.
+            Lances ativos serão automaticamente encerrados.
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:14px; background:var(--bg-muted); border-radius:8px; margin-bottom:20px;">
+        <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px;">Solicitação</div>
+        <div style="font-size:16px; font-weight:700; color:var(--pmf-navy); margin-bottom:4px;">{{ service_request.title }}</div>
+        <div style="font-size:13px; color:var(--text-secondary);">
+          {% if service_request.category %}{{ service_request.category.name }} · {% endif %}
+          Criada em {{ service_request.created_at|date:"d/m/Y" }}
+        </div>
+      </div>
+
+      <form method="post" style="display:flex; gap:12px; justify-content:flex-end;">
+        {% csrf_token %}
+        <a href="{% url 'minhas_solicitacoes' %}" class="btn btn-ghost">Voltar</a>
+        <button type="submit" class="btn btn-secondary"
+                style="border-color:var(--status-danger); color:var(--status-danger);">
+          Sim, cancelar solicitação
+        </button>
+      </form>
+    </div>
+
+  </div>
+</main>
+{% endblock %}

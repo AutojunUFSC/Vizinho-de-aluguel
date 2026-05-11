@@ -2,6 +2,10 @@ venv/
 *.pyc
 __pycache__/
 db.sqlite3
+*.sqlite3
+*.bak
+vizinho_de_aluguel
+vizinho_db
 .env
 staticfiles/
 media/

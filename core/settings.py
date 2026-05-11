@@ -37,8 +37,7 @@ INSTALLED_APPS = [
     'apps.orders',
     'apps.reviews',
     'apps.admin_panel',
-    'rest_framework',
-    'rest_framework_simplejwt',
+    'apps.ui',
 ]
 
 MIDDLEWARE = [
@@ -144,13 +143,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.User'
 
 
-# Django REST Framework
+# Authentication backends — login por email (USERNAME_FIELD='email')
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-}
+AUTHENTICATION_BACKENDS = [
+    'apps.accounts.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+# URLs de autenticação por sessão Django
+
+LOGIN_URL = '/cadastro/'
+LOGIN_REDIRECT_URL = '/usuario/'
+LOGOUT_REDIRECT_URL = '/'

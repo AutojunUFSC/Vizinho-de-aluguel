@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Fazer proposta — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li><a href="{% url 'home_profissional' %}">Painel</a></li>
+        <li class="sep">›</li>
+        <li>Fazer proposta</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Enviar proposta</h1>
+          <p class="subtitle">Preencha os detalhes da sua oferta para este serviço.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding: 32px 24px 60px; max-width: 820px;">
+
+    {# ===== Resumo do serviço ===== #}
+    <div class="card card-pad" style="margin-bottom:24px;">
+      <div class="request-meta" style="margin-bottom:10px;">
+        {% if service_request.category %}<span class="badge badge-cyan">{{ service_request.category.name }}</span>{% endif %}
+        {% if service_request.address %}<span class="badge badge-muted">📍 {{ service_request.address.neighborhood }}, {{ service_request.address.city }}</span>{% endif %}
+        <span class="status-badge status-{{ service_request.status|lower|cut:'_' }}"><span class="dot"></span> {{ service_request.get_status_display }}</span>
+      </div>
+      <h2 style="font-size:18px; font-weight:700; color:var(--pmf-navy); margin:0 0 8px;">{{ service_request.title }}</h2>
+      <p style="font-size:14px; color:var(--text-secondary); margin:0 0 12px; line-height:1.5;">{{ service_request.description|linebreaksbr }}</p>
+      {% if service_request.budget_max %}
+        <div style="font-size:13px; color:var(--text-muted);">
+          Orçamento máximo do cidadão:
+          <strong style="color:var(--pmf-navy);">R$ {{ service_request.budget_max }}</strong>
+        </div>
+      {% endif %}
+      {% if service_request.desired_deadline %}
+        <div style="font-size:13px; color:var(--text-muted);">
+          Prazo desejado: <strong>{{ service_request.desired_deadline|date:"d/m/Y" }}</strong>
+        </div>
+      {% endif %}
+    </div>
+
+    {# ===== Formulário de proposta ===== #}
+    <div class="card card-pad-lg">
+      <h2 class="section-h2" style="margin-bottom:20px;">Sua proposta</h2>
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger" role="alert" style="margin-bottom:16px;">
+            <div class="alert-body">{{ form.non_field_errors.0 }}</div>
+          </div>
+        {% endif %}
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+
+          <div class="field">
+            <label for="id_amount">Valor da proposta (R$) <span style="color:var(--status-danger);">*</span></label>
+            <input id="id_amount" name="amount" class="input" type="number"
+                   min="1" step="0.01" placeholder="0,00"
+                   value="{{ form.amount.value|default:'' }}"
+                   {% if service_request.budget_max %}max="{{ service_request.budget_max }}"{% endif %} required>
+            {% if service_request.budget_max %}
+              <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">Máximo: R$ {{ service_request.budget_max }}</div>
+            {% endif %}
+            {% if form.amount.errors %}
+              <div class="field-help" style="color:var(--status-danger);">{{ form.amount.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <div class="field">
+            <label for="id_estimated_hours">Estimativa de horas</label>
+            <input id="id_estimated_hours" name="estimated_hours" class="input" type="number"
+                   min="0.5" step="0.5" placeholder="Ex.: 4"
+                   value="{{ form.estimated_hours.value|default:'' }}">
+            {% if form.estimated_hours.errors %}
+              <div class="field-help" style="color:var(--status-danger);">{{ form.estimated_hours.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <div class="field" style="grid-column:1/-1;">
+            <label for="id_proposed_deadline">Prazo de entrega</label>
+            <input id="id_proposed_deadline" name="proposed_deadline" class="input" type="date"
+                   value="{{ form.proposed_deadline.value|default:'' }}">
+            {% if form.proposed_deadline.errors %}
+              <div class="field-help" style="color:var(--status-danger);">{{ form.proposed_deadline.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <div class="field" style="grid-column:1/-1;">
+            <label for="id_notes">Apresentação e observações</label>
+            <textarea id="id_notes" name="notes" class="textarea" rows="4"
+                      placeholder="Descreva sua experiência, como você pretende abordar o problema, materiais inclusos...">{{ form.notes.value|default:'' }}</textarea>
+            {% if form.notes.errors %}
+              <div class="field-help" style="color:var(--status-danger);">{{ form.notes.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <div style="grid-column:1/-1; display:flex; gap:12px; justify-content:flex-end; align-items:center; margin-top:4px;">
+            <a href="{% url 'home_profissional' %}" class="btn btn-ghost">Cancelar</a>
+            <button type="submit" class="btn btn-primary">Enviar proposta</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</main>
+{% endblock %}

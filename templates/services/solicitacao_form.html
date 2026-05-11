@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Editar solicitação — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li><a href="{% url 'services:my_requests' %}">Solicitações</a></li>
+        <li class="sep">›</li>
+        <li>Editar</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Editar solicitação</h1>
+          <p class="subtitle">Atualize os dados da sua solicitação de serviço.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container container-auth" style="padding: 32px 24px 60px;">
+    <div class="card card-pad-lg">
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger" role="alert" style="margin-bottom:16px;">
+            <div class="alert-body">{{ form.non_field_errors.0 }}</div>
+          </div>
+        {% endif %}
+
+        {% for field in form.visible_fields %}
+          <div class="field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+              <div class="field-help" style="color:var(--status-danger);">{{ field.errors.0 }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        <div style="display:flex; gap:12px; margin-top:8px;">
+          <button type="submit" class="btn btn-primary btn-lg">Salvar alterações</button>
+          <a href="{% url 'services:my_requests' %}" class="btn btn-secondary btn-lg">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock %}

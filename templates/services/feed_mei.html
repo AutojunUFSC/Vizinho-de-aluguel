@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Feed de pedidos — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li><a href="{% url 'home_profissional' %}">Painel</a></li>
+        <li class="sep">›</li>
+        <li>Feed de pedidos</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Pedidos disponíveis</h1>
+          <p class="subtitle">Solicitações abertas e em leilão na sua área.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding: 32px 24px 60px;">
+
+    <div class="dash-grid" style="grid-template-columns: 1fr 320px;">
+
+      <div style="display:grid; gap:14px;">
+        {% for req in requests %}
+          <article class="request-card">
+            <div class="request-card-head">
+              <div style="flex:1; min-width:0;">
+                <div class="request-meta">
+                  <span class="badge badge-muted">#{{ req.pk|stringformat:"s"|slice:":6" }}</span>
+                  <span class="status-badge status-{{ req.status|lower|cut:'_' }}"><span class="dot"></span> {{ req.get_status_display }}</span>
+                  {% if req.category %}<span class="badge badge-cyan">{{ req.category.name }}</span>{% endif %}
+                  {% if req.urgency == 'ALTA' or req.urgency == 'EMERGENCIA' %}
+                    <span class="badge badge-danger">{{ req.get_urgency_display }}</span>
+                  {% endif %}
+                </div>
+                <h3>{{ req.title }}</h3>
+                <p class="description">{{ req.description|truncatechars:200 }}</p>
+              </div>
+            </div>
+            <div class="request-card-footer">
+              {% if req.address %}<span class="icon-text">📍 {{ req.address.neighborhood }} · {{ req.address.city }}</span>{% endif %}
+              <span class="icon-text">🕒 {{ req.created_at|date:"d/m/Y H:i" }}</span>
+              {% if req.budget_max %}<span class="budget">Até R$ {{ req.budget_max }}</span>{% endif %}
+              <a href="{% url 'fazer_proposta' request_pk=req.pk %}" class="btn btn-primary btn-sm" style="margin-left:auto;">Enviar proposta</a>
+            </div>
+          </article>
+        {% empty %}
+          <div class="empty-state">
+            <div class="empty-state-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            </div>
+            <h3>Nenhum pedido disponível</h3>
+            <p>Não há solicitações abertas com os filtros selecionados.</p>
+          </div>
+        {% endfor %}
+      </div>
+
+      <aside class="dash-aside">
+        <form method="get" class="card card-pad" style="display:block;">
+          <h3 style="font-size:14px; font-weight:700; color:var(--pmf-navy); margin:0 0 12px; text-transform:uppercase; letter-spacing:0.04em;">Filtros</h3>
+
+          <div class="field">
+            <label for="cat-filter">Categoria</label>
+            <select id="cat-filter" name="category" class="select">
+              <option value="">Todas</option>
+              {% for cat in categories %}
+                <option value="{{ cat.slug }}" {% if category_filter == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="city-filter">Cidade</label>
+            <input id="city-filter" name="city" type="text" class="input"
+                   placeholder="Florianópolis" value="{{ city_filter|default:'' }}">
+          </div>
+
+          <div class="field">
+            <label for="urg-filter">Urgência</label>
+            <select id="urg-filter" name="urgency" class="select">
+              <option value="">Todas</option>
+              <option value="EMERGENCIA" {% if urgency_filter == 'EMERGENCIA' %}selected{% endif %}>Emergência</option>
+              <option value="ALTA" {% if urgency_filter == 'ALTA' %}selected{% endif %}>Alta</option>
+              <option value="MEDIA" {% if urgency_filter == 'MEDIA' %}selected{% endif %}>Média</option>
+              <option value="BAIXA" {% if urgency_filter == 'BAIXA' %}selected{% endif %}>Baixa</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-sm btn-block">Aplicar filtros</button>
+          {% if category_filter or city_filter or urgency_filter %}
+            <a href="?" class="btn btn-ghost btn-sm btn-block" style="margin-top:8px;">Limpar</a>
+          {% endif %}
+        </form>
+
+        <div class="card card-pad">
+          <h3 style="font-size:14px; font-weight:700; color:var(--pmf-navy); margin:0 0 12px; text-transform:uppercase; letter-spacing:0.04em;">Dica</h3>
+          <p style="font-size:13px; color:var(--text-secondary); margin:0; line-height:1.5;">
+            Você só recebe alertas de novos pedidos das categorias em que está
+            <a href="{% url 'auctions:subscription_list' %}" style="font-weight:600;">inscrito</a>.
+          </p>
+        </div>
+      </aside>
+    </div>
+
+  </div>
+</main>
+{% endblock %}

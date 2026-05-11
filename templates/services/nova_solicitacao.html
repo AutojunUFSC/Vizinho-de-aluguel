@@ -1,0 +1,377 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Solicitar serviço — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li><a href="{% url 'accounts:profile' %}">Minha conta</a></li>
+        <li class="sep">›</li>
+        <li>Nova solicitação</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Solicitar um serviço</h1>
+          <p class="subtitle">Preencha os dados abaixo. Você receberá propostas de profissionais MEI da sua região em
+            até 24 horas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container container-narrow" style="padding: 32px 24px 60px;">
+
+    {# ===== Stepper ===== #}
+    <ol class="stepper">
+      <li class="is-active" data-step="1">
+        <div class="stepper-circle">1</div>
+        <div class="stepper-label">Serviço</div>
+      </li>
+      <li data-step="2">
+        <div class="stepper-circle">2</div>
+        <div class="stepper-label">Local & Detalhes</div>
+      </li>
+      <li data-step="3">
+        <div class="stepper-circle">3</div>
+        <div class="stepper-label">Revisão</div>
+      </li>
+    </ol>
+
+    <form id="solicitacao-form" method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+      <div class="alert alert-danger" role="alert" style="margin-bottom:16px;">
+        <div class="alert-body">{{ form.non_field_errors.0 }}</div>
+      </div>
+      {% endif %}
+
+      <div class="card card-pad-lg">
+
+        {# ====== STEP 1 ====== #}
+        <section data-step-pane="1">
+          <h2 style="font-size:20px; font-weight:700; color:var(--pmf-navy); margin:0 0 6px;">Sobre o serviço</h2>
+          <p style="font-size:14px; color:var(--text-secondary); margin:0 0 20px;">Escolha a categoria e descreva o que
+            você precisa.</p>
+
+          <label>Categoria do serviço</label>
+          <select name="category" id="category-select" class="input" required>
+            <option value="">Selecione uma categoria…</option>
+            {% for cat in categories %}
+            <option value="{{ cat.id }}" {% if form.category.value|stringformat:'s' == cat.id|stringformat:'s' %}selected{% endif %}>{{ cat.name }}</option>
+            {% endfor %}
+          </select>
+          {% if form.category.errors %}
+          <div class="field-help" style="color:var(--status-danger);">{{ form.category.errors.0 }}</div>
+          {% endif %}
+
+          <div class="field" style="margin-top:16px;">
+            <label for="titulo">Título da solicitação</label>
+            <input id="titulo" name="title" class="input" type="text" placeholder="Ex: Troca de torneira no banheiro"
+              value="{{ form.title.value|default:'' }}" required>
+            {% if form.title.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ form.title.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <div class="field">
+            <label for="descricao">Descrição detalhada</label>
+            <textarea id="descricao" name="description" class="textarea" rows="5"
+              placeholder="Conte ao profissional o que você precisa, materiais já disponíveis, prazo, etc."
+              required>{{ form.description.value|default:'' }}</textarea>
+            <div class="field-help" style="text-align:right;">
+              <span id="desc-count">0</span> caracteres · mínimo 20
+            </div>
+            {% if form.description.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ form.description.errors.0 }}</div>
+            {% endif %}
+          </div>
+        </section>
+
+        {# ====== STEP 2 ====== #}
+        <section data-step-pane="2" style="display:none;">
+          <h2 style="font-size:20px; font-weight:700; color:var(--pmf-navy); margin:0 0 6px;">Local e detalhes</h2>
+          <p style="font-size:14px; color:var(--text-secondary); margin:0 0 20px;">Onde e quando o serviço deve
+            acontecer?</p>
+
+          {% if addresses %}
+          <div class="field">
+            <label for="address-select">Endereço salvo (opcional)</label>
+            <select name="address" id="address-select" class="input">
+              <option value="">— Usar endereço novo abaixo —</option>
+              {% for addr in addresses %}
+              <option value="{{ addr.id }}">{{ addr.label }} · {{ addr.street }}, {{ addr.number }} — {{
+                addr.neighborhood }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          {% endif %}
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <div class="field">
+              <label for="bairro">Bairro</label>
+              <input id="bairro" name="neighborhood" class="input" type="text" placeholder="Trindade"
+                value="{{ request.POST.neighborhood|default:'' }}">
+            </div>
+            <div class="field">
+              <label for="cep">CEP</label>
+              <input id="cep" name="cep" class="input" type="text" placeholder="00000-000"
+                value="{{ request.POST.cep|default:'' }}">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="endereco">Endereço</label>
+            <input id="endereco" name="street" class="input" type="text" placeholder="Rua, número, complemento"
+              value="{{ request.POST.street|default:'' }}">
+          </div>
+
+          {% if form.address.errors %}
+          <div class="alert alert-danger" role="alert" style="margin-top:8px;">
+            <div class="alert-body">{{ form.address.errors.0 }}</div>
+          </div>
+          {% endif %}
+
+          <label style="margin-top:12px;">Urgência</label>
+          <div class="urgency-group" style="margin-bottom:16px;">
+            <label class="urgency-card {% if form.urgency.value == 'ALTA' or not form.urgency.value %}is-active{% endif %}">
+              <input type="radio" name="urgency" value="ALTA" {% if form.urgency.value == 'ALTA' or not form.urgency.value %}checked{% endif %} style="display:none;">
+              <span class="ti">Urgente</span>
+              <span class="sub">Hoje ou amanhã</span>
+            </label>
+            <label class="urgency-card {% if form.urgency.value == 'MEDIA' %}is-active{% endif %}">
+              <input type="radio" name="urgency" value="MEDIA" {% if form.urgency.value == 'MEDIA' %}checked{% endif %} style="display:none;">
+              <span class="ti">Esta semana</span>
+              <span class="sub">7 dias</span>
+            </label>
+            <label class="urgency-card {% if form.urgency.value == 'BAIXA' %}is-active{% endif %}">
+              <input type="radio" name="urgency" value="BAIXA" {% if form.urgency.value == 'BAIXA' %}checked{% endif %} style="display:none;">
+              <span class="ti">Flexível</span>
+              <span class="sub">Sem pressa</span>
+            </label>
+          </div>
+
+          <div class="field">
+            <label for="orcamento">Orçamento estimado (R$)</label>
+            <input id="orcamento" name="budget_max" class="input" type="number" step="0.01" min="0"
+              placeholder="Ex: 200" value="{{ form.budget_max.value|default:'' }}">
+            <div class="field-help">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 16v-4M12 8h.01" />
+              </svg>
+              Os profissionais usarão isso como referência. Não é uma promessa.
+            </div>
+            {% if form.budget_max.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ form.budget_max.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <div class="field">
+            <label for="auction-end">Fim do leilão (data e hora)</label>
+            <input id="auction-end" name="auction_end_at" class="input" type="datetime-local"
+              value="{{ form.auction_end_at.value|default:'' }}">
+            {% if form.auction_end_at.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ form.auction_end_at.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <div class="field">
+            <label for="deadline">Prazo desejado</label>
+            <input id="deadline" name="desired_deadline" class="input" type="date"
+              value="{{ form.desired_deadline.value|default:'' }}">
+            {% if form.desired_deadline.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ form.desired_deadline.errors.0 }}</div>
+            {% endif %}
+          </div>
+
+          <div class="field">
+            <label for="fotos">Fotos do serviço</label>
+            <div
+              style="border:2px dashed var(--border); border-radius:10px; padding:24px; text-align:center; background:var(--bg-page);">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="color:var(--text-muted); margin-bottom:8px;">
+                <path d="M23 7v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                <circle cx="12" cy="13" r="4" />
+              </svg>
+              <div style="font-size:14px; color:var(--text-secondary); margin-bottom:8px;">Arraste fotos aqui ou</div>
+              <input id="fotos" name="files" type="file" multiple accept="image/*,video/*" style="display:none;">
+              <button type="button" class="btn btn-secondary btn-sm"
+                onclick="document.getElementById('fotos').click()">Adicionar fotos</button>
+              <div id="fotos-list" class="muted" style="margin-top:8px; font-size:12px;"></div>
+            </div>
+            {% if media_form.files.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ media_form.files.errors.0 }}</div>
+            {% endif %}
+          </div>
+        </section>
+
+        {# ====== STEP 3 ====== #}
+        <section data-step-pane="3" style="display:none;">
+          <h2 style="font-size:20px; font-weight:700; color:var(--pmf-navy); margin:0 0 6px;">Revisão</h2>
+          <p style="font-size:14px; color:var(--text-secondary); margin:0 0 20px;">Confira os detalhes antes de
+            publicar.</p>
+
+          <div class="card" style="padding:20px; margin-bottom:16px; box-shadow:none;">
+            <div class="request-meta" style="margin-bottom:8px;">
+              <span class="badge badge-cyan" id="rev-cat">—</span>
+              <span class="status-badge status-em-andamento" id="rev-urg"><span class="dot"></span> Urgente</span>
+            </div>
+            <h3 style="font-size:18px; font-weight:700; color:var(--pmf-navy); margin:0 0 6px;" id="rev-title">—</h3>
+            <p style="font-size:14px; color:var(--text-secondary); margin:0 0 12px; line-height:1.5;" id="rev-desc">—
+            </p>
+            <div
+              style="display:flex; gap:16px; flex-wrap:wrap; font-size:13px; color:var(--text-muted); padding-top:12px; border-top:1px solid var(--border);">
+              <span>📍 <span id="rev-loc">—</span></span>
+              <span>💰 R$ <span id="rev-budget">—</span></span>
+            </div>
+          </div>
+
+          <div class="alert alert-info" role="status">
+            <span class="alert-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 16v-4M12 8h.01" />
+              </svg>
+            </span>
+            <div>
+              <div class="alert-title">Como funciona o leilão</div>
+              <div class="alert-body">
+                Sua solicitação fica aberta para profissionais MEI da sua região por 24 horas.
+                Você recebe propostas com preço, prazo e avaliações.
+                Escolha a melhor proposta — o pagamento é direto ao profissional.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="wizard-footer">
+          <button type="button" id="btn-back" class="btn btn-ghost">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 12H5M11 6l-6 6 6 6" />
+            </svg>
+            Cancelar
+          </button>
+          <button type="button" id="btn-next" class="btn btn-primary">
+            Continuar
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  var currentStep = 1;
+  var totalSteps = 3;
+
+  // Categoria nome para revisão
+  var catSelect = document.getElementById('category-select');
+
+  // Urgência
+  document.querySelectorAll('.urgency-card').forEach(function (c) {
+    c.addEventListener('click', function () {
+      document.querySelectorAll('.urgency-card').forEach(function (x) { x.classList.remove('is-active'); });
+      c.classList.add('is-active');
+      var input = c.querySelector('input[type=radio]');
+      if (input) input.checked = true;
+    });
+  });
+
+  // Descrição count
+  var descEl = document.getElementById('descricao');
+  var descCount = document.getElementById('desc-count');
+  if (descEl) {
+    descCount.textContent = descEl.value.length;
+    descEl.addEventListener('input', function (e) {
+      descCount.textContent = e.target.value.length;
+    });
+  }
+
+  // Fotos preview
+  var fotosInput = document.getElementById('fotos');
+  if (fotosInput) {
+    fotosInput.addEventListener('change', function () {
+      var list = document.getElementById('fotos-list');
+      if (!fotosInput.files.length) { list.textContent = ''; return; }
+      var names = [];
+      for (var i = 0; i < fotosInput.files.length; i++) names.push(fotosInput.files[i].name);
+      list.textContent = names.length + ' arquivo(s): ' + names.join(', ');
+    });
+  }
+
+  function showStep(n) {
+    currentStep = n;
+    for (var i = 1; i <= totalSteps; i++) {
+      var pane = document.querySelector('[data-step-pane="' + i + '"]');
+      if (pane) pane.style.display = (i === n) ? 'block' : 'none';
+      var dot = document.querySelector('.stepper li[data-step="' + i + '"]');
+      if (dot) {
+        dot.classList.toggle('is-active', i === n);
+        dot.classList.toggle('is-done', i < n);
+        if (i < n) dot.querySelector('.stepper-circle').innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>';
+        else dot.querySelector('.stepper-circle').textContent = i;
+      }
+    }
+    document.getElementById('btn-back').innerHTML = (n === 1)
+      ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Cancelar'
+      : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 6l-6 6 6 6"/></svg> Voltar';
+    var nextBtn = document.getElementById('btn-next');
+    if (n < totalSteps) {
+      nextBtn.className = 'btn btn-primary';
+      nextBtn.type = 'button';
+      nextBtn.innerHTML = 'Continuar <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+    } else {
+      nextBtn.className = 'btn btn-yellow';
+      nextBtn.type = 'submit';
+      nextBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg> Publicar solicitação';
+      fillReview();
+    }
+  }
+
+  function fillReview() {
+    var catName = catSelect && catSelect.options[catSelect.selectedIndex] ? catSelect.options[catSelect.selectedIndex].text : '—';
+    document.getElementById('rev-cat').textContent = catName;
+    var urgEl = document.querySelector('input[name=urgency]:checked');
+    var urgLabel = urgEl ? (urgEl.parentElement.querySelector('.ti') || {}).textContent : '';
+    document.getElementById('rev-urg').innerHTML = '<span class="dot"></span> ' + (urgLabel || 'Urgente');
+    document.getElementById('rev-title').textContent = document.getElementById('titulo').value || '—';
+    document.getElementById('rev-desc').textContent = document.getElementById('descricao').value || '—';
+    var bairro = document.getElementById('bairro').value || '';
+    var endereco = document.getElementById('endereco').value || '';
+    document.getElementById('rev-loc').textContent = (bairro + (endereco ? ', ' + endereco : '')) || '—';
+    document.getElementById('rev-budget').textContent = document.getElementById('orcamento').value || '—';
+  }
+
+  document.getElementById('btn-back').addEventListener('click', function () {
+    if (currentStep === 1) { window.location.href = "{% url 'accounts:profile' %}"; return; }
+    showStep(currentStep - 1);
+  });
+
+  document.getElementById('btn-next').addEventListener('click', function (e) {
+    if (currentStep < totalSteps) {
+      e.preventDefault();
+      showStep(currentStep + 1);
+    }
+    // No último step, o botão tem type="submit" e o navegador envia o form normalmente.
+  });
+
+  // Se o backend retornou erros, abre direto na revisão para exibi-los.
+  {% if form.errors or media_form.errors %}
+  showStep(3);
+  {% else %}
+  showStep(1);
+  {% endif %}
+</script>
+{% endblock %}

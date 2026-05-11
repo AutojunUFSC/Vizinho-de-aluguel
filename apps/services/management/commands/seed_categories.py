@@ -29,8 +29,8 @@ class Command(BaseCommand):
                 }
             )
             if created:
-                self.stdout.write(self.style.SUCCESS(f'✅ Criada: {cat["name"]}'))
+                self.stdout.write(self.style.SUCCESS(f'[OK] Criada: {cat["name"]}'))
             else:
-                self.stdout.write(self.style.WARNING(f'⚠️ Já existe: {cat["name"]}'))
+                self.stdout.write(self.style.WARNING(f'[SKIP] Ja existe: {cat["name"]}'))
 
-        self.stdout.write(self.style.SUCCESS('🎉 Categorias populadas com sucesso!'))
+        self.stdout.write(self.style.SUCCESS('[DONE] Categorias populadas com sucesso!'))

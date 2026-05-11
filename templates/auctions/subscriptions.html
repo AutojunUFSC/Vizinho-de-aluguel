@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Minhas categorias — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li><a href="{% url 'home_profissional' %}">Painel</a></li>
+        <li class="sep">›</li>
+        <li>Categorias inscritas</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Minhas categorias</h1>
+          <p class="subtitle">Gerencie as categorias em que você pode receber solicitações.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding: 32px 24px 60px;">
+    <div class="dash-grid" style="grid-template-columns: 1fr 320px;">
+
+      {# ===== Lista de inscrições ===== #}
+      <div>
+        <h3 style="font-size:14px; font-weight:700; color:var(--pmf-navy); margin:0 0 14px;">Inscrições ativas</h3>
+        <div style="display:grid; gap:10px;">
+          {% for sub in subscriptions %}
+            <div class="card card-pad" style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <strong style="color:var(--pmf-navy);">{{ sub.category.name }}</strong>
+                <div style="font-size:12px; color:var(--text-muted);">Desde {{ sub.subscribed_at|date:"d/m/Y" }}</div>
+              </div>
+              <form method="post" action="{% url 'auctions:subscription_delete' category_id=sub.category.id %}" style="margin:0;"
+                    onsubmit="return confirm('Cancelar inscrição em {{ sub.category.name }}?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary btn-sm" style="border-color:var(--status-danger); color:var(--status-danger);">Cancelar</button>
+              </form>
+            </div>
+          {% empty %}
+            <div class="empty-state">
+              <h3>Nenhuma inscrição</h3>
+              <p>Inscreva-se em categorias para receber solicitações de serviço.</p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      {# ===== Sidebar: inscrever em novas ===== #}
+      <aside class="dash-aside">
+        <form method="post" action="{% url 'auctions:subscription_create' %}" class="card card-pad">
+          {% csrf_token %}
+          <h3 style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; margin:0 0 12px;">
+            Inscrever-se
+          </h3>
+          <div style="display:grid; gap:8px; margin-bottom:14px;">
+            {% for cat in available %}
+              <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-secondary); cursor:pointer;">
+                <input type="checkbox" name="category_ids" value="{{ cat.id }}" style="width:16px; height:16px;">
+                {{ cat.name }}
+              </label>
+            {% endfor %}
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm btn-block">Inscrever nas selecionadas</button>
+        </form>
+      </aside>
+
+    </div>
+  </div>
+</main>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Meus lances — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li><a href="{% url 'home_profissional' %}">Painel</a></li>
+        <li class="sep">›</li>
+        <li>Meus lances</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Meus lances</h1>
+          <p class="subtitle">Acompanhe todos os lances enviados para solicitações.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding: 32px 24px 60px;">
+    <div style="display:grid; gap:14px;">
+      {% for bid in bids %}
+        <div class="card card-pad">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+            <div style="flex:1; min-width:200px;">
+              <div class="request-meta" style="margin-bottom:6px;">
+                <span class="status-badge status-{{ bid.status|lower }}"><span class="dot"></span> {{ bid.get_status_display }}</span>
+                {% if bid.service_request.category %}
+                  <span class="badge badge-cyan">{{ bid.service_request.category.name }}</span>
+                {% endif %}
+              </div>
+              <h3 style="font-size:15px; color:var(--pmf-navy); margin:0 0 4px;">
+                {{ bid.service_request.title }}
+              </h3>
+              <div style="font-size:13px; color:var(--text-secondary);">
+                <strong>R$ {{ bid.amount }}</strong> · {{ bid.estimated_hours }}h · Prazo: {{ bid.proposed_deadline|date:"d/m/Y" }}
+              </div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">
+                Enviado em {{ bid.created_at|date:"d/m/Y H:i" }}
+              </div>
+            </div>
+            {% if bid.status == 'ACTIVE' %}
+              <div style="display:flex; gap:8px;">
+                <a href="{% url 'auctions:bid_update' pk=bid.pk %}" class="btn btn-secondary btn-sm">Editar</a>
+                <form method="post" action="{% url 'auctions:bid_withdraw' pk=bid.pk %}" style="margin:0;"
+                      onsubmit="return confirm('Retirar este lance?');">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-secondary btn-sm" style="border-color:var(--status-danger); color:var(--status-danger);">Retirar</button>
+                </form>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% empty %}
+        <div class="empty-state">
+          <div class="empty-state-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h3>Nenhum lance enviado</h3>
+          <p>Acesse o <a href="{% url 'services:request_feed' %}">feed de solicitações</a> para enviar seus lances.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</main>
+{% endblock %}

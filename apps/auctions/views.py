@@ -1,109 +1,150 @@
-from rest_framework import generics, status, viewsets
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from .models import MEICategorySubscription, Bid
-from .serializers import MEICategorySubscriptionSerializer, BidSerializer
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_http_methods, require_POST
+
+from apps.accounts.decorators import mei_required
+from apps.services.models import ServiceCategory, ServiceRequest
+
+from .forms import BidForm
+from .models import Bid, MEICategorySubscription
 
 
-class MEICategorySubscriptionViewSet(viewsets.ViewSet):
-    """
-    Gerencia as inscrições do MEI em categorias de serviço.
+# ─── Inscrições do MEI em categorias ─────────────────────────────────────────
 
-    - list: retorna as categorias em que o MEI autenticado está inscrito.
-    - create: inscreve o MEI em uma ou mais categorias de uma vez (body: {category_ids: [...]}).
-    - destroy: remove a inscrição do MEI em uma categoria pelo ID da categoria.
-    """
+@mei_required
+def subscription_list(request):
+    subscriptions = MEICategorySubscription.objects.filter(
+        mei_profile=request.user.mei_profile,
+    ).select_related('category')
+    available = ServiceCategory.objects.filter(is_active=True).order_by('order')
+    return render(request, 'auctions/subscriptions.html', {
+        'subscriptions': subscriptions,
+        'available': available,
+    })
 
-    permission_classes = (IsAuthenticated,)
 
-    def list(self, request):
-        queryset = MEICategorySubscription.objects.filter(
-            mei_profile=request.user.mei_profile
+@mei_required
+@require_POST
+def subscription_create(request):
+    """Inscreve o MEI em uma ou mais categorias (campo POST 'category_ids')."""
+    category_ids = request.POST.getlist('category_ids')
+    mei = request.user.mei_profile
+    created = 0
+    for cat_id in category_ids:
+        _, was_created = MEICategorySubscription.objects.get_or_create(
+            mei_profile=mei,
+            category_id=cat_id,
+            defaults={'is_active': True},
         )
-        serializer = MEICategorySubscriptionSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def create(self, request):
-        category_ids = request.data.get('category_ids', [])
-        mei = request.user.mei_profile
-        created = []
-        for cat_id in category_ids:
-            obj, _ = MEICategorySubscription.objects.get_or_create(
-                mei_profile=mei,
-                category_id=cat_id,
-                defaults={'is_active': True}
-            )
-            created.append(obj)
-        serializer = MEICategorySubscriptionSerializer(created, many=True)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def destroy(self, request, pk=None):
-        try:
-            sub = MEICategorySubscription.objects.get(
-                mei_profile=request.user.mei_profile,
-                category_id=pk
-            )
-            sub.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except MEICategorySubscription.DoesNotExist:
-            return Response({'error': 'Inscrição não encontrada.'}, status=status.HTTP_404_NOT_FOUND)
+        if was_created:
+            created += 1
+    if created:
+        messages.success(request, f'{created} categoria(s) inscrita(s).')
+    else:
+        messages.info(request, 'Nenhuma nova inscrição criada.')
+    return redirect('auctions:subscription_list')
 
 
-class BidViewSet(viewsets.ModelViewSet):
-    """
-    Gerencia lances (bids) de MEIs em solicitações de serviço.
+@mei_required
+@require_POST
+def subscription_delete(request, category_id):
+    sub = get_object_or_404(
+        MEICategorySubscription,
+        mei_profile=request.user.mei_profile,
+        category_id=category_id,
+    )
+    sub.delete()
+    messages.success(request, 'Inscrição removida.')
+    return redirect('auctions:subscription_list')
 
-    Criação valida: verificação do MEI, inscrição ativa na categoria da solicitação,
-    ausência de lance ACTIVE duplicado e respeito ao budget_max.
-    - mine: lista os lances do MEI autenticado.
-    - withdraw: retira um lance ACTIVE, marcando-o como WITHDRAWN.
-    """
 
-    serializer_class = BidSerializer
-    permission_classes = (IsAuthenticated,)
+# ─── Lances ─────────────────────────────────────────────────────────────────
 
-    def get_queryset(self):
-        user = self.request.user
-        service_request_id = self.request.query_params.get('service_request')
+@mei_required
+def my_bids(request):
+    bids = Bid.objects.filter(
+        mei_profile=request.user.mei_profile,
+    ).select_related('service_request', 'service_request__category').order_by('-created_at')
+    return render(request, 'auctions/meus_lances.html', {'bids': bids})
 
-        if user.user_type == 'MEI':
-            qs = Bid.objects.filter(mei_profile=user.mei_profile)
-            if service_request_id:
-                qs = qs.filter(service_request_id=service_request_id)
-            return qs
 
-        if user.user_type == 'CIDADAO' and service_request_id:
-            return Bid.objects.filter(
-                service_request_id=service_request_id,
-                service_request__citizen_profile=user.citizen_profile,
-                status='ACTIVE',
-            )
+@mei_required
+@require_http_methods(['GET', 'POST'])
+def bid_create(request, request_pk):
+    """Envia um lance para uma ServiceRequest específica."""
+    service_request = get_object_or_404(
+        ServiceRequest.objects.select_related('citizen__user', 'category'),
+        pk=request_pk,
+    )
+    form = BidForm(
+        request.POST or None,
+        service_request=service_request,
+        mei_profile=request.user.mei_profile,
+    )
+    if request.method == 'POST':
+        if form.is_valid():
+            bid = form.save()
+            messages.success(request, f'Lance enviado: R$ {bid.amount}.')
+            return redirect('auctions:my_bids')
+        messages.error(request, 'Verifique os erros no formulário.')
 
-        return Bid.objects.none()
+    return render(request, 'auctions/fazer_proposta.html', {
+        'form': form,
+        'service_request': service_request,
+        'pk': request_pk,
+    })
 
-    def perform_create(self, serializer):
-        serializer.save(mei_profile=self.request.user.mei_profile)
 
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context['request'] = self.request
-        return context
+@mei_required
+@require_http_methods(['GET', 'POST'])
+def bid_update(request, pk):
+    bid = get_object_or_404(
+        Bid,
+        pk=pk,
+        mei_profile=request.user.mei_profile,
+        status=Bid.Status.ACTIVE,
+    )
+    form = BidForm(
+        request.POST or None,
+        instance=bid,
+        service_request=bid.service_request,
+        mei_profile=request.user.mei_profile,
+    )
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Lance atualizado.')
+            return redirect('auctions:my_bids')
+        messages.error(request, 'Verifique os erros no formulário.')
 
-    @action(detail=False, methods=['get'], url_path='mine')
-    def mine(self, request):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+    return render(request, 'auctions/lance_form.html', {
+        'form': form,
+        'bid': bid,
+    })
 
-    @action(detail=True, methods=['post'], url_path='withdraw')
-    def withdraw(self, request, pk=None):
-        bid = self.get_object()
-        if bid.status != 'ACTIVE':
-            return Response(
-                {'error': 'Só é possível retirar lances ativos.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        bid.status = 'WITHDRAWN'
-        bid.save()
-        return Response({'status': 'Lance retirado com sucesso.'})
+
+@mei_required
+@require_POST
+def bid_withdraw(request, pk):
+    bid = get_object_or_404(Bid, pk=pk, mei_profile=request.user.mei_profile)
+    if bid.status != Bid.Status.ACTIVE:
+        messages.error(request, 'Só é possível retirar lances ativos.')
+    else:
+        bid.status = Bid.Status.WITHDRAWN
+        bid.save(update_fields=['status'])
+        messages.success(request, 'Lance retirado.')
+    return redirect('auctions:my_bids')
+
+
+@mei_required
+@require_POST
+def bid_delete(request, pk):
+    bid = get_object_or_404(
+        Bid,
+        pk=pk,
+        mei_profile=request.user.mei_profile,
+        status=Bid.Status.ACTIVE,
+    )
+    bid.delete()
+    messages.success(request, 'Lance excluído.')
+    return redirect('auctions:my_bids')

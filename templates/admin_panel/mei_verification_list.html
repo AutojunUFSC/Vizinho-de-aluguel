@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Verificação de MEIs — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'admin_panel:dashboard' %}">Painel</a></li>
+        <li class="sep">›</li>
+        <li>Verificação de MEIs</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Verificação de MEIs</h1>
+          <p class="subtitle">Aprovar ou rejeitar cadastros de profissionais.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding: 32px 24px 60px;">
+    <div class="tabs" role="tablist" style="margin-bottom:24px;">
+      <a href="?status=PENDING" class="tab-btn {% if current_status == 'PENDING' %}is-active{% endif %}">Pendentes</a>
+      <a href="?status=VERIFIED" class="tab-btn {% if current_status == 'VERIFIED' %}is-active{% endif %}">Aprovados</a>
+      <a href="?status=REJECTED" class="tab-btn {% if current_status == 'REJECTED' %}is-active{% endif %}">Rejeitados</a>
+    </div>
+
+    <div style="display:grid; gap:10px;">
+      {% for mei in meis %}
+        <a href="{% url 'admin_panel:mei_verification_detail' pk=mei.pk %}" class="card card-pad" style="text-decoration:none; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong style="color:var(--pmf-navy);">{{ mei.nome_fantasia }}</strong>
+            <div style="font-size:13px; color:var(--text-muted);">{{ mei.user.full_name }} · {{ mei.cnpj }}</div>
+          </div>
+          <span class="badge {% if mei.verification_status == 'VERIFIED' %}badge-cyan{% elif mei.verification_status == 'REJECTED' %}badge-muted{% else %}badge-muted{% endif %}">
+            {{ mei.get_verification_status_display }}
+          </span>
+        </a>
+      {% empty %}
+        <div class="empty-state">
+          <h3>Nenhum MEI com status "{{ current_status }}"</h3>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</main>
+{% endblock %}

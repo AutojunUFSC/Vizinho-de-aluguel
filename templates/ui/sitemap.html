@@ -76,7 +76,7 @@
           Área do cidadão <span style="font-size:13px; font-weight:500; color:var(--text-muted);">(requer login)</span>
         </h2>
         <ul style="list-style: disc; padding-left: 24px; line-height: 2;">
-          <li><a href="{% url 'home_usuario' %}">Minha área</a></li>
+          <li><a href="{% url 'accounts:profile' %}">Minha conta (Perfil)</a></li>
           <li><a href="{% url 'nova_solicitacao' %}">Nova solicitação</a></li>
           <li>
             <a href="{% url 'minhas_solicitacoes' %}">Minhas solicitações</a>
@@ -85,7 +85,6 @@
               <li>Acompanhamento de pedido <span style="font-size:13px; color:var(--text-muted);">(após aceitar uma proposta)</span></li>
             </ul>
           </li>
-          <li><a href="{% url 'home_usuario' %}#perfil">Meu perfil</a></li>
         </ul>
       </section>
 
@@ -96,14 +95,13 @@
         </h2>
         <ul style="list-style: disc; padding-left: 24px; line-height: 2;">
           <li>
-            <a href="{% url 'home_profissional' %}">Painel do profissional</a>
+            <a href="{% url 'accounts:profile' %}">Minha conta (Perfil)</a>
             <ul style="list-style: circle; padding-left: 24px;">
               <li>Pedidos disponíveis no seu bairro</li>
               <li>Enviar lance em um pedido <span style="font-size:13px; color:var(--text-muted);">(via botão "Enviar lance" no card)</span></li>
               <li>Acompanhar serviço aceito <span style="font-size:13px; color:var(--text-muted);">(após cliente aceitar seu lance)</span></li>
             </ul>
           </li>
-          <li><a href="{% url 'home_profissional' %}#perfil">Meu perfil profissional</a></li>
         </ul>
       </section>
 

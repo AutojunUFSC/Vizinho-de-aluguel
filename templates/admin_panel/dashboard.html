@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Painel administrativo — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li>Painel administrativo</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Painel administrativo</h1>
+          <p class="subtitle">Visão geral da plataforma Vizinho de Aluguel.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding: 32px 24px 60px;">
+
+    {# ===== Cards de métricas ===== #}
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:16px; margin-bottom:32px;">
+      <div class="card card-pad" style="text-align:center;">
+        <div style="font-size:28px; font-weight:800; color:var(--pmf-navy);">{{ total_citizens }}</div>
+        <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em;">Cidadãos</div>
+      </div>
+      <div class="card card-pad" style="text-align:center;">
+        <div style="font-size:28px; font-weight:800; color:var(--pmf-navy);">{{ total_meis }}</div>
+        <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em;">MEIs</div>
+      </div>
+      <div class="card card-pad" style="text-align:center;">
+        <div style="font-size:28px; font-weight:800; color:var(--vda-yellow-600);">{{ meis_pending }}</div>
+        <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em;">MEIs pendentes</div>
+      </div>
+      <div class="card card-pad" style="text-align:center;">
+        <div style="font-size:28px; font-weight:800; color:var(--pmf-navy);">{{ total_requests }}</div>
+        <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em;">Solicitações</div>
+      </div>
+      <div class="card card-pad" style="text-align:center;">
+        <div style="font-size:28px; font-weight:800; color:var(--pmf-cyan-600);">{{ open_requests }}</div>
+        <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em;">Abertas</div>
+      </div>
+      <div class="card card-pad" style="text-align:center;">
+        <div style="font-size:28px; font-weight:800; color:var(--pmf-navy);">{{ total_orders }}</div>
+        <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em;">Pedidos</div>
+      </div>
+      <div class="card card-pad" style="text-align:center;">
+        <div style="font-size:28px; font-weight:800; color:var(--pmf-cyan-600);">{{ orders_in_progress }}</div>
+        <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em;">Em andamento</div>
+      </div>
+      <div class="card card-pad" style="text-align:center;">
+        <div style="font-size:28px; font-weight:800; color:var(--status-success);">{{ orders_completed }}</div>
+        <div style="font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.04em;">Concluídos</div>
+      </div>
+    </div>
+
+    {# ===== Links rápidos ===== #}
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px;">
+      <a href="{% url 'admin_panel:mei_verification_list' %}" class="card card-pad" style="text-decoration:none; transition:transform .15s;"
+         onmouseenter="this.style.transform='translateY(-2px)';" onmouseleave="this.style.transform='';">
+        <h3 style="color:var(--pmf-navy); margin:0 0 4px;">Verificação de MEIs</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin:0;">Aprovar ou rejeitar cadastros de profissionais.</p>
+      </a>
+      <a href="{% url 'admin_panel:user_list' %}" class="card card-pad" style="text-decoration:none; transition:transform .15s;"
+         onmouseenter="this.style.transform='translateY(-2px)';" onmouseleave="this.style.transform='';">
+        <h3 style="color:var(--pmf-navy); margin:0 0 4px;">Usuários</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin:0;">Listar e filtrar usuários da plataforma.</p>
+      </a>
+      <a href="{% url 'admin_panel:order_list' %}" class="card card-pad" style="text-decoration:none; transition:transform .15s;"
+         onmouseenter="this.style.transform='translateY(-2px)';" onmouseleave="this.style.transform='';">
+        <h3 style="color:var(--pmf-navy); margin:0 0 4px;">Pedidos</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin:0;">Acompanhar todos os pedidos de serviço.</p>
+      </a>
+    </div>
+  </div>
+</main>
+{% endblock %}

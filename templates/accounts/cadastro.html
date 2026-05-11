@@ -1,0 +1,353 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Acessar conta — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li id="breadcrumb-mode">{% if active_tab == 'cadastrar' %}Criar conta{% else %}Acessar conta{% endif %}</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1 id="auth-title">{% if active_tab == 'cadastrar' %}Crie sua conta{% else %}Acesse sua conta{% endif %}</h1>
+          <p class="subtitle">Plataforma oficial da Prefeitura de Florianópolis. Seus dados são protegidos pela LGPD.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container container-auth" style="padding: 40px 24px 60px;">
+
+    <div class="auth-toggle" role="tablist">
+      <button id="tab-entrar" type="button" role="tab"
+              aria-selected="{% if active_tab == 'entrar' %}true{% else %}false{% endif %}"
+              class="auth-toggle-btn {% if active_tab == 'entrar' %}is-active{% endif %}"
+              onclick="showTab('entrar')">Entrar</button>
+      <button id="tab-cadastrar" type="button" role="tab"
+              aria-selected="{% if active_tab == 'cadastrar' %}true{% else %}false{% endif %}"
+              class="auth-toggle-btn {% if active_tab == 'cadastrar' %}is-active{% endif %}"
+              onclick="showTab('cadastrar')">Cadastrar-se</button>
+    </div>
+
+    <div class="card card-pad-lg">
+
+      {# ===== Form: Entrar ===== #}
+      <form id="form-entrar" method="post" action="{% url 'cadastro' %}" novalidate
+            style="{% if active_tab == 'cadastrar' %}display:none;{% endif %}">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="login">
+        {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
+
+        {% if login_form.non_field_errors %}
+          <div class="alert alert-danger" role="alert" style="margin-bottom:16px;">
+            <div class="alert-body">{{ login_form.non_field_errors.0 }}</div>
+          </div>
+        {% endif %}
+
+        <div class="field">
+          <label for="login-email">E-mail</label>
+          <input id="login-email" name="username" type="email" class="input"
+                 placeholder="seu@email.com" autocomplete="email"
+                 value="{{ login_form.username.value|default:'' }}" required>
+          {% if login_form.username.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ login_form.username.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="field">
+          <label for="login-password">Senha</label>
+          <input id="login-password" name="password" type="password" class="input"
+                 placeholder="••••••••" autocomplete="current-password" required>
+          {% if login_form.password.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ login_form.password.errors.0 }}</div>
+          {% endif %}
+          <div style="text-align:right; margin-top:6px;">
+            <a href="#" style="font-size:13px; color:var(--pmf-cyan-600); font-weight:600;">Esqueci minha senha</a>
+          </div>
+        </div>
+
+        <button id="btn-entrar" type="submit" class="btn btn-primary btn-block btn-lg">
+          Entrar
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+        <div class="or-divider"><span>ou</span></div>
+        <button type="button" class="btn btn-govbr" disabled style="opacity:.5; cursor:not-allowed;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
+          Entrar com gov.br <small style="font-size:11px;">(em breve)</small>
+        </button>
+      </form>
+
+      {# ===== Form: Cadastrar ===== #}
+      <form id="form-cadastrar" method="post" action="{% url 'cadastro' %}" enctype="multipart/form-data" novalidate
+            style="{% if active_tab != 'cadastrar' %}display:none;{% endif %}">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="register">
+        <input type="hidden" name="user_type" id="reg-user-type" value="{{ register_user_type|default:'CIDADAO' }}">
+
+        {% with form=register_form_citizen %}
+          {% if active_tab == 'cadastrar' and register_user_type == 'CIDADAO' and form.non_field_errors %}
+            <div class="alert alert-danger" role="alert" style="margin-bottom:16px;">
+              <div class="alert-body">{{ form.non_field_errors.0 }}</div>
+            </div>
+          {% endif %}
+        {% endwith %}
+        {% with form=register_form_mei %}
+          {% if active_tab == 'cadastrar' and register_user_type == 'MEI' and form.non_field_errors %}
+            <div class="alert alert-danger" role="alert" style="margin-bottom:16px;">
+              <div class="alert-body">{{ form.non_field_errors.0 }}</div>
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <label style="margin-bottom:10px;">Eu sou</label>
+        <div class="type-chooser" role="radiogroup">
+          <button type="button" role="radio"
+                  aria-checked="{% if register_user_type != 'MEI' %}true{% else %}false{% endif %}"
+                  id="type-cidadao"
+                  class="type-card {% if register_user_type != 'MEI' %}is-active{% endif %}"
+                  onclick="setUserType('CIDADAO')">
+            <span class="icon-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+            </span>
+            <span class="label">Cidadão</span>
+            <span class="sub">Quero solicitar serviços</span>
+          </button>
+          <button type="button" role="radio"
+                  aria-checked="{% if register_user_type == 'MEI' %}true{% else %}false{% endif %}"
+                  id="type-mei"
+                  class="type-card {% if register_user_type == 'MEI' %}is-active{% endif %}"
+                  onclick="setUserType('MEI')">
+            <span class="icon-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            </span>
+            <span class="label">Profissional</span>
+            <span class="sub">Sou MEI e ofereço serviços</span>
+          </button>
+        </div>
+
+        <div class="field">
+          <label for="reg-name">Nome completo</label>
+          <input id="reg-name" name="full_name" type="text" class="input"
+                 placeholder="Maria Souza" autocomplete="name"
+                 value="{% if register_user_type == 'MEI' %}{{ register_form_mei.full_name.value|default:'' }}{% else %}{{ register_form_citizen.full_name.value|default:'' }}{% endif %}" required>
+          {% if register_user_type == 'MEI' and register_form_mei.full_name.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ register_form_mei.full_name.errors.0 }}</div>
+          {% elif register_user_type != 'MEI' and register_form_citizen.full_name.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ register_form_citizen.full_name.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div id="cnpj-field" class="field" style="{% if register_user_type != 'MEI' %}display:none;{% endif %}">
+          <label for="reg-cnpj">CNPJ MEI <span class="required-mark">*</span></label>
+          <div style="position:relative;">
+            <input id="reg-cnpj" name="cnpj" type="text" class="input"
+                   placeholder="00.000.000/0001-00" maxlength="18"
+                   value="{{ register_form_mei.cnpj.value|default:'' }}"
+                   oninput="onCnpjInput(this)" onblur="validateCnpjField()">
+            <span id="cnpj-ok" style="display:none; position:absolute; right:12px; top:50%; transform:translateY(-50%); color:var(--status-success); font-size:16px;">✓</span>
+          </div>
+          <div id="cnpj-feedback" style="font-size:12px; margin-top:5px; color:var(--text-muted);">
+            Informe o CNPJ. A situação ativa é verificada pelo servidor.
+          </div>
+          {% if register_user_type == 'MEI' and register_form_mei.cnpj.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ register_form_mei.cnpj.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="field">
+          <label for="reg-email">E-mail</label>
+          <input id="reg-email" name="email" type="email" class="input"
+                 placeholder="seu@email.com" autocomplete="email"
+                 value="{% if register_user_type == 'MEI' %}{{ register_form_mei.email.value|default:'' }}{% else %}{{ register_form_citizen.email.value|default:'' }}{% endif %}" required>
+          {% if register_user_type == 'MEI' and register_form_mei.email.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ register_form_mei.email.errors.0 }}</div>
+          {% elif register_user_type != 'MEI' and register_form_citizen.email.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ register_form_citizen.email.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="field">
+          <label for="reg-phone">Telefone <span style="font-size:11px; color:var(--text-muted); font-weight:400;">(com DDD)</span></label>
+          <input id="reg-phone" name="phone" type="tel" class="input"
+                 placeholder="(48) 99999-9999" maxlength="15"
+                 value="{% if register_user_type == 'MEI' %}{{ register_form_mei.phone.value|default:'' }}{% else %}{{ register_form_citizen.phone.value|default:'' }}{% endif %}"
+                 oninput="onPhoneInput(this)" onblur="validatePhoneField()" autocomplete="tel">
+          <div id="phone-feedback" style="display:none; font-size:12px; margin-top:5px;"></div>
+          {% if register_user_type == 'MEI' and register_form_mei.phone.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ register_form_mei.phone.errors.0 }}</div>
+          {% elif register_user_type != 'MEI' and register_form_citizen.phone.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ register_form_citizen.phone.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="field">
+          <label for="reg-password">Senha</label>
+          <input id="reg-password" name="password" type="password" class="input"
+                 placeholder="••••••••" autocomplete="new-password" required>
+          {% if register_user_type == 'MEI' and register_form_mei.password.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ register_form_mei.password.errors.0 }}</div>
+          {% elif register_user_type != 'MEI' and register_form_citizen.password.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ register_form_citizen.password.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="field">
+          <label for="reg-password-confirm">Confirmar senha</label>
+          <input id="reg-password-confirm" name="password_confirm" type="password" class="input"
+                 placeholder="••••••••" autocomplete="new-password" required>
+          {% if register_user_type == 'MEI' and register_form_mei.password_confirm.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ register_form_mei.password_confirm.errors.0 }}</div>
+          {% elif register_user_type != 'MEI' and register_form_citizen.password_confirm.errors %}
+            <div class="field-help" style="color:var(--status-danger);">{{ register_form_citizen.password_confirm.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="field" style="display:flex; gap:10px; align-items:flex-start;">
+          <input type="checkbox" id="termos" name="termos" required style="margin-top:4px; width:18px; height:18px;" checked>
+          <label for="termos" style="font-size:13px; color:var(--text-secondary); font-weight:400; line-height:1.5; margin-bottom:0;">
+            Li e concordo com os
+            <a href="{% url 'institucional' %}#termos" style="color:var(--pmf-cyan-600); font-weight:600;">Termos de Uso</a> e a
+            <a href="{% url 'institucional' %}#privacidade" style="color:var(--pmf-cyan-600); font-weight:600;">Política de Privacidade (LGPD)</a>
+            da Prefeitura de Florianópolis.
+          </label>
+        </div>
+
+        <button id="btn-cadastrar" type="submit" class="btn btn-primary btn-block btn-lg">
+          Criar conta
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </form>
+
+    </div>
+
+    <div style="margin-top:20px;">
+      <div class="alert alert-info" role="status">
+        <span class="alert-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        </span>
+        <div>
+          <div class="alert-title">Plataforma pública e gratuita</div>
+          <div class="alert-body">O Vizinho de Aluguel é mantido pela Prefeitura de Florianópolis. Não cobramos taxas, mensalidades ou comissões.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  function setUserType(t) {
+    document.getElementById('reg-user-type').value = t;
+    document.getElementById('type-cidadao').classList.toggle('is-active', t === 'CIDADAO');
+    document.getElementById('type-cidadao').setAttribute('aria-checked', t === 'CIDADAO');
+    document.getElementById('type-mei').classList.toggle('is-active', t === 'MEI');
+    document.getElementById('type-mei').setAttribute('aria-checked', t === 'MEI');
+    document.getElementById('cnpj-field').style.display = t === 'MEI' ? 'block' : 'none';
+    resetCnpjUI();
+  }
+
+  function showTab(tab) {
+    var isEntrar = tab === 'entrar';
+    document.getElementById('form-entrar').style.display    = isEntrar ? 'block' : 'none';
+    document.getElementById('form-cadastrar').style.display = isEntrar ? 'none'  : 'block';
+    document.getElementById('tab-entrar').classList.toggle('is-active', isEntrar);
+    document.getElementById('tab-entrar').setAttribute('aria-selected', isEntrar);
+    document.getElementById('tab-cadastrar').classList.toggle('is-active', !isEntrar);
+    document.getElementById('tab-cadastrar').setAttribute('aria-selected', !isEntrar);
+    document.getElementById('auth-title').textContent      = isEntrar ? 'Acesse sua conta' : 'Crie sua conta';
+    document.getElementById('breadcrumb-mode').textContent = isEntrar ? 'Acessar conta'    : 'Criar conta';
+  }
+
+  // ── Algoritmo oficial de dígitos verificadores do CNPJ ────
+  function cnpjDigitsOk(d) {
+    if (d.length !== 14 || /^(\d)\1+$/.test(d)) return false;
+    function calc(str, n) {
+      var weights = [];
+      var p = 2;
+      for (var i = n - 1; i >= 0; i--) { weights[i] = p; p = p === 9 ? 2 : p + 1; }
+      var sum = 0;
+      for (var k = 0; k < n; k++) sum += parseInt(str[k]) * weights[k];
+      var r = sum % 11;
+      return r < 2 ? 0 : 11 - r;
+    }
+    return calc(d, 12) === parseInt(d[12]) && calc(d, 13) === parseInt(d[13]);
+  }
+
+  function onCnpjInput(el) {
+    var v = el.value.replace(/\D/g, '').substring(0, 14);
+    v = v
+      .replace(/^(\d{2})(\d)/, '$1.$2')
+      .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+      .replace(/\.(\d{3})(\d)/, '.$1/$2')
+      .replace(/(\d{4})(\d)/, '$1-$2');
+    el.value = v;
+    resetCnpjUI();
+  }
+
+  function resetCnpjUI() {
+    var ok = document.getElementById('cnpj-ok');
+    if (ok) ok.style.display = 'none';
+    var fb = document.getElementById('cnpj-feedback');
+    if (fb) {
+      fb.style.color = 'var(--text-muted)';
+      fb.textContent = 'Informe o CNPJ. A situação ativa é verificada pelo servidor.';
+    }
+    var input = document.getElementById('reg-cnpj');
+    if (input) input.style.borderColor = '';
+  }
+
+  function validateCnpjField() {
+    var input  = document.getElementById('reg-cnpj');
+    if (!input) return;
+    var digits = input.value.replace(/\D/g, '');
+    var fb     = document.getElementById('cnpj-feedback');
+    if (!digits) return;
+    if (!cnpjDigitsOk(digits)) {
+      input.style.borderColor = 'var(--status-danger)';
+      fb.style.color          = 'var(--status-danger)';
+      fb.textContent          = '✗ CNPJ inválido. Verifique os dígitos.';
+    } else {
+      input.style.borderColor = 'var(--status-success)';
+      fb.style.color          = 'var(--status-success)';
+      fb.textContent          = '✓ Formato válido. A situação ativa é confirmada pelo servidor.';
+      document.getElementById('cnpj-ok').style.display = 'inline';
+    }
+  }
+
+  function onPhoneInput(el) {
+    var v = el.value.replace(/\D/g, '').substring(0, 11);
+    v = v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d{1,4})$/, '$1-$2');
+    el.value = v;
+    var fb = document.getElementById('phone-feedback');
+    if (fb) fb.style.display = 'none';
+    el.style.borderColor = '';
+  }
+
+  function validatePhoneField() {
+    var input  = document.getElementById('reg-phone');
+    if (!input) return;
+    var digits = input.value.replace(/\D/g, '');
+    var fb     = document.getElementById('phone-feedback');
+    if (!digits) return;
+    if (digits.length < 10 || digits.length > 11 || parseInt(digits.substring(0, 2)) < 11) {
+      input.style.borderColor = 'var(--status-danger)';
+      fb.style.color   = 'var(--status-danger)';
+      fb.textContent   = '✗ Telefone inválido. Use o formato (48) 99999-9999.';
+      fb.style.display = 'block';
+    } else {
+      input.style.borderColor = 'var(--status-success)';
+      fb.style.color   = 'var(--status-success)';
+      fb.textContent   = '✓ Telefone válido.';
+      fb.style.display = 'block';
+    }
+  }
+</script>
+{% endblock %}

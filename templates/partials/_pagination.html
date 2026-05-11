@@ -1,0 +1,38 @@
+{% comment %}
+Paginação reutilizável para um Page do django.core.paginator.
+
+Uso:
+  {% include "partials/_pagination.html" with page=page_obj %}
+
+Mantém os parâmetros existentes da querystring (filtros, status, etc.)
+trocando apenas o ?page=. Para isso, o caller pode passar `qs_extra` com
+a querystring base sem o page (ex: 'status=OPEN&category=eletrica').
+{% endcomment %}
+
+{% if page.has_other_pages %}
+  <nav class="pagination" role="navigation" aria-label="Paginação"
+       style="display:flex; gap:6px; justify-content:center; align-items:center; margin-top:24px; flex-wrap:wrap;">
+
+    {% if page.has_previous %}
+      <a class="btn btn-ghost btn-sm" href="?{% if qs_extra %}{{ qs_extra }}&{% endif %}page={{ page.previous_page_number }}" rel="prev">‹ Anterior</a>
+    {% else %}
+      <span class="btn btn-ghost btn-sm" aria-disabled="true" style="opacity:.5;">‹ Anterior</span>
+    {% endif %}
+
+    {% for n in page.paginator.page_range %}
+      {% if n == page.number %}
+        <span class="btn btn-primary btn-sm" aria-current="page">{{ n }}</span>
+      {% elif n == 1 or n == page.paginator.num_pages or n|add:"-2" <= page.number and n|add:"2" >= page.number %}
+        <a class="btn btn-ghost btn-sm" href="?{% if qs_extra %}{{ qs_extra }}&{% endif %}page={{ n }}">{{ n }}</a>
+      {% elif n == page.number|add:"-3" or n == page.number|add:"3" %}
+        <span aria-hidden="true">…</span>
+      {% endif %}
+    {% endfor %}
+
+    {% if page.has_next %}
+      <a class="btn btn-ghost btn-sm" href="?{% if qs_extra %}{{ qs_extra }}&{% endif %}page={{ page.next_page_number }}" rel="next">Próxima ›</a>
+    {% else %}
+      <span class="btn btn-ghost btn-sm" aria-disabled="true" style="opacity:.5;">Próxima ›</span>
+    {% endif %}
+  </nav>
+{% endif %}

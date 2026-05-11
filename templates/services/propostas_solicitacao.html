@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Propostas — {{ service_request.title|default:"Solicitação" }}{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li><a href="{% url 'minhas_solicitacoes' %}">Minhas solicitações</a></li>
+        <li class="sep">›</li>
+        <li>Propostas</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Propostas recebidas</h1>
+          <p class="subtitle">{{ service_request.title }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding: 32px 24px 60px;">
+
+    {# ===== Resumo da solicitação ===== #}
+    <div class="card card-pad" style="margin-bottom:28px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:0;">
+          <div class="request-meta" style="margin-bottom:10px;">
+            {% if service_request.category %}<span class="badge badge-cyan">{{ service_request.category.name }}</span>{% endif %}
+            {% if service_request.address %}<span class="badge badge-muted">📍 {{ service_request.address.city }}</span>{% endif %}
+            <span class="status-badge status-{{ service_request.status|lower|cut:'_' }}"><span class="dot"></span> {{ service_request.get_status_display }}</span>
+            {% if service_request.status not in 'OPEN,IN_AUCTION' %}
+              <span class="badge badge-muted">Fora do prazo de propostas</span>
+            {% endif %}
+          </div>
+          <h3 style="font-size:17px; font-weight:700; color:var(--pmf-navy); margin:0 0 8px;">{{ service_request.title }}</h3>
+          <p style="font-size:14px; color:var(--text-secondary); margin:0;">{{ service_request.description|linebreaksbr }}</p>
+        </div>
+        {% if service_request.budget_max %}
+          <div style="text-align:right; flex-shrink:0;">
+            <div style="font-size:11px; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-muted); margin-bottom:2px;">Orçamento máximo</div>
+            <div style="font-size:22px; font-weight:800; color:var(--pmf-navy);">R$ {{ service_request.budget_max }}</div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    {# ===== Lista de propostas ===== #}
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+      <h2 class="section-h2" style="margin:0;">
+        {{ bids|length }} proposta{{ bids|length|pluralize }} recebida{{ bids|length|pluralize }}
+      </h2>
+    </div>
+
+    {% if bids %}
+      <div style="display:grid; gap:14px;">
+        {% for bid in bids %}
+          <div class="card card-pad">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap;">
+              <div style="flex:1; min-width:0;">
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap;">
+                  <div style="font-size:16px; font-weight:700; color:var(--pmf-navy);">
+                    {{ bid.mei_profile.user.full_name }}
+                  </div>
+                  {% if bid.mei_profile.rating_avg %}
+                    <div style="font-size:13px; color:var(--vda-yellow-600); font-weight:600;">
+                      ★ {{ bid.mei_profile.rating_avg }}
+                    </div>
+                  {% endif %}
+                  {% if bid.mei_profile.verification_status == 'VERIFIED' %}
+                    <span class="badge badge-cyan" style="font-size:11px;">Verificado</span>
+                  {% endif %}
+                </div>
+                {% if bid.notes %}
+                  <p style="font-size:13px; color:var(--text-secondary); margin:0 0 12px; line-height:1.6;">
+                    {{ bid.notes|linebreaksbr }}
+                  </p>
+                {% endif %}
+                <div style="display:flex; gap:20px; font-size:12px; color:var(--text-muted); flex-wrap:wrap;">
+                  {% if bid.estimated_hours %}<span>⏱ {{ bid.estimated_hours }} hora{{ bid.estimated_hours|pluralize }}</span>{% endif %}
+                  {% if bid.proposed_deadline %}<span>📅 Prazo: {{ bid.proposed_deadline|date:"d/m/Y" }}</span>{% endif %}
+                  <span>Enviada em {{ bid.created_at|date:"d/m/Y H:i" }}</span>
+                </div>
+              </div>
+              <div style="text-align:right; flex-shrink:0; display:flex; flex-direction:column; align-items:flex-end; gap:12px;">
+                <div style="font-size:26px; font-weight:800; color:var(--pmf-navy); line-height:1;">
+                  R$ {{ bid.amount }}
+                </div>
+                {% if service_request.status == 'OPEN' or service_request.status == 'IN_AUCTION' %}
+                  {% if service_request.citizen.user_id == user.id %}
+                    <form method="post" action="{% url 'services:award_bid' bid_pk=bid.pk %}" style="margin:0;"
+                          onsubmit="return confirm('Confirma a escolha de {{ bid.mei_profile.user.full_name|escapejs }}?\nOs demais lances serão rejeitados e o pedido será criado automaticamente.');">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-primary btn-sm">Aceitar proposta</button>
+                    </form>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-state-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3>Nenhuma proposta ainda</h3>
+        <p>Assim que profissionais MEI enviarem propostas, elas aparecerão aqui.</p>
+        <a href="{% url 'minhas_solicitacoes' %}" class="btn btn-secondary">Voltar às solicitações</a>
+      </div>
+    {% endif %}
+
+  </div>
+</main>
+{% endblock %}

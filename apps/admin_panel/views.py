@@ -48,7 +48,7 @@ def mei_verification_detail(request, pk):
             mei.verification_status = MEIProfile.VerificationStatus.REJECTED
             mei.save(update_fields=['verification_status'])
             messages.warning(request, f'MEI {mei.nome_fantasia} rejeitado.')
-        return redirect('admin_mei_verification_list')
+        return redirect('admin_panel:mei_verification_list')
 
     context = {'mei': mei}
     return render(request, 'admin_panel/mei_verification_detail.html', context)

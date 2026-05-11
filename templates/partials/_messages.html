@@ -1,0 +1,123 @@
+{% if messages %}
+  <style>
+    .toast-container {
+      position: fixed;
+      top: 54px; /* Mais perto do topo, levemente sobreposto */
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10000;
+      width: 100%;
+      max-width: 480px;
+      padding: 0 16px;
+      pointer-events: none; /* Deixa cliques passarem por trás do container */
+    }
+
+    .toast-messages {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: auto; /* Permite interação apenas nas mensagens */
+    }
+
+    .floating-alert {
+      padding: 16px 20px;
+      border-radius: 12px !important;
+      box-shadow: 0 10px 30px rgba(14, 31, 77, 0.15) !important;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-left: 6px solid !important;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      transform: translateY(-20px);
+      animation: toastSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transition: opacity 0.4s ease, transform 0.4s ease, max-height 0.4s ease, margin 0.4s ease, padding 0.4s ease;
+      overflow: hidden;
+      max-height: 100px;
+    }
+
+    @keyframes toastSlideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Cores premium com transparência de 85% */
+    .floating-alert.alert-success {
+      background: rgba(227, 245, 221, 0.85) !important;
+      color: #106017 !important;
+      border-left-color: var(--status-success) !important;
+    }
+
+    .floating-alert.alert-warning {
+      background: rgba(255, 244, 224, 0.85) !important;
+      color: #8c5200 !important;
+      border-left-color: var(--status-warning) !important;
+    }
+
+    .floating-alert.alert-danger {
+      background: rgba(251, 231, 231, 0.85) !important;
+      color: #9c1c1c !important;
+      border-left-color: var(--status-danger) !important;
+    }
+
+    .floating-alert.alert-info {
+      background: rgba(230, 239, 251, 0.85) !important;
+      color: #0d4294 !important;
+      border-left-color: var(--status-info) !important;
+    }
+
+    .floating-alert .alert-body {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+  </style>
+
+  <div class="toast-container">
+    <div class="toast-messages" role="region" aria-label="Notificações">
+      {% for message in messages %}
+        <div class="floating-alert alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}" role="alert">
+          <div class="alert-body">{{ message }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      function initAutoDismiss() {
+        var alerts = document.querySelectorAll('.toast-messages .floating-alert');
+        alerts.forEach(function (alert) {
+          setTimeout(function () {
+            // Suaviza o sumiço
+            alert.style.opacity = "0";
+            alert.style.transform = "translateY(-15px)";
+
+            // Recolhe o espaço ocupado
+            setTimeout(function () {
+              alert.style.maxHeight = "0";
+              alert.style.paddingTop = "0";
+              alert.style.paddingBottom = "0";
+              alert.style.marginTop = "0";
+              alert.style.marginBottom = "0";
+              alert.style.borderLeftWidth = "0";
+              
+              setTimeout(function () {
+                alert.style.display = 'none';
+              }, 400);
+            }, 400);
+          }, 5000); // Exibe por 5 segundos
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAutoDismiss);
+      } else {
+        initAutoDismiss();
+      }
+    })();
+  </script>
+{% endif %}

@@ -27,7 +27,7 @@ def mei_required(view_func):
 def admin_required(view_func):
     @login_required
     def wrapper(request, *args, **kwargs):
-        if request.user.user_type != 'ADMIN':
+        if request.user.user_type != 'ADMIN' and not request.user.is_superuser:
             raise PermissionDenied
         return view_func(request, *args, **kwargs)
     wrapper.__name__ = view_func.__name__

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}{{ mei.nome_fantasia }} — Verificação{% endblock %}
+
+{% block content %}
+<main id="main">
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'admin_panel:dashboard' %}">Painel</a></li>
+        <li class="sep">›</li>
+        <li><a href="{% url 'admin_panel:mei_verification_list' %}">Verificação</a></li>
+        <li class="sep">›</li>
+        <li>{{ mei.nome_fantasia|truncatechars:25 }}</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>{{ mei.nome_fantasia }}</h1>
+          <p class="subtitle">{{ mei.user.full_name }} · {{ mei.get_verification_status_display }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding: 32px 24px 60px;">
+    <div class="dash-grid" style="grid-template-columns:1fr 300px;">
+      <div class="card card-pad">
+        <h3 style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; margin:0 0 12px;">Dados do MEI</h3>
+        <div style="display:grid; gap:8px; font-size:13px;">
+          <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border);">
+            <span style="color:var(--text-muted);">Nome completo</span>
+            <strong style="color:var(--pmf-navy);">{{ mei.user.full_name }}</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border);">
+            <span style="color:var(--text-muted);">E-mail</span>
+            <strong style="color:var(--pmf-navy);">{{ mei.user.email }}</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border);">
+            <span style="color:var(--text-muted);">CNPJ</span>
+            <strong style="color:var(--pmf-navy);">{{ mei.cnpj }}</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border);">
+            <span style="color:var(--text-muted);">Razão Social</span>
+            <strong style="color:var(--pmf-navy);">{{ mei.razao_social }}</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--border);">
+            <span style="color:var(--text-muted);">Nome Fantasia</span>
+            <strong style="color:var(--pmf-navy);">{{ mei.nome_fantasia }}</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:6px 0;">
+            <span style="color:var(--text-muted);">Cidade</span>
+            <strong style="color:var(--pmf-navy);">{{ mei.city }}</strong>
+          </div>
+        </div>
+        {% if mei.cnpj_file %}
+          <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--border);">
+            <a href="{{ mei.cnpj_file.url }}" target="_blank" rel="noopener" style="font-size:13px; color:var(--pmf-cyan-600); font-weight:600;">
+              📄 Ver Cartão CNPJ anexado
+            </a>
+          </div>
+        {% endif %}
+      </div>
+
+      <aside class="dash-aside">
+        <div class="card card-pad">
+          <h3 style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; margin:0 0 14px;">Ações</h3>
+          {% if mei.verification_status == 'PENDING' %}
+            <form method="post" style="display:grid; gap:10px;">
+              {% csrf_token %}
+              <button type="submit" name="action" value="approve" class="btn btn-primary btn-block"
+                      onclick="return confirm('Aprovar {{ mei.nome_fantasia }}?');">
+                ✓ Aprovar MEI
+              </button>
+              <button type="submit" name="action" value="reject" class="btn btn-secondary btn-block"
+                      style="border-color:var(--status-danger); color:var(--status-danger);"
+                      onclick="return confirm('Rejeitar {{ mei.nome_fantasia }}?');">
+                ✗ Rejeitar MEI
+              </button>
+            </form>
+          {% else %}
+            <div style="font-size:13px; color:var(--text-muted); text-align:center;">
+              Status: <strong>{{ mei.get_verification_status_display }}</strong>
+            </div>
+          {% endif %}
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+{% endblock %}

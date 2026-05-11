@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ mei.nome_fantasia }} — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li><a href="{% url 'accounts:mei_list' %}">Profissionais</a></li>
+        <li class="sep">›</li>
+        <li>{{ mei.nome_fantasia|truncatechars:30 }}</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>{{ mei.nome_fantasia }}</h1>
+          <p class="subtitle">{{ mei.user.full_name }}</p>
+        </div>
+        <div class="request-meta">
+          {% if mei.verification_status == 'VERIFIED' %}
+            <span class="badge badge-cyan">✓ Verificado</span>
+          {% else %}
+            <span class="badge badge-muted">Pendente</span>
+          {% endif %}
+          {% if mei.is_available %}
+            <span class="badge" style="background:var(--status-success-50, #f6ffed); color:var(--status-success);">Disponível</span>
+          {% else %}
+            <span class="badge badge-muted">Indisponível</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding: 32px 24px 60px;">
+    <div class="dash-grid" style="grid-template-columns: 1fr 300px;">
+
+      {# ===== Dados principais ===== #}
+      <div style="display:grid; gap:16px;">
+
+        <div class="card card-pad">
+          <h3 style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; margin:0 0 12px;">
+            Sobre o profissional
+          </h3>
+          {% if mei.bio %}
+            <p style="font-size:14px; color:var(--text-secondary); line-height:1.7; margin:0;">
+              {{ mei.bio|linebreaksbr }}
+            </p>
+          {% else %}
+            <p style="font-size:13px; color:var(--text-muted); margin:0;">
+              Este profissional ainda não adicionou uma biografia.
+            </p>
+          {% endif %}
+        </div>
+
+        <div class="card card-pad">
+          <h3 style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; margin:0 0 12px;">
+            Informações
+          </h3>
+          <div style="display:grid; gap:10px;">
+            <div style="display:flex; justify-content:space-between; font-size:13px; padding:6px 0; border-bottom:1px solid var(--border);">
+              <span style="color:var(--text-muted);">Razão Social</span>
+              <strong style="color:var(--pmf-navy);">{{ mei.razao_social }}</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:13px; padding:6px 0; border-bottom:1px solid var(--border);">
+              <span style="color:var(--text-muted);">CNPJ</span>
+              <strong style="color:var(--pmf-navy);">{{ mei.cnpj|truncatechars:8 }}•••</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:13px; padding:6px 0; border-bottom:1px solid var(--border);">
+              <span style="color:var(--text-muted);">Cidade</span>
+              <strong style="color:var(--pmf-navy);">{{ mei.city }}</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:13px; padding:6px 0; border-bottom:1px solid var(--border);">
+              <span style="color:var(--text-muted);">Raio de atendimento</span>
+              <strong style="color:var(--pmf-navy);">{{ mei.service_radius_km }} km</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:13px; padding:6px 0;">
+              <span style="color:var(--text-muted);">Serviços concluídos</span>
+              <strong style="color:var(--pmf-navy);">{{ mei.total_services_completed }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {# ===== Sidebar ===== #}
+      <aside class="dash-aside">
+        <div class="card card-pad" style="text-align:center;">
+          <div style="width:72px; height:72px; border-radius:50%; background:var(--pmf-cyan-100); display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-size:28px; font-weight:700; color:var(--pmf-cyan-700);">
+            {{ mei.user.full_name|truncatechars:1 }}
+          </div>
+          {% if mei.rating_avg %}
+            <div style="font-size:20px; color:var(--vda-yellow-600); font-weight:700;">
+              ★ {{ mei.rating_avg }}
+            </div>
+          {% endif %}
+          {% if mei.whatsapp_link %}
+            <a href="{{ mei.whatsapp_link }}" target="_blank" rel="noopener"
+               class="btn btn-primary btn-block" style="margin-top:16px;">
+              Contatar via WhatsApp →
+            </a>
+          {% endif %}
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+</main>
+{% endblock %}

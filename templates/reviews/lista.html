@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Minhas avaliações — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main" class="container" style="padding: 32px 0;">
+  <h1>Minhas avaliações</h1>
+
+  <section style="margin-top: 24px;">
+    <h2>Avaliações que enviei</h2>
+    {% if reviews_given %}
+      <ul class="review-list">
+        {% for review in reviews_given %}
+          <li class="review-item">
+            <strong>{{ review.rating }}★</strong>
+            <span class="muted">— {{ review.created_at|date:"d/m/Y" }}</span>
+            {% if review.comment %}<p>{{ review.comment }}</p>{% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">Você ainda não enviou avaliações.</p>
+    {% endif %}
+  </section>
+
+  <section style="margin-top: 24px;">
+    <h2>Avaliações que recebi</h2>
+    {% if reviews_received %}
+      <ul class="review-list">
+        {% for review in reviews_received %}
+          <li class="review-item">
+            <strong>{{ review.rating }}★</strong>
+            <span class="muted">— {{ review.created_at|date:"d/m/Y" }}</span>
+            {% if review.comment %}<p>{{ review.comment }}</p>{% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">Você ainda não recebeu avaliações.</p>
+    {% endif %}
+  </section>
+</main>
+{% endblock %}

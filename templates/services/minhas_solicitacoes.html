@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Minhas solicitações — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li><a href="{% url 'accounts:profile' %}">Minha conta</a></li>
+        <li class="sep">›</li>
+        <li>Minhas solicitações</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Minhas solicitações</h1>
+          <p class="subtitle">Acompanhe o andamento de todos os serviços solicitados.</p>
+        </div>
+        <a href="{% url 'nova_solicitacao' %}" class="btn btn-yellow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Nova solicitação
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding: 32px 24px 60px;">
+
+    {# ===== Tabs (links de filtro por status) ===== #}
+    <div class="tabs" role="tablist">
+      <a href="?{% if category_filter %}category={{ category_filter }}{% endif %}"
+         class="tab-btn {% if not status_filter %}is-active{% endif %}" role="tab">
+        Todas <span class="tab-count">{{ counts.TODAS|default:0 }}</span>
+      </a>
+      <a href="?status=OPEN{% if category_filter %}&category={{ category_filter }}{% endif %}"
+         class="tab-btn {% if status_filter == 'OPEN' %}is-active{% endif %}" role="tab">
+        Abertas <span class="tab-count">{{ counts.OPEN|default:0 }}</span>
+      </a>
+      <a href="?status=IN_AUCTION{% if category_filter %}&category={{ category_filter }}{% endif %}"
+         class="tab-btn {% if status_filter == 'IN_AUCTION' %}is-active{% endif %}" role="tab">
+        Recebendo propostas <span class="tab-count">{{ counts.IN_AUCTION|default:0 }}</span>
+      </a>
+      <a href="?status=AWARDED{% if category_filter %}&category={{ category_filter }}{% endif %}"
+         class="tab-btn {% if status_filter == 'AWARDED' %}is-active{% endif %}" role="tab">
+        Aceitas <span class="tab-count">{{ counts.AWARDED|default:0 }}</span>
+      </a>
+      <a href="?status=IN_PROGRESS{% if category_filter %}&category={{ category_filter }}{% endif %}"
+         class="tab-btn {% if status_filter == 'IN_PROGRESS' %}is-active{% endif %}" role="tab">
+        Em andamento <span class="tab-count">{{ counts.IN_PROGRESS|default:0 }}</span>
+      </a>
+      <a href="?status=COMPLETED{% if category_filter %}&category={{ category_filter }}{% endif %}"
+         class="tab-btn {% if status_filter == 'COMPLETED' %}is-active{% endif %}" role="tab">
+        Concluídas <span class="tab-count">{{ counts.COMPLETED|default:0 }}</span>
+      </a>
+      <a href="?status=CANCELLED{% if category_filter %}&category={{ category_filter }}{% endif %}"
+         class="tab-btn {% if status_filter == 'CANCELLED' %}is-active{% endif %}" role="tab">
+        Canceladas <span class="tab-count">{{ counts.CANCELLED|default:0 }}</span>
+      </a>
+    </div>
+
+    {# ===== Layout 2 colunas (lista + sidebar) ===== #}
+    <div class="dash-grid" style="grid-template-columns: 1fr 320px;">
+
+      <div id="solicitacoes-list" style="display:grid; gap:14px;">
+        {% for r in requests %}
+          <a href="{% url 'propostas_solicitacao' pk=r.pk %}" class="request-card">
+            <div class="request-card-head">
+              <div style="flex:1;min-width:0;">
+                <div class="request-meta">
+                  <span class="badge badge-muted">#{{ r.pk|stringformat:"s"|slice:":6" }}</span>
+                  <span class="status-badge status-{{ r.status|lower|cut:'_' }}"><span class="dot"></span> {{ r.get_status_display }}</span>
+                  {% if r.category %}<span class="badge badge-cyan">{{ r.category.name }}</span>{% endif %}
+                </div>
+                <h3>{{ r.title }}</h3>
+                <p class="description">{{ r.description|truncatechars:160 }}</p>
+              </div>
+            </div>
+            <div class="request-card-footer">
+              {% if r.address %}<span class="icon-text">📍 {{ r.address.neighborhood }}</span>{% endif %}
+              <span class="icon-text">🕒 {{ r.created_at|date:"d/m/Y" }}</span>
+              {% if r.bid_count %}<span class="proposals">{{ r.bid_count }} proposta{{ r.bid_count|pluralize }}</span>{% endif %}
+              {% if r.budget_max %}<span class="budget">R$ {{ r.budget_max }}</span>{% endif %}
+            </div>
+          </a>
+        {% empty %}
+          <div class="empty-state">
+            <div class="empty-state-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+            </div>
+            <h3>Sem solicitações nesta categoria</h3>
+            <p>Crie sua primeira solicitação e receba propostas de profissionais MEI verificados.</p>
+            <a href="{% url 'nova_solicitacao' %}" class="btn btn-primary">Nova solicitação</a>
+          </div>
+        {% endfor %}
+
+        {% include "partials/_pagination.html" with page=page_obj %}
+      </div>
+
+      <aside class="dash-aside">
+        <div class="card card-pad">
+          <h3 style="font-size:14px; font-weight:700; color:var(--pmf-navy); margin:0 0 12px; text-transform:uppercase; letter-spacing:0.04em;">Resumo</h3>
+          <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px;">
+            <span style="color:var(--text-muted);">Total</span>
+            <strong style="color:var(--pmf-navy);">{{ counts.TODAS|default:0 }}</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px;">
+            <span style="color:var(--text-muted);">Em andamento</span>
+            <strong style="color:var(--pmf-navy);">{{ counts.IN_PROGRESS|default:0 }}</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px;">
+            <span style="color:var(--text-muted);">Aguardando proposta</span>
+            <strong style="color:var(--pmf-navy);">{{ counts.OPEN|default:0|add:counts.IN_AUCTION|default:0 }}</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; padding:8px 0; font-size:13px;">
+            <span style="color:var(--text-muted);">Concluídas</span>
+            <strong style="color:var(--pmf-navy);">{{ counts.COMPLETED|default:0 }}</strong>
+          </div>
+        </div>
+
+        <form method="get" class="card card-pad" style="display:block;">
+          <h3 style="font-size:14px; font-weight:700; color:var(--pmf-navy); margin:0 0 12px; text-transform:uppercase; letter-spacing:0.04em;">Filtros</h3>
+          {% if status_filter %}<input type="hidden" name="status" value="{{ status_filter }}">{% endif %}
+          <div class="field">
+            <label for="cat-filter">Categoria</label>
+            <select id="cat-filter" name="category" class="select" onchange="this.form.submit()">
+              <option value="">Todas</option>
+              {% for cat in categories %}
+                <option value="{{ cat.slug }}" {% if category_filter == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <noscript>
+            <button type="submit" class="btn btn-primary btn-sm btn-block">Aplicar</button>
+          </noscript>
+          {% if category_filter or status_filter %}
+            <a href="?" class="btn btn-ghost btn-sm btn-block" style="margin-top:8px;">Limpar filtros</a>
+          {% endif %}
+        </form>
+      </aside>
+    </div>
+
+  </div>
+</main>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% if mode == 'update' %}Editar endereço{% else %}Novo endereço{% endif %} — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li><a href="{% url 'accounts:address_list' %}">Endereços</a></li>
+        <li class="sep">›</li>
+        <li>{% if mode == 'update' %}Editar{% else %}Novo{% endif %}</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>{% if mode == 'update' %}Editar endereço{% else %}Novo endereço{% endif %}</h1>
+          <p class="subtitle">Preencha os dados do endereço.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container container-auth" style="padding: 32px 24px 60px;">
+    <div class="card card-pad-lg">
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger" role="alert" style="margin-bottom:16px;">
+            <div class="alert-body">{{ form.non_field_errors.0 }}</div>
+          </div>
+        {% endif %}
+
+        {% for field in form.visible_fields %}
+          <div class="field">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            <input id="{{ field.id_for_label }}" name="{{ field.html_name }}" type="text" class="input"
+                   value="{{ field.value|default:'' }}" {% if field.field.required %}required{% endif %}>
+            {% if field.errors %}
+              <div class="field-help" style="color:var(--status-danger);">{{ field.errors.0 }}</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+
+        {{ form.latitude }}
+        {{ form.longitude }}
+
+        <div style="display:flex; gap:12px; margin-top:8px;">
+          <button type="submit" class="btn btn-primary btn-lg">
+            {% if mode == 'update' %}Salvar{% else %}Cadastrar{% endif %}
+          </button>
+          <a href="{% url 'accounts:address_list' %}" class="btn btn-secondary btn-lg">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock %}

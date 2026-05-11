@@ -22,9 +22,9 @@ O fluxo principal da plataforma é:
 | Camada | Tecnologia |
 |---|---|
 | Linguagem | Python 3.12 |
-| Framework web | Django 6.0.2 |
-| API REST | Django REST Framework 3.16 |
-| Autenticação | JWT via `djangorestframework-simplejwt` |
+| Framework web | Django 6.0.2 (Templates SSR) |
+| Formulários | Django Forms |
+| Autenticação | Sessões padrão do Django |
 | Banco de dados (dev) | SQLite (padrão) |
 | Banco de dados (prod) | PostgreSQL (`psycopg2-binary`) |
 | Upload de arquivos | Pillow (imagens) |
@@ -98,8 +98,9 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-A API estará disponível em `http://localhost:8000/api/v1/`.
-O painel admin Django estará em `http://localhost:8000/admin/`.
+A plataforma estará disponível em `http://localhost:8000/`.
+O painel administrativo padrão do Django em `http://localhost:8000/admin/`.
+O painel de controle gerencial (customizado) em `http://localhost:8000/painel/`.
 
 ---
 
@@ -118,35 +119,25 @@ python manage.py test apps.auctions
 python manage.py test apps.orders
 ```
 
-A suíte atual conta com **42 testes** distribuídos entre os apps `accounts`, `auctions` e `orders`.
-
-Para o teste de ponta a ponta (requer servidor rodando e `pip install requests`):
-
-```bash
-# Janela 1 — servidor
-python manage.py runserver
-
-# Janela 2 — teste E2E
-python e2e_test.py
-```
+A suíte atual conta com dezenas de testes (mais de 50 testes no total) distribuídos entre os apps `accounts`, `auctions`, `orders`, `reviews` e `services`, com cobertura de ponta a ponta dos fluxos de negócios e segurança.
 
 ---
 
 ## Estrutura de Apps
 
-```
+```text
 vizinho_de_aluguel/
 ├── core/               # Configurações globais (settings.py, urls.py, wsgi.py)
 ├── apps/
-│   ├── accounts/       # Usuários, perfis (Cidadão e MEI) e endereços
-│   ├── services/       # Categorias e solicitações de serviço
-│   ├── auctions/       # Inscrições de MEI em categorias e lances (bids)
-│   ├── orders/         # Ordens de serviço e ciclo de vida do trabalho
-│   ├── reviews/        # Avaliações (stub — não implementado)
-│   └── admin_panel/    # Painel administrativo customizado (stub)
-├── ui/                 # Front-end Django (templates)
-├── templates/
-├── e2e_test.py         # Teste de ponta a ponta com requests
+│   ├── accounts/       # Autenticação, Perfis (Cidadão/MEI) e Endereços
+│   ├── services/       # Categorias e Solicitações de Serviço
+│   ├── auctions/       # Inscrições em Categorias e Feed de Lances (Bids)
+│   ├── orders/         # Acompanhamento de Pedidos e Chat
+│   ├── reviews/        # Reputação e Avaliações de Usuários
+│   └── admin_panel/    # Painel Gerencial (Backoffice Administrativo)
+├── templates/          # Templates SSR modulares (separados por app)
+├── static/             # Estilos CSS, assets e bibliotecas front-end
+├── media/              # Diretório local para imagens e uploads
 ├── requirements.txt
 └── manage.py
 ```
@@ -159,63 +150,47 @@ vizinho_de_aluguel/
 | `services` | `ServiceCategory`, `ServiceRequest`, `ServiceRequestMedia` |
 | `auctions` | `MEICategorySubscription`, `Bid` |
 | `orders` | `ServiceOrder` |
+| `reviews` | `Review` |
 
 ---
 
-## Rotas Principais
+## Rotas Principais (Navegação UI)
 
-> Prefixo base: `/api/v1/`
+> O sistema não possui uma API REST pública. A renderização é 100% Server-Side (SSR) usando Django Templates nativos.
 
-### Autenticação e Perfis — `/api/v1/auth/`
+### Autenticação e Perfis
 
-| Método | Rota | Descrição | Auth |
-|---|---|---|---|
-| POST | `auth/register/` | Cadastra novo usuário, retorna JWT | Pública |
-| POST | `auth/login/` | Login, retorna par de tokens JWT | Pública |
-| POST | `auth/refresh/` | Renova o access token | Pública |
-| GET/PATCH | `users/me/` | Dados do usuário autenticado | Sim |
-| GET/PATCH | `citizen-profiles/me/` | Perfil do cidadão autenticado | Sim |
-| GET/PATCH | `mei-profiles/me/` | Perfil do MEI autenticado | Sim |
-| GET | `mei-profiles/` | Lista pública de MEIs (`?city=`, `?is_available=`) | Pública |
-| GET | `mei-profiles/<uuid>/` | Perfil público de um MEI | Pública |
-| GET/POST | `addresses/` | Endereços do usuário autenticado | Sim |
+| Rota | Descrição | Auth |
+|---|---|---|
+| `/cadastro/` | Cadastro unificado (Cidadão e MEI) | Pública |
+| `/login/` | Autenticação unificada por email e senha | Pública |
+| `/logout/` | Encerra a sessão atual com segurança | Sim |
+| `/usuario/perfil/` | Perfil Unificado e Dashboard Híbrido (Cidadão e MEI) | Sim |
+| `/usuario/enderecos/` | Gerenciamento de endereços para cidadãos | Sim |
+| `/mei/` | Diretório público de profissionais cadastrados | Pública |
+| `/mei/<pk>/` | Perfil público detalhado do profissional MEI | Pública |
 
-### Serviços — `/api/v1/`
+### Serviços e Marketplace
 
-| Método | Rota | Descrição | Auth |
-|---|---|---|---|
-| GET | `categories/` | Lista categorias ativas | Pública |
-| GET | `categories/<slug>/` | Detalhe de uma categoria | Pública |
-| GET/POST | `service-requests/` | Lista e cria solicitações | Sim |
-| GET/PATCH/DELETE | `service-requests/<pk>/` | Detalhe de uma solicitação | Sim |
-| GET | `service-requests/mine/` | Solicitações do cidadão (`?status=`) | Sim |
-| GET | `service-requests/feed/` | Feed para MEIs (`?category=`, `?city=`, `?urgency=`) | Sim |
-| POST | `service-requests/<pk>/cancel/` | Cancela uma solicitação | Sim |
-| POST | `service-requests/<pk>/award/` | Adjudica lance vencedor, cria ordem | Sim |
-| GET/POST | `service-requests/<uuid>/media/` | Mídias de uma solicitação | Sim |
+| Rota | Descrição | Auth |
+|---|---|---|
+| `/servicos/` | Catálogo público das categorias ativas | Pública |
+| `/solicitacoes/nova/` | Assistente para cidadão criar uma solicitação (Wizard) | Cidadão |
+| `/solicitacoes/minhas/`| Listagem das solicitações abertas/em progresso do cidadão | Cidadão |
+| `/solicitacoes/<pk>/` | Detalhes da solicitação e comparação de lances/orçamentos | Cidadão |
+| `/solicitacoes/<pk>/adjudicar/<bid_pk>/` | Ação: cidadão aceita um lance e gera um Pedido | Cidadão |
 
-### Leilões — `/api/v1/`
+### Leilões e Pedidos
 
-| Método | Rota | Descrição | Auth |
-|---|---|---|---|
-| GET/POST | `category-subscriptions/` | Inscrições do MEI em categorias | Sim |
-| DELETE | `category-subscriptions/<pk>/` | Remove inscrição | Sim |
-| GET/POST | `bids/` | Lista e cria lances | Sim |
-| GET/PATCH/DELETE | `bids/<pk>/` | Detalhe de um lance | Sim |
-| GET | `bids/mine/` | Lances do MEI autenticado | Sim |
-| POST | `bids/<pk>/withdraw/` | Retira um lance ACTIVE | Sim |
-
-### Ordens — `/api/v1/`
-
-| Método | Rota | Descrição | Auth |
-|---|---|---|---|
-| GET | `service-orders/` | Lista todas as ordens | Sim |
-| GET | `service-orders/<pk>/` | Detalhe de uma ordem | Sim |
-| GET | `service-orders/mine/` | Ordens do usuário autenticado | Sim |
-| POST | `service-orders/<pk>/start/` | Inicia o serviço (PENDING_START → IN_PROGRESS) | Sim |
-| POST | `service-orders/<pk>/complete/` | Conclui o serviço (IN_PROGRESS → COMPLETED) | Sim |
-| POST | `service-orders/<pk>/confirm/` | Cidadão confirma a entrega | Sim |
-| POST | `service-orders/<pk>/cancel/` | Cancela a ordem | Sim |
+| Rota | Descrição | Auth |
+|---|---|---|
+| `/feed/` | Feed Kanban de oportunidades disponíveis para MEIs na região | MEI |
+| `/categorias/inscrever/`| Painel para o MEI gerenciar inscrições nas suas áreas de atuação | MEI |
+| `/propostas/nova/<pk>/` | MEI avalia detalhes da solicitação e envia seu orçamento formal | MEI |
+| `/propostas/minhas/` | Listagem das propostas enviadas pelo MEI com status atualizado | MEI |
+| `/pedidos/` | Listagem completa de todos os serviços (Cidadãos e MEIs) | Sim |
+| `/pedidos/<pk>/` | Tela de acompanhamento do pedido ativo com linha do tempo | Sim |
+| `/avaliacoes/avaliar/<pk>/`| Ferramenta de feedback para avaliar pedidos já finalizados | Sim |
 
 ---
 

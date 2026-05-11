@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Categorias de serviço — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li>Categorias</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Categorias de serviço</h1>
+          <p class="subtitle">Conheça os tipos de serviço disponíveis na plataforma.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding: 32px 24px 60px;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:16px;">
+      {% for cat in categories %}
+        <a href="{% url 'services:category_detail' slug=cat.slug %}" class="card card-pad"
+           style="text-decoration:none; text-align:center; transition:transform .15s, box-shadow .15s;"
+           onmouseenter="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 24px rgba(0,0,0,.08)';"
+           onmouseleave="this.style.transform=''; this.style.boxShadow='';">
+          {% if cat.icon %}
+            <div style="font-size:32px; margin-bottom:10px;">{{ cat.icon }}</div>
+          {% endif %}
+          <div style="font-weight:700; color:var(--pmf-navy); font-size:16px;">{{ cat.name }}</div>
+        </a>
+      {% empty %}
+        <div class="empty-state" style="grid-column: 1 / -1;">
+          <h3>Nenhuma categoria disponível</h3>
+          <p>As categorias de serviço serão adicionadas em breve.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</main>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Mídias — {{ service_request.title }} — Vizinho de Aluguel{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li><a href="{% url 'services:my_requests' %}">Solicitações</a></li>
+        <li class="sep">›</li>
+        <li>Mídias</li>
+      </ul>
+      <div class="page-header-row">
+        <div>
+          <h1>Mídias da solicitação</h1>
+          <p class="subtitle">{{ service_request.title }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="padding: 32px 24px 60px;">
+
+    {# ===== Upload ===== #}
+    <div class="card card-pad" style="margin-bottom:24px;">
+      <h3 style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; margin:0 0 12px;">
+        Adicionar fotos ou vídeos
+      </h3>
+      <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        {% if media_form.errors %}
+          <div class="alert alert-danger" role="alert" style="margin-bottom:12px;">
+            <div class="alert-body">
+              {% for field, errors in media_form.errors.items %}
+                {% for err in errors %}{{ err }}{% endfor %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="field">
+          <label for="id_files">Arquivos (até 5 no total — imagens ou vídeos, máx. 20 MB cada)</label>
+          <input id="id_files" name="files" type="file" class="input" multiple accept="image/*,video/*">
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar mídias</button>
+      </form>
+    </div>
+
+    {# ===== Galeria ===== #}
+    <h3 style="font-size:14px; font-weight:700; color:var(--pmf-navy); margin:0 0 14px;">
+      Mídias anexadas ({{ media|length }}/5)
+    </h3>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:12px;">
+      {% for m in media %}
+        <div class="card card-pad" style="text-align:center; padding:12px;">
+          {% if m.media_type == 'IMAGE' %}
+            <img src="{{ m.file.url }}" alt="Mídia {{ forloop.counter }}"
+                 style="width:100%; border-radius:6px; object-fit:cover; max-height:160px;">
+          {% else %}
+            <video src="{{ m.file.url }}" controls style="width:100%; border-radius:6px; max-height:160px;"></video>
+          {% endif %}
+          <div style="font-size:11px; color:var(--text-muted); margin-top:6px;">
+            {{ m.get_media_type_display }} · #{{ forloop.counter }}
+          </div>
+        </div>
+      {% empty %}
+        <div class="empty-state" style="grid-column: 1 / -1;">
+          <h3>Nenhuma mídia anexada</h3>
+          <p>Use o formulário acima para adicionar fotos ou vídeos.</p>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div style="margin-top:24px;">
+      <a href="{% url 'services:service_request_detail' pk=service_request.pk %}" class="btn btn-secondary">
+        ← Voltar à solicitação
+      </a>
+    </div>
+  </div>
+</main>
+{% endblock %}

@@ -32,6 +32,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = 'Usuário'
         verbose_name_plural = 'Usuários'
 
+    @property
+    def first_name(self):
+        if self.full_name:
+            parts = self.full_name.split()
+            if parts:
+                return parts[0]
+        return self.email.split('@')[0]
+
     def __str__(self):
         return f'{self.full_name} ({self.user_type})'
 

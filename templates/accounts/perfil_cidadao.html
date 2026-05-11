@@ -1,0 +1,291 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Minha conta — Vizinho de Aluguel{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/perfil.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+<main id="main">
+
+  <div class="vda-shell">
+
+    {# ========== SIDEBAR ========== #}
+    <aside class="vda-sidebar">
+
+      {# Card de identidade #}
+      <div class="vda-id-card">
+        <div class="vda-id-row">
+          <div class="vda-id-avatar" aria-hidden="true">
+            {% if request.user.avatar %}
+              <img src="{{ request.user.avatar.url }}" alt="">
+            {% else %}
+              {{ request.user.full_name|first|upper }}
+            {% endif %}
+          </div>
+          <div class="vda-id-meta">
+            <div class="vda-id-name">{{ request.user.full_name }}</div>
+            <div class="vda-id-role">Cidadão · Florianópolis</div>
+          </div>
+        </div>
+
+        <div class="vda-id-stats">
+          <div>
+            <div class="vda-id-stat-num">{{ profile.total_services_requested|default:0 }}</div>
+            <div class="vda-id-stat-lbl">Solicit.</div>
+          </div>
+          <div>
+            <div class="vda-id-stat-num">{{ profile.rating_avg|default:"—" }}</div>
+            <div class="vda-id-stat-lbl">Reputação</div>
+          </div>
+          <div>
+            <div class="vda-id-stat-num">{{ request.user.created_at|date:"M/y" }}</div>
+            <div class="vda-id-stat-lbl">Desde</div>
+          </div>
+        </div>
+
+        <div class="vda-id-verified">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+          Conta verificada
+        </div>
+      </div>
+
+      {# Navegação lateral (âncoras na própria página) #}
+      <nav class="vda-nav" aria-label="Seções da minha conta">
+        <div class="vda-nav-section">Minha conta</div>
+        <a href="#visao" class="vda-nav-item is-active">
+          <svg class="vda-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+          Visão geral
+        </a>
+        <a href="#dados" class="vda-nav-item">
+          <svg class="vda-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+          Dados pessoais
+        </a>
+        <a href="{% url 'accounts:address_list' %}" class="vda-nav-item">
+          <svg class="vda-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Endereços
+        </a>
+        <a href="{% url 'services:my_requests' %}" class="vda-nav-item">
+          <svg class="vda-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+          Minhas solicitações
+        </a>
+        <a href="{% url 'reviews:my_reviews' %}" class="vda-nav-item">
+          <svg class="vda-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Avaliações
+        </a>
+
+        <div class="vda-nav-section" style="margin-top:6px;">Sessão</div>
+        <form method="post" action="{% url 'accounts:logout' %}" style="margin:0;">
+          {% csrf_token %}
+          <button type="submit" class="vda-nav-item is-danger">
+            <svg class="vda-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+            Sair da conta
+          </button>
+        </form>
+      </nav>
+
+    </aside>
+
+    {# ========== MAIN ========== #}
+    <div class="vda-main">
+
+      <div class="vda-crumb">
+        <a href="{% url 'home' %}">Início</a>
+        <span>›</span>
+        <span>Minha conta</span>
+      </div>
+
+      <div class="vda-page-head">
+        <div>
+          <h1>Olá, {{ request.user.first_name }}</h1>
+          <p>Centralize seus dados, endereços e histórico em um só lugar.</p>
+        </div>
+        <a href="{% url 'services:service_request_create' %}" class="vda-btn vda-btn-yellow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
+          Nova solicitação
+        </a>
+      </div>
+
+      {# ===== Visão geral ===== #}
+      <section id="visao" class="vda-section">
+        <div class="vda-section-head">
+          <div>
+            <h2>Visão geral</h2>
+            <div class="sub">Sua atividade na plataforma.</div>
+          </div>
+        </div>
+        <div class="vda-section-body">
+
+          <div class="vda-stats">
+            <div class="vda-stat">
+              <div class="vda-stat-icon" style="background: var(--pmf-cyan-50); color: var(--pmf-navy);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+              </div>
+              <div class="vda-stat-num">{{ profile.total_services_requested|default:0 }}</div>
+              <div class="vda-stat-lbl">Total de solicitações</div>
+            </div>
+            <div class="vda-stat">
+              <div class="vda-stat-icon" style="background: var(--status-success-50); color: var(--status-success);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+              </div>
+              <div class="vda-stat-num">{{ completed_count|default:0 }}</div>
+              <div class="vda-stat-lbl">Serviços concluídos</div>
+            </div>
+            <div class="vda-stat">
+              <div class="vda-stat-icon" style="background: var(--status-warning-50); color: var(--status-warning);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="vda-stat-num">{{ pending_review_count|default:0 }}</div>
+              <div class="vda-stat-lbl">Aguardando avaliar</div>
+            </div>
+            <div class="vda-stat">
+              <div class="vda-stat-icon" style="background: var(--vda-yellow-50); color: var(--vda-yellow-600);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <div class="vda-stat-num">{{ profile.rating_avg|default:"—" }}</div>
+              <div class="vda-stat-lbl">Sua reputação</div>
+            </div>
+          </div>
+
+          <h3 style="font-size:13px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; margin: 8px 0 12px;">
+            Atalhos rápidos
+          </h3>
+          <div class="vda-quick">
+            <a href="{% url 'services:service_request_create' %}" class="vda-quick-card">
+              <div class="icon" style="background: var(--vda-yellow-50); color: var(--vda-yellow-600);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+              </div>
+              <div>
+                <strong>Solicitar serviço</strong>
+                <span>Crie uma nova solicitação e receba propostas em até 24h.</span>
+              </div>
+            </a>
+            <a href="{% url 'services:my_requests' %}" class="vda-quick-card">
+              <div class="icon" style="background: var(--pmf-cyan-50); color: var(--pmf-cyan-600);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+              </div>
+              <div>
+                <strong>Acompanhar pedidos</strong>
+                <span>Veja propostas, escolha profissionais e acompanhe o serviço.</span>
+              </div>
+            </a>
+            <a href="{% url 'accounts:address_list' %}" class="vda-quick-card">
+              <div class="icon" style="background: var(--status-info-50); color: var(--status-info);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <strong>Meus endereços</strong>
+                <span>Gerencie endereços de cobrança e atendimento.</span>
+              </div>
+            </a>
+          </div>
+
+        </div>
+      </section>
+
+      {# ===== Dados pessoais ===== #}
+      <section id="dados" class="vda-section">
+        <form method="post" enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
+
+          <div class="vda-section-head">
+            <div>
+              <h2>Dados pessoais</h2>
+              <div class="sub">Atualize seu nome, telefone e foto.</div>
+            </div>
+          </div>
+
+          <div class="vda-section-body">
+
+            <div class="vda-avatar-block" style="margin-bottom: 22px;">
+              <div class="vda-avatar-preview">
+                {% if request.user.avatar %}
+                  <img src="{{ request.user.avatar.url }}" alt="">
+                {% else %}
+                  {{ request.user.full_name|first|upper }}
+                {% endif %}
+              </div>
+              <div class="vda-avatar-meta">
+                <strong>Foto de perfil</strong>
+                <p>JPG ou PNG, no máximo 2 MB. Aparecerá nas propostas que você receber.</p>
+                <div class="vda-avatar-actions">
+                  <input id="id_avatar" name="avatar" type="file" accept="image/*">
+                  {% if user_form.avatar.errors %}
+                    <span class="vda-help is-error">{{ user_form.avatar.errors.0 }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <div class="vda-fields">
+              <div class="vda-field full">
+                <label for="id_full_name">Nome completo</label>
+                <input id="id_full_name" name="full_name" type="text" class="vda-input"
+                       value="{{ user_form.full_name.value|default:'' }}" required>
+                {% if user_form.full_name.errors %}
+                  <div class="vda-help is-error">{{ user_form.full_name.errors.0 }}</div>
+                {% endif %}
+              </div>
+
+              <div class="vda-field">
+                <label for="id_phone">Telefone</label>
+                <input id="id_phone" name="phone" type="tel" class="vda-input"
+                       placeholder="(48) 99999-9999"
+                       value="{{ user_form.phone.value|default:'' }}">
+                {% if user_form.phone.errors %}
+                  <div class="vda-help is-error">{{ user_form.phone.errors.0 }}</div>
+                {% endif %}
+              </div>
+
+              <div class="vda-field">
+                <label>E-mail (não editável)</label>
+                <input class="vda-input is-locked" type="email" value="{{ request.user.email }}" disabled>
+              </div>
+
+              {% if request.user.cpf %}
+                <div class="vda-field">
+                  <label>CPF</label>
+                  <input class="vda-input is-locked" type="text" value="{{ request.user.cpf }}" disabled>
+                </div>
+              {% endif %}
+            </div>
+
+            {% if profile_form %}
+              <div style="margin-top: 22px;">
+                <h3 style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; margin:0 0 12px;">
+                  Preferências
+                </h3>
+                <div class="vda-fields">
+                  {% for field in profile_form.visible_fields %}
+                    <div class="vda-field">
+                      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                      {{ field }}
+                      {% if field.errors %}
+                        <div class="vda-help is-error">{{ field.errors.0 }}</div>
+                      {% endif %}
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="vda-section-foot">
+            <div style="display:flex; gap:8px; margin-left:auto;">
+              <a href="{% url 'accounts:profile' %}" class="vda-btn vda-btn-ghost">Cancelar</a>
+              <button type="submit" class="vda-btn vda-btn-primary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+                Salvar alterações
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+    </div>
+  </div>
+
+</main>
+{% endblock %}
