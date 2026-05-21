@@ -359,10 +359,89 @@
     showStep(currentStep - 1);
   });
 
+  function showFieldError(el, msg) {
+    var next = el.nextElementSibling;
+    if (next && next.classList.contains('step-error')) next.remove();
+    var err = document.createElement('div');
+    err.className = 'field-help step-error';
+    err.style.color = 'var(--status-danger)';
+    err.style.marginTop = '4px';
+    err.textContent = msg;
+    el.insertAdjacentElement('afterend', err);
+    el.style.borderColor = 'var(--status-danger)';
+  }
+
+  function clearFieldError(el) {
+    var next = el.nextElementSibling;
+    if (next && next.classList.contains('step-error')) next.remove();
+    el.style.borderColor = '';
+  }
+
+  function validateStep(step) {
+    var ok = true;
+
+    if (step === 1) {
+      var cat = document.getElementById('category-select');
+      if (!cat.value) {
+        showFieldError(cat, 'Selecione uma categoria.');
+        ok = false;
+      } else { clearFieldError(cat); }
+
+      var titulo = document.getElementById('titulo');
+      if (!titulo.value.trim()) {
+        showFieldError(titulo, 'Informe o título da solicitação.');
+        ok = false;
+      } else { clearFieldError(titulo); }
+
+      var desc = document.getElementById('descricao');
+      if (!desc.value.trim()) {
+        showFieldError(desc, 'Descreva o serviço necessário.');
+        ok = false;
+      } else if (desc.value.trim().length < 20) {
+        showFieldError(desc, 'A descrição deve ter pelo menos 20 caracteres.');
+        ok = false;
+      } else { clearFieldError(desc); }
+    }
+
+    if (step === 2) {
+      var addrSel = document.getElementById('address-select');
+      var savedOk = addrSel && addrSel.value !== '';
+
+      var bairro = document.getElementById('bairro');
+      var cep = document.getElementById('cep');
+      var endereco = document.getElementById('endereco');
+
+      if (!savedOk) {
+        if (!bairro.value.trim()) {
+          showFieldError(bairro, 'Informe o bairro.');
+          ok = false;
+        } else { clearFieldError(bairro); }
+
+        if (!cep.value.trim()) {
+          showFieldError(cep, 'Informe o CEP.');
+          ok = false;
+        } else { clearFieldError(cep); }
+
+        if (!endereco.value.trim()) {
+          showFieldError(endereco, 'Informe o endereço.');
+          ok = false;
+        } else { clearFieldError(endereco); }
+      } else {
+        clearFieldError(bairro);
+        clearFieldError(cep);
+        clearFieldError(endereco);
+      }
+    }
+
+    return ok;
+  }
+
   document.getElementById('btn-next').addEventListener('click', function (e) {
     if (currentStep < totalSteps) {
       e.preventDefault();
-      showStep(currentStep + 1);
+      if (validateStep(currentStep)) {
+        showStep(currentStep + 1);
+      }
     }
     // No último step, o botão tem type="submit" e o navegador envia o form normalmente.
   });
