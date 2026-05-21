@@ -66,16 +66,16 @@
         encontrados em Florianópolis
       </div>
       <select id="sort" class="select" style="width:auto; min-height:40px;">
-        <option>Mais bem avaliados</option>
-        <option>Mais próximos</option>
-        <option>Menor preço</option>
+        <option value="rating">Mais bem avaliados</option>
+        <option value="distance">Mais próximos</option>
+        <option value="price">Menor preço</option>
       </select>
     </div>
 
     {# ===== Grid ===== #}
     <div id="pros-grid" class="grid-pros">
       {# Cards demo institucional — substituir por loop {% for pro in pros %} quando contexto disponível #}
-      <article class="pro-card" data-name="Carlos Silva" data-cat="eletrica" data-rating="4.9" data-bairro="Trindade">
+      <article class="pro-card" data-name="Carlos Silva" data-cat="eletrica" data-rating="4.9" data-bairro="Trindade" data-price="80" data-distance="3.2">
         <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
         <div class="pro-card-body">
           <div class="pro-avatar" style="background:#FFCD07; color:#0E1F4D;">CS</div>
@@ -90,7 +90,7 @@
         </div>
       </article>
 
-      <article class="pro-card" data-name="Joana Pereira" data-cat="hidraulica" data-rating="4.8" data-bairro="Centro">
+      <article class="pro-card" data-name="Joana Pereira" data-cat="hidraulica" data-rating="4.8" data-bairro="Centro" data-price="95" data-distance="5.1">
         <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
         <div class="pro-card-body">
           <div class="pro-avatar" style="background:#1FA9E0;">JP</div>
@@ -105,7 +105,7 @@
         </div>
       </article>
 
-      <article class="pro-card" data-name="Rafael Mendes" data-cat="pintura" data-rating="4.7" data-bairro="Lagoa">
+      <article class="pro-card" data-name="Rafael Mendes" data-cat="pintura" data-rating="4.7" data-bairro="Lagoa" data-price="60" data-distance="8.4">
         <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
         <div class="pro-card-body">
           <div class="pro-avatar" style="background:#168821;">RM</div>
@@ -120,7 +120,7 @@
         </div>
       </article>
 
-      <article class="pro-card" data-name="Beatriz Lima" data-cat="limpeza" data-rating="5.0" data-bairro="Itacorubi">
+      <article class="pro-card" data-name="Beatriz Lima" data-cat="limpeza" data-rating="5.0" data-bairro="Itacorubi" data-price="120" data-distance="4.6">
         <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
         <div class="pro-card-body">
           <div class="pro-avatar" style="background:#C97D00;">BL</div>
@@ -135,7 +135,7 @@
         </div>
       </article>
 
-      <article class="pro-card" data-name="André Costa" data-cat="reparos" data-rating="4.6" data-bairro="Ingleses">
+      <article class="pro-card" data-name="André Costa" data-cat="reparos" data-rating="4.6" data-bairro="Ingleses" data-price="150" data-distance="15.3">
         <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
         <div class="pro-card-body">
           <div class="pro-avatar" style="background:#155BCB;">AC</div>
@@ -150,7 +150,7 @@
         </div>
       </article>
 
-      <article class="pro-card" data-name="Patrícia Rocha" data-cat="jardinagem" data-rating="4.9" data-bairro="Córrego Grande">
+      <article class="pro-card" data-name="Patrícia Rocha" data-cat="jardinagem" data-rating="4.9" data-bairro="Córrego Grande" data-price="70" data-distance="6.1">
         <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
         <div class="pro-card-body">
           <div class="pro-avatar" style="background:#168821;">PR</div>
@@ -200,7 +200,7 @@
     });
   });
 
-  ['search-q', 'search-bairro', 'search-rating'].forEach(function (id) {
+  ['search-q', 'search-bairro', 'search-rating', 'sort'].forEach(function (id) {
     var el = document.getElementById(id);
     if (el) el.addEventListener('input', applyFilters);
     if (el) el.addEventListener('change', applyFilters);
@@ -210,11 +210,26 @@
     var q = (document.getElementById('search-q').value || '').toLowerCase();
     var bairro = document.getElementById('search-bairro').value;
     var minRating = parseFloat(document.getElementById('search-rating').value) || 0;
+    var sortBy = (document.getElementById('sort') || {}).value || 'rating';
     var cat = (document.querySelector('#chips .chip.is-active') || {}).dataset || {};
     var catFilter = cat.cat || '';
 
+    var grid = document.getElementById('pros-grid');
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('.pro-card'));
+
+    cards.sort(function (a, b) {
+      if (sortBy === 'price') {
+        return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
+      }
+      if (sortBy === 'distance') {
+        return parseFloat(a.dataset.distance) - parseFloat(b.dataset.distance);
+      }
+      return parseFloat(b.dataset.rating) - parseFloat(a.dataset.rating);
+    });
+    cards.forEach(function (card) { grid.appendChild(card); });
+
     var visible = 0;
-    document.querySelectorAll('#pros-grid .pro-card').forEach(function (card) {
+    cards.forEach(function (card) {
       var match = true;
       if (q && !card.dataset.name.toLowerCase().includes(q)) match = false;
       if (bairro && card.dataset.bairro !== bairro) match = false;
@@ -231,6 +246,7 @@
     document.getElementById('search-q').value = '';
     document.getElementById('search-bairro').value = '';
     document.getElementById('search-rating').value = '0';
+    document.getElementById('sort').value = 'rating';
     document.querySelectorAll('#chips .chip').forEach(function (x, i) { x.classList.toggle('is-active', i === 0); });
     applyFilters();
   }

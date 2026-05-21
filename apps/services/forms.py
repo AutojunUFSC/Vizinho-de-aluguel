@@ -48,6 +48,26 @@ class ServiceRequestForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if self.user is not None:
             self.fields['address'].queryset = Address.objects.filter(user=self.user)
+        # category e address são null=True no model, mas no fluxo de criação
+        # o cidadão precisa obrigatoriamente informar ambos.
+        self.fields['category'].required = True
+        self.fields['address'].required = True
+        self.fields['title'].required = True
+        self.fields['description'].required = True
+
+    def clean_title(self):
+        value = (self.cleaned_data.get('title') or '').strip()
+        if not value:
+            raise forms.ValidationError('Informe um título para o serviço.')
+        return value
+
+    def clean_description(self):
+        value = (self.cleaned_data.get('description') or '').strip()
+        if not value:
+            raise forms.ValidationError('Descreva o serviço.')
+        if len(value) < 20:
+            raise forms.ValidationError('A descrição deve ter pelo menos 20 caracteres.')
+        return value
 
     def clean_auction_end_at(self):
         value = self.cleaned_data.get('auction_end_at')
