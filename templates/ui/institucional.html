@@ -103,10 +103,37 @@
       </div>
     </div>
 
+    {# ===== Realização ===== #}
+    <section id="realizacao" style="margin-bottom:40px;">
+      <h2 style="font-size:22px; font-weight:700; color:var(--pmf-navy); margin:0 0 16px;">Realização</h2>
+      <div class="card card-pad-lg" style="display:flex; gap:32px; align-items:center;">
+
+        <!--Esquerda: texto-->
+        <div style="flex:1;">
+          <p style="font-size:16px; color:var(--text-secondary); line-height:1.65;">
+            A <strong>Casa do Empreendedor de Florianópolis</strong> é o espaço físico que torna o Vizinho de Aluguel possível. Por meio desta parceria com a Prefeitura Municipal, a Casa do Empreendedor apoia o cadastramento e a formalização dos profissionais MEI que atuam na plataforma, oferecendo suporte administrativo, cursos de capacitação e orientação para quem deseja empreender.
+          </p>
+          <p style="font-size:16px; color:var(--text-secondary); line-height:1.65;">
+            Se você é um profissional autônomo e quer se formalizar como MEI para atuar no Vizinho de Aluguel, a Casa do Empreendedor é o seu primeiro passo.
+          </p>
+        </div>
+
+        <!--Direita: foto local-->
+        <div style="flex:1; overflow:hidden; border-radius:12px;">
+          <img src="{% static 'images/vista-cima2.JPG' %}" 
+          alt="Espaço físico da Casa do Empreendedor"
+          style="width:100%; height:auto; border-radius:12px; object-fit:cover; transition:transform 0.4s ease; cursor:zoom-in;"
+          onmouseover="this.style.transform='scale(2.1)';"
+          onmouseout="this.style.transform='scale(1)';">
+        </div>
+
+      </div>
+    </section>
+
     {# ===== Termos ===== #}
     <section id="termos" style="margin-bottom:40px;">
       <h2 style="font-size:22px; font-weight:700; color:var(--pmf-navy); margin:0 0 16px;">Termos de Uso</h2>
-      <div class="card card-pad-lg" style="font-size:14px; color:var(--text-secondary); line-height:1.7;">
+      <div class="card card-pad-lg" style="font-size:16px; color:var(--text-secondary); line-height:1.65;">
         <p>O acesso e uso da plataforma Vizinho de Aluguel implica na aceitação destes termos. Os usuários se comprometem a:</p>
         <ul style="padding-left:20px; margin:12px 0;">
           <li>Fornecer informações verdadeiras e atualizadas em seu cadastro;</li>
@@ -118,10 +145,12 @@
       </div>
     </section>
 
+  
+
     {# ===== Privacidade ===== #}
     <section id="privacidade" style="margin-bottom:40px;">
       <h2 style="font-size:22px; font-weight:700; color:var(--pmf-navy); margin:0 0 16px;">Política de Privacidade (LGPD)</h2>
-      <div class="card card-pad-lg" style="font-size:14px; color:var(--text-secondary); line-height:1.7;">
+      <div class="card card-pad-lg" style="font-size:16px; color:var(--text-secondary); line-height:1.65;">
         <p>Em conformidade com a Lei Geral de Proteção de Dados (Lei 13.709/2018), informamos que coletamos apenas os dados necessários para o funcionamento da plataforma:</p>
         <ul style="padding-left:20px; margin:12px 0;">
           <li><strong>Dados de cadastro:</strong> nome, e-mail, telefone, CPF/CNPJ;</li>
