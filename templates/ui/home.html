@@ -139,15 +139,6 @@
             <div class="count">52 profissionais</div>
           </div>
         </a>
-        <a href="{% url 'servicos' %}?cat=reparos" class="service-cat-card">
-          <span class="service-cat-icon cat-reparos">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 5 9 10l-1 1 4 4 1-1 5-5z"/><path d="m12 13-7 7"/><path d="M14 5h5v5"/></svg>
-          </span>
-          <div>
-            <div class="name">Reparos</div>
-            <div class="count">73 profissionais</div>
-          </div>
-        </a>
         <a href="{% url 'servicos' %}?cat=limpeza" class="service-cat-card">
           <span class="service-cat-icon cat-limpeza">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
@@ -179,7 +170,13 @@
         <p>Sem taxa de cadastro, sem comissão. A plataforma é gratuita para cidadãos e profissionais.</p>
       </div>
 
-      <div class="grid-howit" style="margin-top:40px;">
+      <div class="auth-toggle" id="howit-toggle" style="max-width:320px; margin:24px auto 0;">
+        <button type="button" class="auth-toggle-btn is-active" data-howit="cidadao">Sou Cidadão</button>
+        <button type="button" class="auth-toggle-btn" data-howit="mei">Sou MEI</button>
+      </div>
+
+      {# ----- Passos: Cidadão ----- #}
+      <div class="grid-howit" data-howit-pane="cidadao" style="margin-top:8px;">
         <div class="howit-card">
           <div class="howit-card-head">
             <span class="howit-num">01</span>
@@ -213,145 +210,41 @@
           <p>Escolha o profissional. O contato é direto — sem intermediários, sem taxas.</p>
         </div>
       </div>
-    </div>
-  </section>
 
-  {# ===================== PROFISSIONAIS ===================== #}
-  <section class="section-pad section-bg-page">
-    <div class="container">
-      <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px; margin-bottom:32px;">
-        <div class="section-head is-left">
-          <div class="kicker">Em destaque</div>
-          <h2>Profissionais bem avaliados</h2>
-          <p>MEI verificados e com nota acima de 4.5 nas avaliações dos cidadãos.</p>
+      {# ----- Passos: MEI ----- #}
+      <div class="grid-howit" data-howit-pane="mei" style="margin-top:8px; display:none;">
+        <div class="howit-card">
+          <div class="howit-card-head">
+            <span class="howit-num">01</span>
+            <span class="howit-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
+            </span>
+          </div>
+          <h3>Cadastre-se como MEI</h3>
+          <p>Crie sua conta e valide seu CNPJ. Aprovação automática em até 24h.</p>
         </div>
-        <a href="{% url 'servicos' %}" class="btn btn-secondary">
-          Ver todos
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </div>
 
-      <div class="grid-pros">
-        {# Cards demo — substituir por loop {% for pro in destaque_pros %} quando a view fornecer dados #}
-        <article class="pro-card">
-          <div class="pro-card-banner">
-            <span class="status-badge badge-yellow verified-badge">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
-              MEI Verificado
+        <div class="howit-card">
+          <div class="howit-card-head">
+            <span class="howit-num">02</span>
+            <span class="howit-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7L22 7"/></svg>
             </span>
           </div>
-          <div class="pro-card-body">
-            <div class="pro-avatar" style="background:#FFCD07; color:#0E1F4D;">CS</div>
-            <h3 class="pro-name">Carlos Silva</h3>
-            <div class="pro-specialty">Eletricista</div>
-            <div class="pro-rating">
-              <span class="stars">★★★★★</span>
-              <span class="score">4.9</span>
-              <span class="count">(87 avaliações)</span>
-            </div>
-            <div class="pro-location">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Trindade
-            </div>
-            <div class="pro-card-footer">
-              <div>
-                <div class="pro-price-label">A partir de</div>
-                <div class="pro-price">R$ 80</div>
-              </div>
-              <span class="btn btn-sm btn-secondary" style="pointer-events:none;">Ver perfil →</span>
-            </div>
-          </div>
-        </article>
+          <h3>Receba solicitações</h3>
+          <p>Veja pedidos do seu bairro e envie orçamentos com preço e prazo.</p>
+        </div>
 
-        <article class="pro-card">
-          <div class="pro-card-banner">
-            <span class="status-badge badge-yellow verified-badge">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
-              MEI Verificado
+        <div class="howit-card">
+          <div class="howit-card-head">
+            <span class="howit-num">03</span>
+            <span class="howit-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
             </span>
           </div>
-          <div class="pro-card-body">
-            <div class="pro-avatar" style="background:#1FA9E0;">JP</div>
-            <h3 class="pro-name">Joana Pereira</h3>
-            <div class="pro-specialty">Encanadora</div>
-            <div class="pro-rating">
-              <span class="stars">★★★★★</span>
-              <span class="score">4.8</span>
-              <span class="count">(64 avaliações)</span>
-            </div>
-            <div class="pro-location">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Centro
-            </div>
-            <div class="pro-card-footer">
-              <div>
-                <div class="pro-price-label">A partir de</div>
-                <div class="pro-price">R$ 95</div>
-              </div>
-              <span class="btn btn-sm btn-secondary" style="pointer-events:none;">Ver perfil →</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="pro-card">
-          <div class="pro-card-banner">
-            <span class="status-badge badge-yellow verified-badge">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
-              MEI Verificado
-            </span>
-          </div>
-          <div class="pro-card-body">
-            <div class="pro-avatar" style="background:#168821;">RM</div>
-            <h3 class="pro-name">Rafael Mendes</h3>
-            <div class="pro-specialty">Pintor</div>
-            <div class="pro-rating">
-              <span class="stars">★★★★★</span>
-              <span class="score">4.7</span>
-              <span class="count">(52 avaliações)</span>
-            </div>
-            <div class="pro-location">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Lagoa
-            </div>
-            <div class="pro-card-footer">
-              <div>
-                <div class="pro-price-label">A partir de</div>
-                <div class="pro-price">R$ 60</div>
-              </div>
-              <span class="btn btn-sm btn-secondary" style="pointer-events:none;">Ver perfil →</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="pro-card">
-          <div class="pro-card-banner">
-            <span class="status-badge badge-yellow verified-badge">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
-              MEI Verificado
-            </span>
-          </div>
-          <div class="pro-card-body">
-            <div class="pro-avatar" style="background:#C97D00;">BL</div>
-            <h3 class="pro-name">Beatriz Lima</h3>
-            <div class="pro-specialty">Diarista</div>
-            <div class="pro-rating">
-              <span class="stars">★★★★★</span>
-              <span class="score">5.0</span>
-              <span class="count">(41 avaliações)</span>
-            </div>
-            <div class="pro-location">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              Itacorubi
-            </div>
-            <div class="pro-card-footer">
-              <div>
-                <div class="pro-price-label">A partir de</div>
-                <div class="pro-price">R$ 120</div>
-              </div>
-              <span class="btn btn-sm btn-secondary" style="pointer-events:none;">Ver perfil →</span>
-            </div>
-          </div>
-        </article>
+          <h3>Feche negócio</h3>
+          <p>O cliente aceita sua proposta. Contato direto, sem comissão sobre o serviço.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -381,4 +274,24 @@
   </section>
 
 </main>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  (function () {
+    var toggle = document.getElementById('howit-toggle');
+    if (!toggle) return;
+    var buttons = toggle.querySelectorAll('.auth-toggle-btn[data-howit]');
+    var panes = document.querySelectorAll('[data-howit-pane]');
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var target = btn.dataset.howit;
+        buttons.forEach(function (b) { b.classList.toggle('is-active', b === btn); });
+        panes.forEach(function (p) {
+          p.style.display = (p.dataset.howitPane === target) ? '' : 'none';
+        });
+      });
+    });
+  })();
+</script>
 {% endblock %}
