@@ -37,8 +37,12 @@ def cadastro_view(request):
     login_form = LoginForm(request)
     register_form_citizen = CitizenRegisterForm()
     register_form_mei = MEIRegisterForm()
-    active_tab = 'entrar'
-    register_user_type = 'CIDADAO'
+    active_tab = request.GET.get('tab', 'entrar')
+    if active_tab not in ('entrar', 'cadastrar'):
+        active_tab = 'entrar'
+    register_user_type = request.GET.get('tipo', 'CIDADAO')
+    if register_user_type not in ('CIDADAO', 'MEI'):
+        register_user_type = 'CIDADAO'
 
     if request.method == 'POST':
         action = request.POST.get('action', '')
