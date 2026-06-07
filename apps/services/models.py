@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
-
+from django.utils import timezone
+from datetime import timedelta
 
 class ServiceCategory(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -62,6 +63,11 @@ class ServiceRequest(models.Model):
     desired_deadline = models.DateField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     awarded_at = models.DateTimeField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.auction_end_at:
+            self.auction_end_at = timezone.now() + timedelta(days=7)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Solicitação de Serviço'

@@ -30,6 +30,13 @@ def category_detail(request, slug):
 
 @citizen_required
 def service_request_list(request):
+    #expira solicitações pendentes há mais de de 7 dias
+    ServiceRequest.objects.filter(
+        citizen__user=request.user,
+        status='OPEN',
+        auction_end_at__lt=timezone.now(),
+    ).update(status=ServiceRequest.Status.CANCELLED)
+
     base_qs = (
         ServiceRequest.objects
         .filter(citizen__user=request.user)
@@ -203,6 +210,7 @@ def service_request_cancel(request, pk):
 def request_feed(request):
     qs = ServiceRequest.objects.filter(
         status__in=('OPEN', 'IN_AUCTION'),
+        auction_end_at__gt=timezone.now(),
     ).select_related('citizen__user', 'category', 'address').order_by('-created_at')
 
     category = request.GET.get('category')
