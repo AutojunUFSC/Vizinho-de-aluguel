@@ -77,10 +77,11 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </button>
         <div class="or-divider"><span>ou</span></div>
-        <button type="button" class="btn btn-govbr" disabled style="opacity:.5; cursor:not-allowed;">
+        <a href="{% url 'accounts:govbr_login' %}" class="btn btn-govbr btn-block btn-lg"
+           role="button" style="display:flex; align-items:center; justify-content:center; gap:8px;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg>
-          Entrar com gov.br <small style="font-size:11px;">(em breve)</small>
-        </button>
+          Entrar com <strong>gov.br</strong>
+        </a>
       </form>
 
       {# ===== Form: Cadastrar ===== #}

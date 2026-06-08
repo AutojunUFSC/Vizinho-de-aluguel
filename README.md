@@ -194,6 +194,34 @@ vizinho_de_aluguel/
 
 ---
 
+## Login Único Gov.BR (OAuth2 + OIDC + PKCE)
+
+A plataforma suporta "Entrar com gov.br" (coexistindo com o login por e-mail/senha).
+Detalhes técnicos em [`Integra_gov_br.md`](Integra_gov_br.md).
+
+### Configuração
+
+1. Instale as dependências: `pip install -r requirements.txt` (adiciona `requests` e `PyJWT[crypto]`).
+2. Copie `.env.example` para `.env` e preencha as variáveis `GOVBR_*` com as credenciais
+   fornecidas pela Prefeitura/Gov.BR (homologação primeiro). No Railway, cadastre as mesmas
+   variáveis no painel **Variables**.
+3. O `GOVBR_REDIRECT_URI` (`.../accounts/govbr/callback/`) e o `GOVBR_LOGOUT_REDIRECT_URI`
+   precisam ser **idênticos** aos cadastrados na credencial Gov.BR.
+4. Rode as migrações: `python manage.py migrate` (campos `govbr_verified` e `govbr_level`).
+
+### Rotas
+
+| Rota | Descrição | Auth |
+|---|---|---|
+| `/accounts/govbr/login/` | Inicia o fluxo OIDC (gera PKCE/state/nonce, redireciona ao gov.br) | Não |
+| `/accounts/govbr/callback/` | Recebe o code, valida tokens e abre a sessão Django | Não |
+| `/accounts/govbr/logout/` | Encerra a sessão e redireciona ao logout do gov.br (POST) | Sim |
+
+> Usuário novo via gov.br é criado como **Cidadão** (sem senha utilizável; entra só pelo gov.br).
+> O teste ponta-a-ponta exige as credenciais de homologação da Prefeitura.
+
+---
+
 ## Equipe
 
 - Artur Tomaz

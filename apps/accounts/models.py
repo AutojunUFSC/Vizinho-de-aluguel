@@ -23,6 +23,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    # Integração Gov.BR (Login Único) — preenchidos no callback OIDC.
+    govbr_verified = models.BooleanField(default=False)
+    govbr_level = models.CharField(max_length=10, blank=True, null=True)  # bronze/silver/gold
+
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'

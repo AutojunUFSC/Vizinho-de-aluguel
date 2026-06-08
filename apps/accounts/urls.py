@@ -9,6 +9,12 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
 
+    # Login Único Gov.BR (OAuth2 + OIDC + PKCE).
+    # Prefixo literal 'accounts/' para casar com GOVBR_REDIRECT_URI (app incluído na raiz).
+    path('accounts/govbr/login/', views.govbr_login, name='govbr_login'),
+    path('accounts/govbr/callback/', views.govbr_callback, name='govbr_callback'),
+    path('accounts/govbr/logout/', views.govbr_logout, name='govbr_logout'),
+
     # Perfil do usuário autenticado
     path('usuario/perfil/', views.profile_view, name='profile'),
 

@@ -1,3 +1,6 @@
+import logging
+
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login as django_login
 from django.contrib.auth import logout as django_logout
@@ -5,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods, require_POST
 
+from . import govbr
 from .decorators import mei_required
 from .forms import (
     AddressForm,
@@ -261,4 +265,140 @@ def toggle_availability(request):
     else:
         messages.warning(request, 'Sua disponibilidade foi pausada.')
     return redirect('accounts:profile')
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Login Único Gov.BR (OAuth2 + OIDC + PKCE) — ver Integra_gov_br.md
+# ──────────────────────────────────────────────────────────────────────────────
+
+logger = logging.getLogger(__name__)
+
+# Chaves usadas na sessão durante o fluxo OIDC.
+_SESS_VERIFIER = 'govbr_code_verifier'
+_SESS_STATE = 'govbr_state'
+_SESS_NONCE = 'govbr_nonce'
+
+
+def _only_digits(value):
+    return ''.join(c for c in (value or '') if c.isdigit())
+
+
+def _govbr_user_from_claims(claims):
+    """
+    Vincula ou cria o usuário local a partir dos claims validados do Gov.BR.
+
+    Estratégia de vínculo (CPF sempre comparado por dígitos):
+      1) usuário cujo CPF == CPF do gov.br  → loga nele;
+      2) senão, usuário com o e-mail verificado do gov.br → vincula CPF e loga;
+      3) senão, cria um novo usuário CIDADAO (sem senha utilizável).
+    """
+    cpf = _only_digits(claims.get('sub') or claims.get('preferred_username'))
+    name = claims.get('social_name') or claims.get('name') or ''
+    email = claims.get('email') if claims.get('email_verified') else None
+    level = (claims.get('reliability_info') or {}).get('level', '') if isinstance(
+        claims.get('reliability_info'), dict
+    ) else ''
+
+    user = None
+    # 1) match por CPF (normalizado).
+    for candidate in User.objects.exclude(cpf__isnull=True).exclude(cpf=''):
+        if _only_digits(candidate.cpf) == cpf and cpf:
+            user = candidate
+            break
+
+    # 2) match por e-mail verificado.
+    if user is None and email:
+        user = User.objects.filter(email__iexact=email).first()
+        if user is not None and not _only_digits(user.cpf) and cpf:
+            user.cpf = cpf
+
+    created = False
+    if user is None:
+        # 3) cria novo CIDADAO. O signal cria o CitizenProfile automaticamente.
+        created = True
+        user = User(
+            user_type=User.UserType.CIDADAO,
+            full_name=name or (email.split('@')[0] if email else f'gov.br {cpf}'),
+            email=email or f'{cpf}@govbr.local',
+            cpf=cpf or None,
+        )
+        user.set_unusable_password()
+
+    # Atualiza dados de confiabilidade Gov.BR em todos os casos.
+    user.govbr_verified = True
+    if level:
+        user.govbr_level = level
+    if name and not user.full_name:
+        user.full_name = name
+    user.save()
+    return user, created
+
+
+def govbr_login(request):
+    """Inicia o fluxo OIDC: gera PKCE/state/nonce, salva na sessão e redireciona."""
+    if not settings.GOVBR_CLIENT_ID or not settings.GOVBR_REDIRECT_URI:
+        messages.error(request, 'Login Gov.BR ainda não está configurado.')
+        return redirect('cadastro')
+
+    code_verifier, code_challenge = govbr.generate_pkce_pair()
+    state = govbr.random_token()
+    nonce = govbr.random_token()
+
+    request.session[_SESS_VERIFIER] = code_verifier
+    request.session[_SESS_STATE] = state
+    request.session[_SESS_NONCE] = nonce
+
+    return redirect(govbr.build_authorize_url(state, nonce, code_challenge))
+
+
+def govbr_callback(request):
+    """
+    Recebe o authorization code, valida state/token e abre a sessão Django.
+
+    A tela que recebe o `code` NÃO renderiza conteúdo — sempre redireciona.
+    """
+    error = request.GET.get('error')
+    if error:
+        logger.warning('Gov.BR retornou erro: %s — %s', error, request.GET.get('error_description'))
+        messages.error(request, 'Não foi possível autenticar com o Gov.BR. Tente novamente.')
+        return redirect('cadastro')
+
+    code = request.GET.get('code')
+    returned_state = request.GET.get('state')
+    saved_state = request.session.pop(_SESS_STATE, None)
+    code_verifier = request.session.pop(_SESS_VERIFIER, None)
+    nonce = request.session.pop(_SESS_NONCE, None)
+
+    if not code or not returned_state or returned_state != saved_state or not code_verifier:
+        logger.warning('Gov.BR callback inválido: state divergente ou parâmetros ausentes.')
+        messages.error(request, 'Sessão de login Gov.BR inválida ou expirada. Tente novamente.')
+        return redirect('cadastro')
+
+    try:
+        tokens = govbr.exchange_code_for_tokens(code, code_verifier)
+        id_token = tokens.get('id_token')
+        claims = govbr.validate_id_token(id_token, nonce)
+    except Exception:
+        logger.exception('Falha ao trocar/validar tokens do Gov.BR.')
+        messages.error(request, 'Falha ao validar a autenticação Gov.BR. Tente novamente.')
+        return redirect('cadastro')
+
+    user, created = _govbr_user_from_claims(claims)
+    django_login(request, user, backend='apps.accounts.backends.EmailBackend')
+    request.session['govbr'] = True  # marca a sessão como originada do Gov.BR
+
+    if created:
+        messages.success(request, f'Conta criada via Gov.BR. Bem-vindo(a), {user.first_name}!')
+    else:
+        messages.success(request, f'Bem-vindo(a), {user.first_name}!')
+    return _redirect_by_user_type(user)
+
+
+@require_POST
+def govbr_logout(request):
+    """Encerra a sessão Django e redireciona ao /logout do Gov.BR (disparado pelo front)."""
+    django_logout(request)
+    if settings.GOVBR_LOGOUT_REDIRECT_URI:
+        return redirect(govbr.build_logout_url())
+    return redirect('home')
 

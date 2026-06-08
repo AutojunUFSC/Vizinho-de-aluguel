@@ -155,3 +155,18 @@ AUTHENTICATION_BACKENDS = [
 LOGIN_URL = '/cadastro/'
 LOGIN_REDIRECT_URL = '/usuario/'
 LOGOUT_REDIRECT_URL = '/'
+
+
+# Integração Login Único Gov.BR (OAuth2 + OIDC + PKCE)
+# Em produção, troque GOVBR_PROVIDER_URL para o host de produção informado na credencial.
+# Os valores reais (CLIENT_ID/SECRET, REDIRECT_URI) ficam no .env / Railway Variables.
+
+GOVBR_CLIENT_ID = config('GOVBR_CLIENT_ID', default='')
+GOVBR_CLIENT_SECRET = config('GOVBR_CLIENT_SECRET', default='')
+GOVBR_REDIRECT_URI = config('GOVBR_REDIRECT_URI', default='')
+GOVBR_LOGOUT_REDIRECT_URI = config('GOVBR_LOGOUT_REDIRECT_URI', default='')
+GOVBR_PROVIDER_URL = config('GOVBR_PROVIDER_URL', default='https://sso.staging.acesso.gov.br')
+GOVBR_SCOPES = config(
+    'GOVBR_SCOPES',
+    default='openid email profile govbr_confiabilidades govbr_confiabilidades_idtoken',
+)
