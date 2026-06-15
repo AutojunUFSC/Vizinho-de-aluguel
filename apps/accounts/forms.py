@@ -3,7 +3,6 @@ import re
 import urllib.request
 
 from django import forms
-from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
 
 from .models import Address, CitizenProfile, MEIProfile, User
@@ -144,14 +143,13 @@ class MEIRegisterForm(forms.ModelForm):
         return _clean_phone(self.cleaned_data.get('phone'))
 
     def clean_cnpj(self):
+        # ⚠ MODO DE TESTE: validação de CNPJ desativada direto no código.
+        # Aceita qualquer CNPJ de 14 dígitos (sem checksum, sem ReceitaWS).
+        # Para reativar, restaurar: digits = _clean_cnpj_digits(raw)
         raw = self.cleaned_data.get('cnpj', '')
-        if getattr(settings, 'DISABLE_CNPJ_VALIDATION', False):
-            # Modo de teste: aceita qualquer CNPJ de 14 dígitos (sem checksum).
-            digits = re.sub(r'\D', '', raw or '')
-            if len(digits) != 14:
-                raise forms.ValidationError('CNPJ deve conter 14 dígitos.')
-        else:
-            digits = _clean_cnpj_digits(raw)
+        digits = re.sub(r'\D', '', raw or '')
+        if len(digits) != 14:
+            raise forms.ValidationError('CNPJ deve conter 14 dígitos.')
         if MEIProfile.objects.filter(cnpj=digits).exists():
             raise forms.ValidationError('Este CNPJ já está cadastrado na plataforma.')
         return digits
@@ -163,7 +161,7 @@ class MEIRegisterForm(forms.ModelForm):
         if password and password_confirm and password != password_confirm:
             self.add_error('password_confirm', 'As senhas não coincidem.')
 
-        skip_receita = getattr(settings, 'DISABLE_CNPJ_VALIDATION', False)
+        skip_receita = True  # ⚠ MODO DE TESTE: não consulta a ReceitaWS.
         cnpj_digits = cleaned.get('cnpj')
         if cnpj_digits and not skip_receita:
             try:
@@ -195,13 +193,9 @@ class MEIRegisterForm(forms.ModelForm):
         user.set_password(self.cleaned_data['password'])
         if commit:
             user.save()
-            # Em modo de teste, já verifica o MEI para que possa dar lances
+            # ⚠ MODO DE TESTE: já verifica o MEI para que possa dar lances
             # sem precisar de aprovação manual no painel admin.
-            verification_status = (
-                MEIProfile.VerificationStatus.VERIFIED
-                if getattr(settings, 'DISABLE_CNPJ_VALIDATION', False)
-                else MEIProfile.VerificationStatus.PENDING
-            )
+            verification_status = MEIProfile.VerificationStatus.VERIFIED
             # Signal de accounts NÃO cria MEIProfile — fazemos manualmente:
             MEIProfile.objects.create(
                 user=user,
