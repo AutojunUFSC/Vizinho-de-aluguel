@@ -143,6 +143,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.User'
 
 
+# ─── Modo de TESTE: desativa validação de CNPJ (dígitos + ReceitaWS) ──────────
+# Quando True, o cadastro MEI aceita qualquer CNPJ de 14 dígitos e já marca o
+# perfil como VERIFIED (assim o MEI pode dar lances sem aprovação do admin).
+# Use APENAS em ambiente de testes. Em produção mantenha False (padrão).
+DISABLE_CNPJ_VALIDATION = config('DISABLE_CNPJ_VALIDATION', default=False, cast=bool)
+
+
 # Authentication backends — login por email (USERNAME_FIELD='email')
 
 AUTHENTICATION_BACKENDS = [
