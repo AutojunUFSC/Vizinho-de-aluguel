@@ -4,16 +4,33 @@
 {% block title %}Minha conta — Vizinho de Aluguel{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'css/perfil.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'css/perfil.css' %}?v=6">
 {% endblock %}
 
 {% block content %}
 <main id="main">
 
+  {# ========== BOTÃO HAMBURGUER (mobile) ========== #}
+  <button class="vda-mobile-toggle" id="vdaSidebarToggle" aria-expanded="false" aria-controls="vdaSidebar">
+    <svg class="hamburger-open" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+    <svg class="hamburger-close" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+    Menu da conta
+  </button>
+
+  {# Backdrop para fechar o drawer clicando fora #}
+  <div class="vda-sidebar-backdrop" id="vdaSidebarBackdrop"></div>
+
   <div class="vda-shell">
 
     {# ========== SIDEBAR ========== #}
-    <aside class="vda-sidebar">
+    <aside class="vda-sidebar" id="vdaSidebar">
 
       {# Card de identidade MEI #}
       <div class="vda-id-card">
@@ -107,6 +124,30 @@
 
     {# ========== MAIN ========== #}
     <div class="vda-main">
+
+      {# Tabs de navegação rápida — visível apenas no mobile #}
+      <nav class="vda-mobile-tabs" aria-label="Ir para seção">
+        <a href="#visao" class="vda-mobile-tab is-active">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+          Visão geral
+        </a>
+        <a href="#atendimento" class="vda-mobile-tab">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/></svg>
+          Atendimento
+        </a>
+        <a href="#dados" class="vda-mobile-tab">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          Dados
+        </a>
+        <a href="{% url 'services:request_feed' %}" class="vda-mobile-tab hide-mobile-tab">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+          Feed
+        </a>
+        <a href="{% url 'auctions:my_bids' %}" class="vda-mobile-tab hide-mobile-tab">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Propostas
+        </a>
+      </nav>
 
       <div class="vda-crumb">
         <a href="{% url 'home' %}">Início</a>
@@ -409,4 +450,73 @@
   </div>
 
 </main>
+
 {% endblock %}
+
+{% block extra_scripts %}
+<script>
+(function () {
+  var toggle   = document.getElementById('vdaSidebarToggle');
+  var sidebar  = document.getElementById('vdaSidebar');
+  var backdrop = document.getElementById('vdaSidebarBackdrop');
+
+  if (!toggle || !sidebar || !backdrop) return;
+
+  function openDrawer() {
+    sidebar.classList.add('is-open');
+    backdrop.classList.add('is-open');
+    toggle.classList.add('is-open');
+    toggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDrawer() {
+    sidebar.classList.remove('is-open');
+    backdrop.classList.remove('is-open');
+    toggle.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  toggle.addEventListener('click', function () {
+    if (sidebar.classList.contains('is-open')) { closeDrawer(); }
+    else { openDrawer(); }
+  });
+
+  backdrop.addEventListener('click', closeDrawer);
+
+  // Fecha drawer ao navegar para uma seção (clique em link do menu)
+  sidebar.querySelectorAll('.vda-nav-item').forEach(function (link) {
+    link.addEventListener('click', function () {
+      if (link.getAttribute('href') && link.getAttribute('href').startsWith('#')) {
+        closeDrawer();
+      }
+    });
+  });
+
+  // Fecha drawer com Escape
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeDrawer();
+  });
+
+  // Highlight ativo das tabs mobile ao fazer scroll
+  var sections = document.querySelectorAll('.vda-section[id]');
+  var tabs = document.querySelectorAll('.vda-mobile-tab[href^="#"]');
+  if (sections.length && tabs.length && 'IntersectionObserver' in window) {
+    var current = '';
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          current = '#' + entry.target.id;
+          tabs.forEach(function (tab) {
+            tab.classList.toggle('is-active', tab.getAttribute('href') === current);
+          });
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    sections.forEach(function (s) { observer.observe(s); });
+  }
+})();
+</script>
+{% endblock %}
+

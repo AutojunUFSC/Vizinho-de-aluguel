@@ -192,6 +192,8 @@
   margin: 4px 0 0;
   color: var(--text-secondary);
   font-size: 14px;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 .vda-crumb {
   display: flex;
@@ -531,11 +533,204 @@
 }
 
 /* ===== Mobile responsive ===== */
+
+/* --- Botão hamburguer para abrir sidebar em mobile --- */
+.vda-mobile-toggle {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: var(--pmf-navy);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  margin: 16px 16px 0;
+  width: calc(100% - 32px);
+  box-shadow: 0 2px 8px rgba(14,31,77,0.18);
+  transition: background 0.15s;
+}
+.vda-mobile-toggle:hover { background: var(--pmf-navy-700, #122560); }
+.vda-mobile-toggle svg { flex-shrink: 0; }
+.vda-mobile-toggle .hamburger-close { display: none; }
+.vda-mobile-toggle.is-open .hamburger-open { display: none; }
+.vda-mobile-toggle.is-open .hamburger-close { display: block; }
+
+/* --- Backdrop overlay --- */
+.vda-sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 31, 77, 0.45);
+  z-index: 199;
+  backdrop-filter: blur(2px);
+}
+.vda-sidebar-backdrop.is-open { display: block; }
+
+/* --- Tabs de navegação rápida (seções) em mobile --- */
+.vda-mobile-tabs {
+  display: none;
+  overflow-x: auto;
+  gap: 6px;
+  background: var(--bg-muted, #F4F5F7);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.vda-mobile-tabs::-webkit-scrollbar { display: none; }
+.vda-mobile-tab {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1.5px solid var(--border);
+}
+.vda-mobile-tab:hover {
+  background: var(--pmf-cyan-50);
+  color: var(--pmf-navy);
+  border-color: var(--pmf-cyan);
+  text-decoration: none;
+}
+.vda-mobile-tab.is-active {
+  background: var(--pmf-navy);
+  color: white;
+  border-color: var(--pmf-navy);
+  font-weight: 700;
+}
+.vda-mobile-tab.is-active svg { stroke: white; }
+
+/* Feed e Propostas: visíveis em tablet+, ocultos em celular pequeno */
+@media (max-width: 520px) {
+  .hide-mobile-tab { display: none !important; }
+}
+
 @media (max-width: 880px) {
-  .vda-shell { grid-template-columns: 1fr; padding: 16px; }
-  .vda-sidebar { position: relative; top: 0; }
-  .vda-nav-section { display: none; }
-  .vda-nav { flex-direction: row; overflow-x: auto; padding: 6px; }
-  .vda-nav-item { white-space: nowrap; padding: 8px 12px; }
-  .vda-nav-item.is-active::before { display: none; }
+  /* Sem scroll horizontal na página toda */
+  .vda-shell {
+    grid-template-columns: 1fr;
+    padding: 0;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  /* Mostra botão hamburguer */
+  .vda-mobile-toggle { display: flex; }
+
+  /* Mostra tabs de seções — margem negativa para cancelar o padding do .vda-main */
+  .vda-mobile-tabs {
+    display: flex;
+    margin: 0 -16px;     /* cancela o padding lateral do .vda-main */
+    margin-bottom: 16px; /* espaço antes do conteúdo */
+  }
+
+  /* Sidebar vira drawer deslizante */
+  .vda-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(320px, 88vw);
+    z-index: 200;
+    background: var(--bg-muted, #F4F5F7);
+    padding: 20px 12px 32px;
+    overflow-y: auto;
+    transform: translateX(-110%);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 24px rgba(14,31,77,0.18);
+    gap: 16px;
+  }
+  .vda-sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  /* Restore nav vertical no drawer */
+  .vda-nav {
+    flex-direction: column;
+    overflow-x: visible;
+    padding: 8px;
+  }
+  .vda-nav-section { display: block; }
+  .vda-nav-item { white-space: normal; padding: 10px 12px; }
+  .vda-nav-item.is-active::before { display: block; }
+
+  /* Main content com padding adequado */
+  .vda-main {
+    padding: 16px;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  /* Cabeçalho da página — evita overflow do CNPJ longo */
+  .vda-page-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .vda-page-head h1 { font-size: 22px; }
+  .vda-page-head p {
+    font-size: 12.5px;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+  .vda-page-head .vda-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Banner de verificação */
+  .vda-verify-banner { flex-wrap: wrap; gap: 10px; }
+  .vda-verify-banner .icon-wrap { width: 32px; height: 32px; }
+
+  /* Cards de estatística — 2 colunas em mobile */
+  .vda-stats { grid-template-columns: 1fr 1fr; }
+
+  /* Quick actions — 1 coluna */
+  .vda-quick { grid-template-columns: 1fr; }
+
+  /* Toggle row — wrap para não sair da tela */
+  .vda-toggle-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .vda-toggle-row .meta { min-width: 0; width: 100%; }
+
+  /* Rodapé da seção */
+  .vda-section-foot {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .vda-section-foot > div {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+  }
+  .vda-section-foot .vda-btn { flex: 1; justify-content: center; }
+
+  /* Bloco de avatar */
+  .vda-avatar-block { flex-direction: column; align-items: flex-start; }
+
+  /* Seções sem padding lateral excessivo */
+  .vda-section-head,
+  .vda-section-body,
+  .vda-section-foot { padding-left: 16px; padding-right: 16px; }
+
+  /* Campos do formulário — 1 coluna */
+  .vda-fields { grid-template-columns: 1fr; }
+
+  /* Botões full width no mobile */
+  .vda-btn-sm { min-height: 36px; }
 }

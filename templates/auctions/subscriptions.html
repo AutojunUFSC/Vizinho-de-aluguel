@@ -24,15 +24,15 @@
     </div>
   </div>
 
-  <div class="container" style="padding: 32px 24px 60px;">
-    <div class="dash-grid" style="grid-template-columns: 1fr 320px;">
+  <div class="container feed-container">
+    <div class="dash-grid feed-grid">
 
       {# ===== Lista de inscrições ===== #}
       <div>
         <h3 style="font-size:14px; font-weight:700; color:var(--pmf-navy); margin:0 0 14px;">Inscrições ativas</h3>
         <div style="display:grid; gap:10px;">
           {% for sub in subscriptions %}
-            <div class="card card-pad" style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="card card-pad sub-card-row">
               <div>
                 <strong style="color:var(--pmf-navy);">{{ sub.category.name }}</strong>
                 <div style="font-size:12px; color:var(--text-muted);">Desde {{ sub.subscribed_at|date:"d/m/Y" }}</div>
@@ -40,7 +40,8 @@
               <form method="post" action="{% url 'auctions:subscription_delete' category_id=sub.category.id %}" style="margin:0;"
                     onsubmit="return confirm('Cancelar inscrição em {{ sub.category.name }}?');">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-secondary btn-sm" style="border-color:var(--status-danger); color:var(--status-danger);">Cancelar</button>
+                <button type="submit" class="btn btn-secondary btn-sm sub-cancel-btn"
+                        style="border-color:var(--status-danger); color:var(--status-danger);">Cancelar</button>
               </form>
             </div>
           {% empty %}
@@ -53,7 +54,7 @@
       </div>
 
       {# ===== Sidebar: inscrever em novas ===== #}
-      <aside class="dash-aside">
+      <aside class="dash-aside feed-aside">
         <form method="post" action="{% url 'auctions:subscription_create' %}" class="card card-pad">
           {% csrf_token %}
           <h3 style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; margin:0 0 12px;">
