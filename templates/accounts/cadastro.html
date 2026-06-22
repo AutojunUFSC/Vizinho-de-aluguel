@@ -310,15 +310,15 @@
     var digits = input.value.replace(/\D/g, '');
     var fb     = document.getElementById('cnpj-feedback');
     if (!digits) return;
-    if (!cnpjDigitsOk(digits)) {
-      input.style.borderColor = 'var(--status-danger)';
-      fb.style.color          = 'var(--status-danger)';
-      fb.textContent          = '✗ CNPJ inválido. Verifique os dígitos.';
-    } else {
+    if (cnpjDigitsOk(digits)) {
       input.style.borderColor = 'var(--status-success)';
       fb.style.color          = 'var(--status-success)';
       fb.textContent          = '✓ Formato válido. A situação ativa é confirmada pelo servidor.';
       document.getElementById('cnpj-ok').style.display = 'inline';
+    } else {
+      input.style.borderColor = 'var(--status-danger)';
+      fb.style.color          = 'var(--status-danger)';
+      fb.textContent          = 'CNPJ inválido. Verifique os dígitos.';
     }
   }
 

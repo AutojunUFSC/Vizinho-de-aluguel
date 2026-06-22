@@ -60,3 +60,44 @@
   </div>
 </main>
 {% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // ─── CEP: máscara (só dígitos, formato 00000-000) + autopreenchimento ViaCEP ─
+  (function () {
+    var cepEl = document.getElementById('id_cep');
+    if (!cepEl) return;
+    var streetEl = document.getElementById('id_street');
+    var bairroEl = document.getElementById('id_neighborhood');
+    var cityEl = document.getElementById('id_city');
+    var stateEl = document.getElementById('id_state');
+
+    cepEl.setAttribute('inputmode', 'numeric');
+    cepEl.setAttribute('maxlength', '9');
+
+    function maskCep() {
+      var v = cepEl.value.replace(/\D/g, '').substring(0, 8);
+      cepEl.value = v.replace(/^(\d{5})(\d)/, '$1-$2');
+    }
+
+    function fillFromViaCep() {
+      var digits = cepEl.value.replace(/\D/g, '');
+      if (digits.length !== 8) return;
+      fetch('https://viacep.com.br/ws/' + digits + '/json/')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (!data || data.erro) return;
+          if (data.logradouro && streetEl) streetEl.value = data.logradouro;
+          if (data.bairro && bairroEl) bairroEl.value = data.bairro;
+          if (data.localidade && cityEl) cityEl.value = data.localidade;
+          if (data.uf && stateEl) stateEl.value = data.uf;
+        })
+        .catch(function () { /* offline/erro: usuário preenche manualmente */ });
+    }
+
+    cepEl.addEventListener('input', function () { maskCep(); fillFromViaCep(); });
+    cepEl.addEventListener('blur', fillFromViaCep);
+    maskCep();
+  })();
+</script>
+{% endblock %}

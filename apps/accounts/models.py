@@ -49,7 +49,6 @@ class CitizenProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='citizen_profile')
     default_address = models.ForeignKey('Address', on_delete=models.SET_NULL, null=True, blank=True, related_name='+')
     rating_avg = models.DecimalField(max_digits=3, decimal_places=2, default=0)
-    total_services_requested = models.IntegerField(default=0)
 
     class Meta:
         verbose_name = 'Perfil Cidadão'
@@ -76,7 +75,6 @@ class MEIProfile(models.Model):
     service_radius_km = models.DecimalField(max_digits=5, decimal_places=2, default=10)
     city = models.CharField(max_length=100, default='Florianópolis')
     rating_avg = models.DecimalField(max_digits=3, decimal_places=2, default=0)
-    total_services_completed = models.IntegerField(default=0)
     is_available = models.BooleanField(default=True)
     cnpj_file = models.FileField(upload_to='cnpj_files/', blank=True, null=True)
     whatsapp_link = models.CharField(max_length=255, blank=True, null=True)

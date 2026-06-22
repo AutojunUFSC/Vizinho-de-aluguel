@@ -122,7 +122,11 @@
             <div class="field">
               <label for="cep">CEP</label>
               <input id="cep" name="cep" class="input" type="text" placeholder="00000-000"
+                inputmode="numeric" maxlength="9" autocomplete="postal-code"
                 value="{{ request.POST.cep|default:'' }}">
+              {% if cep_error %}
+              <div class="field-help" style="color:var(--status-danger); margin-top:4px;">{{ cep_error }}</div>
+              {% endif %}
             </div>
           </div>
 
@@ -131,6 +135,10 @@
             <input id="endereco" name="street" class="input" type="text" placeholder="Rua, número, complemento"
               value="{{ request.POST.street|default:'' }}">
           </div>
+
+          {# Cidade/UF reais do CEP (ViaCEP); default no servidor se vazios. #}
+          <input type="hidden" id="cep-city" name="city" value="{{ request.POST.city|default:'' }}">
+          <input type="hidden" id="cep-state" name="state" value="{{ request.POST.state|default:'' }}">
 
           {% if form.address.errors %}
           <div class="alert alert-danger" role="alert" style="margin-top:8px;">
@@ -174,24 +182,6 @@
           </div>
 
           <div class="field">
-            <label for="auction-end">Fim do leilão (data e hora)</label>
-            <input id="auction-end" name="auction_end_at" class="input" type="datetime-local"
-              value="{{ form.auction_end_at.value|default:'' }}">
-            {% if form.auction_end_at.errors %}
-            <div class="field-help" style="color:var(--status-danger);">{{ form.auction_end_at.errors.0 }}</div>
-            {% endif %}
-          </div>
-
-          <div class="field">
-            <label for="deadline">Prazo desejado</label>
-            <input id="deadline" name="desired_deadline" class="input" type="date"
-              value="{{ form.desired_deadline.value|default:'' }}">
-            {% if form.desired_deadline.errors %}
-            <div class="field-help" style="color:var(--status-danger);">{{ form.desired_deadline.errors.0 }}</div>
-            {% endif %}
-          </div>
-
-          <div class="field">
             <label for="fotos">Fotos do serviço</label>
             <div
               style="border:2px dashed var(--border); border-radius:10px; padding:24px; text-align:center; background:var(--bg-page);">
@@ -228,7 +218,7 @@
             </p>
             <div
               style="display:flex; gap:16px; flex-wrap:wrap; font-size:13px; color:var(--text-muted); padding-top:12px; border-top:1px solid var(--border);">
-              <span>📍 <span id="rev-loc">—</span></span>
+              <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-2px; margin-right:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> <span id="rev-loc">—</span></span>
               <span>💰 R$ <span id="rev-budget">—</span></span>
             </div>
           </div>
@@ -517,8 +507,12 @@
           ok = false;
         } else { clearFieldError(bairro); }
 
-        if (!cep.value.trim()) {
+        var cepDigits = cep.value.replace(/\D/g, '');
+        if (!cepDigits) {
           showFieldError(cep, 'Informe o CEP.');
+          ok = false;
+        } else if (cepDigits.length !== 8) {
+          showFieldError(cep, 'CEP inválido. Use o formato 00000-000.');
           ok = false;
         } else { clearFieldError(cep); }
 
@@ -554,8 +548,44 @@
     if (!validateStep(2)) { e.preventDefault(); showStep(2); return; }
   });
 
-  // Se o backend retornou erros, abre direto na revisão para exibi-los.
-  {% if form.errors or media_form.errors %}
+  // ─── CEP: máscara (só dígitos, formato 00000-000) + autopreenchimento ViaCEP ─
+  (function () {
+    var cepEl = document.getElementById('cep');
+    if (!cepEl) return;
+    var streetEl = document.getElementById('endereco');
+    var bairroEl = document.getElementById('bairro');
+    var cityEl = document.getElementById('cep-city');
+    var stateEl = document.getElementById('cep-state');
+
+    function maskCep() {
+      var v = cepEl.value.replace(/\D/g, '').substring(0, 8);
+      cepEl.value = v.replace(/^(\d{5})(\d)/, '$1-$2');
+    }
+
+    function fillFromViaCep() {
+      var digits = cepEl.value.replace(/\D/g, '');
+      if (digits.length !== 8) return;
+      fetch('https://viacep.com.br/ws/' + digits + '/json/')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (!data || data.erro) return;
+          if (data.logradouro && streetEl) streetEl.value = data.logradouro;
+          if (data.bairro && bairroEl) bairroEl.value = data.bairro;
+          if (cityEl) cityEl.value = data.localidade || '';
+          if (stateEl) stateEl.value = data.uf || '';
+        })
+        .catch(function () { /* offline/erro: usuário preenche manualmente */ });
+    }
+
+    cepEl.addEventListener('input', function () { maskCep(); fillFromViaCep(); });
+    cepEl.addEventListener('blur', fillFromViaCep);
+    maskCep(); // normaliza valor pré-preenchido (ex.: retorno de POST com erro)
+  })();
+
+  // Se o backend retornou erros, abre direto onde o usuário pode corrigir.
+  {% if cep_error %}
+  showStep(2);
+  {% elif form.errors or media_form.errors %}
   showStep(3);
   {% else %}
   showStep(1);

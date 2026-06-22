@@ -235,6 +235,19 @@ class MEIProfileForm(forms.ModelForm):
         fields = ('nome_fantasia', 'bio', 'service_radius_km', 'city', 'is_available', 'whatsapp_link')
 
 
+def normalize_cep(raw: str) -> str:
+    """Normaliza um CEP para o formato '00000-000'.
+
+    Remove qualquer caractere não numérico e exige exatamente 8 dígitos.
+    Levanta ValidationError caso contrário. Reutilizado pelo AddressForm e
+    pelo fluxo inline de criação de endereço em service_request_create.
+    """
+    digits = re.sub(r'\D', '', raw or '')
+    if len(digits) != 8:
+        raise forms.ValidationError('CEP inválido. Use o formato 00000-000.')
+    return f'{digits[:5]}-{digits[5:]}'
+
+
 class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
@@ -248,7 +261,4 @@ class AddressForm(forms.ModelForm):
         }
 
     def clean_cep(self):
-        cep = (self.cleaned_data.get('cep') or '').replace('-', '').replace(' ', '')
-        if len(cep) != 8 or not cep.isdigit():
-            raise forms.ValidationError('CEP inválido. Use o formato 00000-000.')
-        return self.cleaned_data['cep']
+        return normalize_cep(self.cleaned_data.get('cep'))

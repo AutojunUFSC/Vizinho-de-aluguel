@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db import transaction
 from django.db.models import Count, Q
@@ -8,6 +9,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_http_methods, require_POST
 
 from apps.accounts.decorators import citizen_required, mei_required
+from apps.accounts.forms import normalize_cep
 from apps.accounts.models import Address
 
 from .forms import ServiceRequestForm, ServiceRequestMediaForm
@@ -95,28 +97,34 @@ def service_request_create(request):
     post_data = request.POST.copy() if request.method == 'POST' else None
 
     inline_address = None
+    cep_error = None
     if post_data is not None and not post_data.get('address'):
         cep = (post_data.get('cep') or '').strip()
         street = (post_data.get('street') or '').strip()
         neighborhood = (post_data.get('neighborhood') or '').strip()
         if cep and street and neighborhood:
-            inline_address = Address.objects.create(
-                user=request.user,
-                label='Solicitação',
-                cep=cep,
-                street=street,
-                number=(post_data.get('number') or 'S/N').strip() or 'S/N',
-                neighborhood=neighborhood,
-                city=(post_data.get('city') or 'Florianópolis').strip(),
-                state=(post_data.get('state') or 'SC').strip().upper()[:2],
-            )
-            post_data['address'] = str(inline_address.pk)
+            try:
+                cep = normalize_cep(cep)
+            except ValidationError as exc:
+                cep_error = exc.messages[0]
+            if cep_error is None:
+                inline_address = Address.objects.create(
+                    user=request.user,
+                    label='Solicitação',
+                    cep=cep,
+                    street=street,
+                    number=(post_data.get('number') or 'S/N').strip() or 'S/N',
+                    neighborhood=neighborhood,
+                    city=(post_data.get('city') or 'Florianópolis').strip(),
+                    state=(post_data.get('state') or 'SC').strip().upper()[:2],
+                )
+                post_data['address'] = str(inline_address.pk)
 
     form = ServiceRequestForm(post_data, user=request.user)
     media_form = ServiceRequestMediaForm(post_data, request.FILES or None)
 
     if request.method == 'POST':
-        if form.is_valid() and media_form.is_valid():
+        if cep_error is None and form.is_valid() and media_form.is_valid():
             with transaction.atomic():
                 service_request = form.save(commit=False)
                 service_request.citizen = request.user.citizen_profile
@@ -125,7 +133,7 @@ def service_request_create(request):
                 media_form.save()
             messages.success(request, 'Solicitação publicada!')
             return redirect('services:service_request_detail', pk=service_request.pk)
-        messages.error(request, 'Verifique os erros no formulário.')
+        messages.error(request, cep_error or 'Verifique os erros no formulário.')
 
     # Se criamos um Address inline mas o form falhou, removemos para não deixar lixo.
     if inline_address is not None and request.method == 'POST' and not form.is_valid():
@@ -134,6 +142,7 @@ def service_request_create(request):
     return render(request, 'services/nova_solicitacao.html', {
         'form': form,
         'media_form': media_form,
+        'cep_error': cep_error,
         'categories': ServiceCategory.objects.filter(is_active=True).order_by('order'),
         'addresses': Address.objects.filter(user=request.user),
     })
@@ -149,6 +158,13 @@ def service_request_detail(request, pk):
     if request.user.user_type == 'CIDADAO' and service_request.citizen.user != request.user:
         messages.error(request, 'Você não pode ver esta solicitação.')
         return redirect('home_usuario')
+
+    # Solicitação já adjudicada: leva à tela de acompanhamento do pedido
+    # (com dados/WhatsApp do profissional), pois o fluxo de propostas já fechou.
+    if service_request.status not in (ServiceRequest.Status.OPEN, ServiceRequest.Status.IN_AUCTION):
+        order = service_request.orders.order_by('-created_at').first()
+        if order is not None:
+            return redirect('acompanhamento_pedido', pk=order.pk)
 
     bids = service_request.bids.filter(status='ACTIVE').select_related('mei_profile__user').order_by('amount')
     return render(request, 'services/propostas_solicitacao.html', {
@@ -208,9 +224,16 @@ def service_request_cancel(request, pk):
 
 @mei_required
 def request_feed(request):
+    mei_profile = request.user.mei_profile
+    subscribed_category_ids = list(
+        mei_profile.category_subscriptions.filter(is_active=True)
+        .values_list('category_id', flat=True)
+    )
+
     qs = ServiceRequest.objects.filter(
         status__in=('OPEN', 'IN_AUCTION'),
         auction_end_at__gt=timezone.now(),
+        category_id__in=subscribed_category_ids,
     ).select_related('citizen__user', 'category', 'address').order_by('-created_at')
 
     category = request.GET.get('category')
@@ -228,7 +251,10 @@ def request_feed(request):
         'category_filter': category,
         'city_filter': city,
         'urgency_filter': urgency,
-        'categories': ServiceCategory.objects.filter(is_active=True).order_by('order'),
+        'categories': ServiceCategory.objects.filter(
+            is_active=True,
+            id__in=subscribed_category_ids,
+        ).order_by('order'),
     })
 
 

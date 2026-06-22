@@ -141,6 +141,7 @@ def profile_view(request):
             user=user,
         )
         orders_qs = ServiceOrder.objects.filter(citizen=profile) if profile else ServiceOrder.objects.none()
+        extra_context['requests_count'] = ServiceRequest.objects.filter(citizen=profile).count() if profile else 0
         extra_context['completed_count'] = orders_qs.filter(status=ServiceOrder.Status.COMPLETED).count()
         extra_context['pending_review_count'] = orders_qs.filter(status=ServiceOrder.Status.COMPLETED).exclude(reviews__reviewer=user).count()
         extra_context['profile'] = profile
@@ -155,18 +156,22 @@ def profile_view(request):
             subscribed_category_ids = list(subscriptions.values_list('category_id', flat=True))
             feed_qs = ServiceRequest.objects.filter(
                 status__in=(ServiceRequest.Status.OPEN, ServiceRequest.Status.IN_AUCTION),
+                category_id__in=subscribed_category_ids,
             )
-            if subscribed_category_ids:
-                feed_qs = feed_qs.filter(category_id__in=subscribed_category_ids)
-            
+
             extra_context['feed_count'] = feed_qs.count()
             extra_context['active_orders_count'] = ServiceOrder.objects.filter(
                 mei_profile=mei_profile,
                 status=ServiceOrder.Status.IN_PROGRESS,
             ).count()
+            extra_context['completed_count'] = ServiceOrder.objects.filter(
+                mei_profile=mei_profile,
+                status=ServiceOrder.Status.COMPLETED,
+            ).count()
         else:
             extra_context['feed_count'] = 0
             extra_context['active_orders_count'] = 0
+            extra_context['completed_count'] = 0
 
     if request.method == 'POST':
         forms_valid = user_form.is_valid() and (profile_form is None or profile_form.is_valid())

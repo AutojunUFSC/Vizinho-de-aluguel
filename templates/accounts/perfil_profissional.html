@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Minha conta MEI — Vizinho de Aluguel{% endblock %}
+{% block title %}Minha conta — Vizinho de Aluguel{% endblock %}
 
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'css/perfil.css' %}?v=1">
@@ -35,7 +35,7 @@
 
         <div class="vda-id-stats">
           <div>
-            <div class="vda-id-stat-num">{{ request.user.mei_profile.total_services_completed|default:0 }}</div>
+            <div class="vda-id-stat-num">{{ completed_count|default:0 }}</div>
             <div class="vda-id-stat-lbl">Concluídos</div>
           </div>
           <div>
@@ -186,7 +186,7 @@
               <div class="vda-stat-icon" style="background: var(--pmf-cyan-50); color: var(--pmf-navy);">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
               </div>
-              <div class="vda-stat-num">{{ request.user.mei_profile.total_services_completed|default:0 }}</div>
+              <div class="vda-stat-num">{{ completed_count|default:0 }}</div>
               <div class="vda-stat-lbl">Serviços realizados</div>
             </div>
             <div class="vda-stat">

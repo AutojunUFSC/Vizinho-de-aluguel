@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Feed de pedidos — Vizinho de Aluguel{% endblock %}
+{% block title %}Feed — Vizinho de Aluguel{% endblock %}
 
 {% block content %}
 <main id="main">
@@ -45,7 +45,7 @@
               </div>
             </div>
             <div class="request-card-footer">
-              {% if req.address %}<span class="icon-text">📍 {{ req.address.neighborhood }} · {{ req.address.city }}</span>{% endif %}
+              {% if req.address %}<span class="icon-text"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-2px; margin-right:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> {{ req.address.neighborhood }} · {{ req.address.city }}</span>{% endif %}
               <span class="icon-text">🕒 {{ req.created_at|date:"d/m/Y H:i" }}</span>
               {% if req.budget_max %}<span class="budget">Até R$ {{ req.budget_max }}</span>{% endif %}
               <a href="{% url 'fazer_proposta' request_pk=req.pk %}" class="btn btn-primary btn-sm" style="margin-left:auto;">Enviar proposta</a>

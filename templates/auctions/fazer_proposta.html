@@ -30,7 +30,7 @@
     <div class="card card-pad" style="margin-bottom:24px;">
       <div class="request-meta" style="margin-bottom:10px;">
         {% if service_request.category %}<span class="badge badge-cyan">{{ service_request.category.name }}</span>{% endif %}
-        {% if service_request.address %}<span class="badge badge-muted">📍 {{ service_request.address.neighborhood }}, {{ service_request.address.city }}</span>{% endif %}
+        {% if service_request.address %}<span class="badge badge-muted"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-2px; margin-right:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> {{ service_request.address.neighborhood }}, {{ service_request.address.city }}</span>{% endif %}
         <span class="status-badge status-{{ service_request.status|lower|cut:'_' }}"><span class="dot"></span> {{ service_request.get_status_display }}</span>
       </div>
       <h2 style="font-size:18px; font-weight:700; color:var(--pmf-navy); margin:0 0 8px;">{{ service_request.title }}</h2>

@@ -303,3 +303,46 @@ class ToggleAvailabilityTest(TestCase):
         self.client.login(email='mei@toggle.test', password='senha-forte-123')
         r = self.client.get(self.url)
         self.assertEqual(r.status_code, 405)
+
+
+# ─── AddressForm: validação/normalização de CEP ──────────────────────────────
+
+class AddressFormCepTest(TestCase):
+    """Garante que o AddressForm rejeita CEP inválido e normaliza para 00000-000."""
+
+    def _data(self, **overrides):
+        data = {
+            'label': 'Casa',
+            'cep': '88036800',
+            'street': 'Rua Lauro Linhares',
+            'number': '100',
+            'neighborhood': 'Trindade',
+            'city': 'Florianópolis',
+            'state': 'SC',
+        }
+        data.update(overrides)
+        return data
+
+    def test_cep_com_texto_invalido(self):
+        from apps.accounts.forms import AddressForm
+        form = AddressForm(self._data(cep='CEP DO CTC'))
+        self.assertFalse(form.is_valid())
+        self.assertIn('cep', form.errors)
+
+    def test_cep_com_poucos_digitos_invalido(self):
+        from apps.accounts.forms import AddressForm
+        form = AddressForm(self._data(cep='1234'))
+        self.assertFalse(form.is_valid())
+        self.assertIn('cep', form.errors)
+
+    def test_cep_valido_normaliza_para_formato_com_hifen(self):
+        from apps.accounts.forms import AddressForm
+        form = AddressForm(self._data(cep='88036800'))
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertEqual(form.cleaned_data['cep'], '88036-800')
+
+    def test_cep_ja_formatado_permanece_valido(self):
+        from apps.accounts.forms import AddressForm
+        form = AddressForm(self._data(cep='88036-800'))
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertEqual(form.cleaned_data['cep'], '88036-800')

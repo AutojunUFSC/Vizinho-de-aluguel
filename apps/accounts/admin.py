@@ -24,7 +24,7 @@ class UserAdmin(BaseUserAdmin):
 
 @admin.register(CitizenProfile)
 class CitizenProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'rating_avg', 'total_services_requested')
+    list_display = ('user', 'rating_avg')
     search_fields = ('user__email', 'user__full_name')
 
 

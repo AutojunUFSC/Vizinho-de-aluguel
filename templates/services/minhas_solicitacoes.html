@@ -80,7 +80,7 @@
               </div>
             </div>
             <div class="request-card-footer">
-              {% if r.address %}<span class="icon-text">📍 {{ r.address.neighborhood }}</span>{% endif %}
+              {% if r.address %}<span class="icon-text"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-2px; margin-right:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> {{ r.address.neighborhood }}</span>{% endif %}
               <span class="icon-text">🕒 {{ r.created_at|date:"d/m/Y" }}</span>
               {% if r.bid_count %}<span class="proposals">{{ r.bid_count }} proposta{{ r.bid_count|pluralize }}</span>{% endif %}
               {% if r.budget_max %}<span class="budget">R$ {{ r.budget_max }}</span>{% endif %}

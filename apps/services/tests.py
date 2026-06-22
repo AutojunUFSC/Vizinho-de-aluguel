@@ -55,7 +55,6 @@ class ServiceRequestFormTest(TestCase):
             'address': self.address.pk,
             'urgency': 'MEDIA',
             'budget_max': '1000.00',
-            'desired_deadline': (date.today() + timedelta(days=14)).isoformat(),
         }
         data.update(overrides)
         return data
@@ -73,14 +72,6 @@ class ServiceRequestFormTest(TestCase):
         form = ServiceRequestForm(self._data(budget_max='0'), user=self.citizen)
         self.assertFalse(form.is_valid())
         self.assertIn('budget_max', form.errors)
-
-    def test_deadline_no_passado_invalido(self):
-        form = ServiceRequestForm(
-            self._data(desired_deadline=(date.today() - timedelta(days=1)).isoformat()),
-            user=self.citizen,
-        )
-        self.assertFalse(form.is_valid())
-        self.assertIn('desired_deadline', form.errors)
 
     def test_endereco_de_outro_usuario_invalido(self):
         form = ServiceRequestForm(
@@ -189,6 +180,41 @@ class ServiceRequestCreateViewTest(ServiceViewBaseTestCase):
     def test_mei_nao_acessa_criar_solicitacao(self):
         r = self.mei_client.get(reverse('services:service_request_create'))
         self.assertEqual(r.status_code, 403)
+
+    def test_post_inline_cep_invalido_nao_cria(self):
+        sr_before = ServiceRequest.objects.count()
+        addr_before = Address.objects.count()
+        r = self.citizen_client.post(reverse('services:service_request_create'), {
+            'title': 'Solicitação ruim',
+            'description': 'Descrição do serviço inline.',
+            'category': self.category.pk,
+            'urgency': 'MEDIA',
+            'cep': 'CEP DO CTC',
+            'street': 'Rua Qualquer',
+            'neighborhood': 'Centro',
+        })
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(ServiceRequest.objects.count(), sr_before)
+        self.assertEqual(Address.objects.count(), addr_before)
+        self.assertFalse(ServiceRequest.objects.filter(title='Solicitação ruim').exists())
+
+    def test_post_inline_cep_valido_normaliza_e_grava_cidade(self):
+        r = self.citizen_client.post(reverse('services:service_request_create'), {
+            'title': 'Solicitação inline',
+            'description': 'Descrição do serviço inline.',
+            'category': self.category.pk,
+            'urgency': 'MEDIA',
+            'cep': '88036800',
+            'street': 'Rua Lauro Linhares',
+            'neighborhood': 'Trindade',
+            'city': 'Florianópolis',
+            'state': 'SC',
+        })
+        self.assertEqual(r.status_code, 302)
+        sr = ServiceRequest.objects.get(title='Solicitação inline')
+        self.assertEqual(sr.address.cep, '88036-800')
+        self.assertEqual(sr.address.city, 'Florianópolis')
+        self.assertEqual(sr.address.state, 'SC')
 
 
 class ServiceRequestDetailViewTest(ServiceViewBaseTestCase):

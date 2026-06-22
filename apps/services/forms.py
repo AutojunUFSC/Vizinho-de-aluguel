@@ -1,5 +1,4 @@
 from django import forms
-from django.utils import timezone
 
 from apps.accounts.models import Address
 
@@ -35,12 +34,10 @@ class ServiceRequestForm(forms.ModelForm):
         model = ServiceRequest
         fields = (
             'title', 'description', 'category', 'address',
-            'urgency', 'budget_max', 'auction_end_at', 'desired_deadline',
+            'urgency', 'budget_max',
         )
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
-            'auction_end_at': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'desired_deadline': forms.DateInput(attrs={'type': 'date'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -69,18 +66,6 @@ class ServiceRequestForm(forms.ModelForm):
             raise forms.ValidationError('A descrição deve ter pelo menos 20 caracteres.')
         return value
 
-    def clean_auction_end_at(self):
-        value = self.cleaned_data.get('auction_end_at')
-        if value and value <= timezone.now():
-            raise forms.ValidationError('A data do leilão deve ser no futuro.')
-        return value
-
-    def clean_desired_deadline(self):
-        value = self.cleaned_data.get('desired_deadline')
-        if value and value < timezone.localdate():
-            raise forms.ValidationError('O prazo desejado não pode estar no passado.')
-        return value
-
     def clean_budget_max(self):
         value = self.cleaned_data.get('budget_max')
         if value is not None and value <= 0:
@@ -92,16 +77,6 @@ class ServiceRequestForm(forms.ModelForm):
         if address and self.user is not None and address.user_id != self.user.id:
             raise forms.ValidationError('Este endereço não pertence ao usuário.')
         return address
-
-    def clean(self):
-        cleaned = super().clean()
-        deadline = cleaned.get('desired_deadline')
-        auction_end = cleaned.get('auction_end_at')
-        if deadline and auction_end and deadline < auction_end.date():
-            raise forms.ValidationError(
-                'O prazo desejado deve ser igual ou posterior ao fim do leilão.'
-            )
-        return cleaned
 
 
 class ServiceRequestMediaForm(forms.Form):

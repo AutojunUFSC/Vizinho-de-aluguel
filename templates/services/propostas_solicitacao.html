@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Propostas — {{ service_request.title|default:"Solicitação" }}{% endblock %}
+{% block title %}Propostas — Vizinho de Aluguel{% endblock %}
 
 {% block content %}
 <main id="main">
@@ -32,7 +32,7 @@
         <div style="flex:1; min-width:0;">
           <div class="request-meta" style="margin-bottom:10px;">
             {% if service_request.category %}<span class="badge badge-cyan">{{ service_request.category.name }}</span>{% endif %}
-            {% if service_request.address %}<span class="badge badge-muted">📍 {{ service_request.address.city }}</span>{% endif %}
+            {% if service_request.address %}<span class="badge badge-muted"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-2px; margin-right:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> {{ service_request.address.city }}</span>{% endif %}
             <span class="status-badge status-{{ service_request.status|lower|cut:'_' }}"><span class="dot"></span> {{ service_request.get_status_display }}</span>
             {% if service_request.status not in 'OPEN,IN_AUCTION' %}
               <span class="badge badge-muted">Fora do prazo de propostas</span>
@@ -46,6 +46,30 @@
             <div style="font-size:11px; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-muted); margin-bottom:2px;">Orçamento máximo</div>
             <div style="font-size:22px; font-weight:800; color:var(--pmf-navy);">R$ {{ service_request.budget_max }}</div>
           </div>
+        {% endif %}
+      </div>
+
+      {# ===== Detalhes da solicitação ===== #}
+      <div style="display:flex; flex-wrap:wrap; gap:18px 32px; margin-top:18px; padding-top:18px; border-top:1px solid var(--border);">
+        <div>
+          <div style="font-size:11px; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-muted); margin-bottom:2px;">Solicitada em</div>
+          <div style="font-size:14px; font-weight:600; color:var(--pmf-navy);">{{ service_request.created_at|date:"d/m/Y" }} às {{ service_request.created_at|date:"H:i" }}</div>
+        </div>
+        {% if service_request.auction_end_at %}
+        <div>
+          <div style="font-size:11px; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-muted); margin-bottom:2px;">Propostas até</div>
+          <div style="font-size:14px; font-weight:600; color:var(--pmf-navy);">{{ service_request.auction_end_at|date:"d/m/Y" }}</div>
+        </div>
+        {% endif %}
+        <div>
+          <div style="font-size:11px; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-muted); margin-bottom:2px;">Urgência</div>
+          <div style="font-size:14px; font-weight:600; color:var(--pmf-navy);">{{ service_request.get_urgency_display }}</div>
+        </div>
+        {% if service_request.address.neighborhood %}
+        <div>
+          <div style="font-size:11px; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-muted); margin-bottom:2px;">Bairro</div>
+          <div style="font-size:14px; font-weight:600; color:var(--pmf-navy);">{{ service_request.address.neighborhood }}</div>
+        </div>
         {% endif %}
       </div>
     </div>
