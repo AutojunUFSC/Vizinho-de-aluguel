@@ -3,41 +3,103 @@
 {% block title %}Minhas avaliações — Vizinho de Aluguel{% endblock %}
 
 {% block content %}
-<main id="main" class="container" style="padding: 32px 0;">
-  <h1>Minhas avaliações</h1>
+<main id="main">
 
-  <section style="margin-top: 24px;">
-    <h2>Avaliações que enviei</h2>
-    {% if reviews_given %}
-      <ul class="review-list">
-        {% for review in reviews_given %}
-          <li class="review-item">
-            <strong>{{ review.rating }}★</strong>
-            <span class="muted">— {{ review.created_at|date:"d/m/Y" }}</span>
-            {% if review.comment %}<p>{{ review.comment }}</p>{% endif %}
-          </li>
-        {% endfor %}
+  <div class="page-header">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a href="{% url 'home' %}">Início</a></li>
+        <li class="sep">›</li>
+        <li><a href="{% url 'accounts:profile' %}">Minha conta</a></li>
+        <li class="sep">›</li>
+        <li>Minhas avaliações</li>
       </ul>
-    {% else %}
-      <p class="muted">Você ainda não enviou avaliações.</p>
-    {% endif %}
-  </section>
+      <div class="page-header-row">
+        <div>
+          <h1>Minhas avaliações</h1>
+          <p class="subtitle">Veja as avaliações que você enviou e recebeu na plataforma.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <section style="margin-top: 24px;">
-    <h2>Avaliações que recebi</h2>
-    {% if reviews_received %}
-      <ul class="review-list">
-        {% for review in reviews_received %}
-          <li class="review-item">
-            <strong>{{ review.rating }}★</strong>
-            <span class="muted">— {{ review.created_at|date:"d/m/Y" }}</span>
-            {% if review.comment %}<p>{{ review.comment }}</p>{% endif %}
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p class="muted">Você ainda não recebeu avaliações.</p>
-    {% endif %}
-  </section>
+  <div class="container feed-container">
+    <div style="display:grid; gap:24px;">
+
+      {# ===== Avaliações enviadas ===== #}
+      <section class="card card-pad-lg">
+        <h2 style="font-size:18px; font-weight:700; color:var(--pmf-navy); margin:0 0 16px;">
+          Avaliações que enviei
+        </h2>
+        {% if reviews_given %}
+          <ul style="list-style:none; padding:0; margin:0; display:grid; gap:12px;">
+            {% for review in reviews_given %}
+              <li style="padding:14px 16px; border:1px solid var(--border); border-radius:10px; background:var(--bg-page);">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
+                  <span style="font-size:16px; font-weight:800; color:var(--pmf-navy);">
+                    {% for i in "12345" %}
+                      {% if forloop.counter <= review.rating %}⭐{% endif %}
+                    {% endfor %}
+                  </span>
+                  <span style="font-size:12px; color:var(--text-muted);">{{ review.created_at|date:"d/m/Y" }}</span>
+                </div>
+                {% if review.comment %}
+                  <p style="margin:0; font-size:14px; color:var(--text-secondary); line-height:1.55;">{{ review.comment }}</p>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <div class="empty-state" style="border-radius:10px;">
+            <div class="empty-state-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            </div>
+            <h3>Nenhuma avaliação enviada</h3>
+            <p>Você ainda não enviou avaliações.</p>
+          </div>
+        {% endif %}
+      </section>
+
+      {# ===== Avaliações recebidas ===== #}
+      <section class="card card-pad-lg">
+        <h2 style="font-size:18px; font-weight:700; color:var(--pmf-navy); margin:0 0 16px;">
+          Avaliações que recebi
+        </h2>
+        {% if reviews_received %}
+          <ul style="list-style:none; padding:0; margin:0; display:grid; gap:12px;">
+            {% for review in reviews_received %}
+              <li style="padding:14px 16px; border:1px solid var(--border); border-radius:10px; background:var(--bg-page);">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
+                  <span style="font-size:16px; font-weight:800; color:var(--pmf-navy);">
+                    {% for i in "12345" %}
+                      {% if forloop.counter <= review.rating %}⭐{% endif %}
+                    {% endfor %}
+                  </span>
+                  <span style="font-size:12px; color:var(--text-muted);">{{ review.created_at|date:"d/m/Y" }}</span>
+                </div>
+                {% if review.comment %}
+                  <p style="margin:0; font-size:14px; color:var(--text-secondary); line-height:1.55;">{{ review.comment }}</p>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <div class="empty-state" style="border-radius:10px;">
+            <div class="empty-state-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            </div>
+            <h3>Nenhuma avaliação recebida</h3>
+            <p>Você ainda não recebeu avaliações.</p>
+          </div>
+        {% endif %}
+      </section>
+
+    </div>
+  </div>
+
 </main>
 {% endblock %}

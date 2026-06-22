@@ -20,7 +20,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 28px;
+  min-height: 36px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   gap: 16px;
 }
 
@@ -28,14 +30,16 @@
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.05em;
-  background: rgba(255, 255, 255, 0.10);
-  padding: 3px 8px;
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 4px 10px;
+  border-radius: 6px;
   text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.18);
 }
 
 .gov-bar .gov-text {
-  opacity: 0.85;
+  opacity: 0.80;
+  font-size: 12px;
 }
 
 .gov-bar .gov-links {
@@ -48,7 +52,7 @@
 .gov-bar a {
   color: white;
   text-decoration: none;
-  opacity: 0.9;
+  opacity: 0.88;
 }
 
 .gov-bar a:hover {
@@ -57,7 +61,7 @@
 }
 
 .gov-bar .sep {
-  opacity: 0.4;
+  opacity: 0.35;
 }
 
 /* ===== Brand Bar (PMF logo + Vizinho logo) ===== */

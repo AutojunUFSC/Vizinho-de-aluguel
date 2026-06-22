@@ -23,9 +23,9 @@
     </div>
   </div>
 
-  <div class="container" style="padding: 32px 24px 60px;">
+  <div class="container feed-container">
 
-    <div class="dash-grid" style="grid-template-columns: 1fr 320px;">
+    <div class="dash-grid feed-grid">
 
       <div style="display:grid; gap:14px;">
         {% for req in requests %}
@@ -48,7 +48,7 @@
               {% if req.address %}<span class="icon-text">📍 {{ req.address.neighborhood }} · {{ req.address.city }}</span>{% endif %}
               <span class="icon-text">🕒 {{ req.created_at|date:"d/m/Y H:i" }}</span>
               {% if req.budget_max %}<span class="budget">Até R$ {{ req.budget_max }}</span>{% endif %}
-              <a href="{% url 'fazer_proposta' request_pk=req.pk %}" class="btn btn-primary btn-sm" style="margin-left:auto;">Enviar proposta</a>
+              <a href="{% url 'fazer_proposta' request_pk=req.pk %}" class="btn btn-primary btn-sm feed-proposta-btn">Enviar proposta</a>
             </div>
           </article>
         {% empty %}
@@ -62,7 +62,7 @@
         {% endfor %}
       </div>
 
-      <aside class="dash-aside">
+      <aside class="dash-aside feed-aside">
         <form method="get" class="card card-pad" style="display:block;">
           <h3 style="font-size:14px; font-weight:700; color:var(--pmf-navy); margin:0 0 12px; text-transform:uppercase; letter-spacing:0.04em;">Filtros</h3>
 

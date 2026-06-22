@@ -2,6 +2,142 @@
    VIZINHO DE ALUGUEL — Responsive (mobile-first breakpoints)
    ============================================================ */
 
+/* Previne scroll horizontal global em mobile */
+@media (max-width: 880px) {
+  html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+  }
+}
+
+/* Grade responsiva da seção Realização (institucional) */
+.realizacao-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: center;
+}
+@media (max-width: 700px) {
+  .realizacao-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+/* ===== Página de contato ===== */
+.contato-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 32px;
+  align-items: start;
+}
+.contato-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.contato-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.contato-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.contato-submit-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+@media (max-width: 760px) {
+  /* Layout principal: info cards acima, formulário abaixo */
+  .contato-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  /* Info cards em 2 colunas no mobile (mais compacto) */
+  .contato-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  /* Campos do formulário em 1 coluna */
+  .contato-form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  /* Botão full-width no mobile */
+  .contato-submit-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 420px) {
+  /* Telas muito pequenas: info cards em 1 coluna */
+  .contato-info {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Feed de pedidos — grid responsivo */
+.feed-container {
+  padding: 32px 24px 60px;
+}
+.feed-grid {
+  grid-template-columns: 1fr 320px;
+}
+
+/* Card de categoria inscrita */
+.sub-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 860px) {
+  .feed-container {
+    padding: 20px 16px 48px;
+  }
+  .feed-grid {
+    grid-template-columns: 1fr;
+  }
+  /* Filtros/formulário sobe para antes da lista */
+  .feed-aside {
+    order: -1;
+  }
+  /* Botão de proposta ocupa toda a largura no mobile */
+  .feed-proposta-btn {
+    width: 100%;
+    justify-content: center;
+    margin-left: 0 !important;
+    margin-top: 8px;
+  }
+  /* Footer do card empilha verticalmente */
+  .request-card-footer {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .request-card-footer .budget {
+    margin-left: 0;
+  }
+  /* Card de categoria: empilha em mobile */
+  .sub-card-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .sub-cancel-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* Helpers */
 .show-md { display: none; }
 
@@ -23,7 +159,7 @@
 
   .mei-cta-inner { grid-template-columns: 1fr; }
 
-  .dash-grid { grid-template-columns: 1fr; }
+  .dash-grid { grid-template-columns: 1fr !important; }
 
   .search-bar { grid-template-columns: 1fr; }
 
@@ -36,7 +172,7 @@
 @media (max-width: 640px) {
   .hide-sm { display: none !important; }
 
-  .gov-bar-inner { height: auto; padding: 6px 0; flex-wrap: wrap; }
+  .gov-bar-inner { height: auto; padding-top: 7px; padding-bottom: 7px; flex-wrap: wrap; }
   .gov-bar .gov-text { display: none; }
 
   .brand-vizinho {

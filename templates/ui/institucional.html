@@ -128,25 +128,25 @@
     {# ===== Realização ===== #}
     <section id="realizacao" style="margin-bottom:40px;">
       <h2 style="font-size:22px; font-weight:700; color:var(--pmf-navy); margin:0 0 16px;">Realização</h2>
-      <div class="card card-pad-lg" style="display:flex; gap:32px; align-items:center;">
+      <div class="card card-pad-lg realizacao-grid">
 
         <!--Esquerda: texto-->
-        <div style="flex:1;">
+        <div>
           <p style="font-size:16px; color:var(--text-secondary); line-height:1.65;">
             A <strong>Casa do Empreendedor de Florianópolis</strong> é o espaço físico que torna o Vizinho de Aluguel possível. Por meio desta parceria com a Prefeitura Municipal, a Casa do Empreendedor apoia o cadastramento e a formalização dos profissionais MEI que atuam na plataforma, oferecendo suporte administrativo, cursos de capacitação e orientação para quem deseja empreender.
           </p>
-          <p style="font-size:16px; color:var(--text-secondary); line-height:1.65;">
+          <p style="font-size:16px; color:var(--text-secondary); line-height:1.65; margin-top:14px;">
             Se você é um profissional autônomo e quer se formalizar como MEI para atuar no Vizinho de Aluguel, a Casa do Empreendedor é o seu primeiro passo.
           </p>
         </div>
 
         <!--Direita: foto local-->
-        <div style="flex:1; overflow:hidden; border-radius:12px;">
+        <div style="overflow:hidden; border-radius:12px;">
           <img src="{% static 'images/vista-cima2.JPG' %}" 
           alt="Espaço físico da Casa do Empreendedor"
-          style="width:100%; height:auto; border-radius:12px; object-fit:cover; transition:transform 0.4s ease; cursor:zoom-in;"
-          onmouseover="this.style.transform='scale(2.1)';"
-          onmouseout="this.style.transform='scale(1)';">
+          style="width:100%; height:100%; object-fit:cover; border-radius:12px; display:block; transition:transform 0.4s ease; cursor:zoom-in; min-height:200px;"
+          onmouseover="this.style.transform='scale(1.05)';"
+          onmouseout="this.style.transform='scale(1);'">
         </div>
 
       </div>
