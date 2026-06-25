@@ -33,12 +33,10 @@
         <input id="search-q" class="input" type="text" placeholder="Buscar serviço ou profissional...">
       </div>
       <select id="search-bairro" class="select">
-        <option value="">Todos os bairros</option>
-        <option>Trindade</option>
-        <option>Centro</option>
-        <option>Lagoa</option>
-        <option>Itacorubi</option>
-        <option>Ingleses</option>
+        <option value="">Todas as cidades</option>
+        {% for city in cities %}
+        <option>{{ city }}</option>
+        {% endfor %}
       </select>
       <select id="search-rating" class="select">
         <option value="0">Avaliação: qualquer</option>
@@ -62,7 +60,7 @@
     {# ===== Result strip ===== #}
     <div style="margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
       <div style="font-size:14px; color:var(--text-secondary);">
-        <strong style="color:var(--pmf-navy);" id="result-count">6 profissionais</strong>
+        <strong style="color:var(--pmf-navy);" id="result-count">{{ meis|length }} profissionais</strong>
         encontrados em Florianópolis
       </div>
       <select id="sort" class="select" style="width:auto; min-height:40px;">
@@ -74,96 +72,38 @@
 
     {# ===== Grid ===== #}
     <div id="pros-grid" class="grid-pros">
-      {# Cards demo institucional — substituir por loop {% for pro in pros %} quando contexto disponível #}
-      <article class="pro-card" data-name="Carlos Silva" data-cat="eletrica" data-rating="4.9" data-bairro="Trindade" data-price="80" data-distance="3.2">
-        <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
+      {% for mei in meis %}
+      <article class="pro-card"
+        data-name="{{ mei.user.full_name }}"
+        data-cat=""
+        data-rating="{{ mei.rating_avg }}"
+        data-bairro="{{ mei.city }}"
+        data-price="0"
+        data-distance="0">
+        <div class="pro-card-banner">
+          {% if mei.verification_status == 'VERIFIED' %}
+          <span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span>
+          {% else %}
+          <span class="status-badge" style="background:var(--bg-page); color:var(--text-muted); border:1px solid var(--border);">Pendente</span>
+          {% endif %}
+        </div>
         <div class="pro-card-body">
-          <div class="pro-avatar" style="background:#FFCD07; color:#0E1F4D;">CS</div>
-          <h3 class="pro-name">Carlos Silva</h3>
-          <div class="pro-specialty">Eletricista</div>
-          <div class="pro-rating"><span class="stars">★★★★★</span><span class="score">4.9</span><span class="count">(87)</span></div>
-          <div class="pro-location"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-2px; margin-right:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Trindade</div>
+          <div class="pro-avatar" style="background:{% cycle '#1FA9E0' '#168821' '#C97D00' '#155BCB' '#DB3D3D' '#7B2FBE' %};">{{ mei.user.full_name|slice:":2"|upper }}</div>
+          <h3 class="pro-name">{{ mei.user.full_name }}</h3>
+          <div class="pro-specialty">{{ mei.nome_fantasia }}</div>
+          <div class="pro-rating"><span class="stars">★★★★★</span><span class="score">{{ mei.rating_avg }}</span></div>
+          <div class="pro-location"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-2px; margin-right:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> {{ mei.city }}</div>
           <div class="pro-card-footer">
-            <div><div class="pro-price-label">A partir de</div><div class="pro-price">R$ 80</div></div>
-            <a href="{% url 'nova_solicitacao' %}" class="btn btn-sm btn-primary">Contratar</a>
+            <div></div>
+            <a href="{% url 'accounts:mei_detail' mei.id %}" class="btn btn-sm btn-primary">Ver perfil</a>
           </div>
         </div>
       </article>
-
-      <article class="pro-card" data-name="Joana Pereira" data-cat="hidraulica" data-rating="4.8" data-bairro="Centro" data-price="95" data-distance="5.1">
-        <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
-        <div class="pro-card-body">
-          <div class="pro-avatar" style="background:#1FA9E0;">JP</div>
-          <h3 class="pro-name">Joana Pereira</h3>
-          <div class="pro-specialty">Encanadora</div>
-          <div class="pro-rating"><span class="stars">★★★★★</span><span class="score">4.8</span><span class="count">(64)</span></div>
-          <div class="pro-location"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-2px; margin-right:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Centro</div>
-          <div class="pro-card-footer">
-            <div><div class="pro-price-label">A partir de</div><div class="pro-price">R$ 95</div></div>
-            <a href="{% url 'nova_solicitacao' %}" class="btn btn-sm btn-primary">Contratar</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="pro-card" data-name="Rafael Mendes" data-cat="pintura" data-rating="4.7" data-bairro="Lagoa" data-price="60" data-distance="8.4">
-        <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
-        <div class="pro-card-body">
-          <div class="pro-avatar" style="background:#168821;">RM</div>
-          <h3 class="pro-name">Rafael Mendes</h3>
-          <div class="pro-specialty">Pintor</div>
-          <div class="pro-rating"><span class="stars">★★★★★</span><span class="score">4.7</span><span class="count">(52)</span></div>
-          <div class="pro-location"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-2px; margin-right:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Lagoa</div>
-          <div class="pro-card-footer">
-            <div><div class="pro-price-label">A partir de</div><div class="pro-price">R$ 60</div></div>
-            <a href="{% url 'nova_solicitacao' %}" class="btn btn-sm btn-primary">Contratar</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="pro-card" data-name="Beatriz Lima" data-cat="limpeza" data-rating="5.0" data-bairro="Itacorubi" data-price="120" data-distance="4.6">
-        <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
-        <div class="pro-card-body">
-          <div class="pro-avatar" style="background:#C97D00;">BL</div>
-          <h3 class="pro-name">Beatriz Lima</h3>
-          <div class="pro-specialty">Diarista</div>
-          <div class="pro-rating"><span class="stars">★★★★★</span><span class="score">5.0</span><span class="count">(41)</span></div>
-          <div class="pro-location"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-2px; margin-right:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Itacorubi</div>
-          <div class="pro-card-footer">
-            <div><div class="pro-price-label">A partir de</div><div class="pro-price">R$ 120</div></div>
-            <a href="{% url 'nova_solicitacao' %}" class="btn btn-sm btn-primary">Contratar</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="pro-card" data-name="André Costa" data-cat="reparos" data-rating="4.6" data-bairro="Ingleses" data-price="150" data-distance="15.3">
-        <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
-        <div class="pro-card-body">
-          <div class="pro-avatar" style="background:#155BCB;">AC</div>
-          <h3 class="pro-name">André Costa</h3>
-          <div class="pro-specialty">Marceneiro</div>
-          <div class="pro-rating"><span class="stars">★★★★★</span><span class="score">4.6</span><span class="count">(33)</span></div>
-          <div class="pro-location"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-2px; margin-right:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Ingleses</div>
-          <div class="pro-card-footer">
-            <div><div class="pro-price-label">A partir de</div><div class="pro-price">R$ 150</div></div>
-            <a href="{% url 'nova_solicitacao' %}" class="btn btn-sm btn-primary">Contratar</a>
-          </div>
-        </div>
-      </article>
-
-      <article class="pro-card" data-name="Patrícia Rocha" data-cat="jardinagem" data-rating="4.9" data-bairro="Córrego Grande" data-price="70" data-distance="6.1">
-        <div class="pro-card-banner"><span class="status-badge badge-yellow verified-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4z"/></svg> MEI Verificado</span></div>
-        <div class="pro-card-body">
-          <div class="pro-avatar" style="background:#168821;">PR</div>
-          <h3 class="pro-name">Patrícia Rocha</h3>
-          <div class="pro-specialty">Jardineira</div>
-          <div class="pro-rating"><span class="stars">★★★★★</span><span class="score">4.9</span><span class="count">(28)</span></div>
-          <div class="pro-location"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:-2px; margin-right:2px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Córrego Grande</div>
-          <div class="pro-card-footer">
-            <div><div class="pro-price-label">A partir de</div><div class="pro-price">R$ 70</div></div>
-            <a href="{% url 'nova_solicitacao' %}" class="btn btn-sm btn-primary">Contratar</a>
-          </div>
-        </div>
-      </article>
+      {% empty %}
+      <div style="grid-column:1/-1; text-align:center; padding:48px 0; color:var(--text-muted);">
+        Nenhum profissional cadastrado ainda.
+      </div>
+      {% endfor %}
     </div>
 
     <div class="empty-state" id="empty-pros" style="display:none;">

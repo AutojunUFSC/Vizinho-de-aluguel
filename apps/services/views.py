@@ -125,6 +125,16 @@ def service_request_create(request):
 
     if request.method == 'POST':
         if cep_error is None and form.is_valid() and media_form.is_valid():
+            from datetime import timedelta
+            duplicate = ServiceRequest.objects.filter(
+                citizen=request.user.citizen_profile,
+                title=form.cleaned_data['title'],
+                created_at__gte=timezone.now() - timedelta(seconds=30),
+            ).first()
+            if duplicate:
+                messages.info(request, 'Sua solicitação já foi publicada!')
+                return redirect('services:service_request_detail', pk=duplicate.pk)
+
             with transaction.atomic():
                 service_request = form.save(commit=False)
                 service_request.citizen = request.user.citizen_profile
