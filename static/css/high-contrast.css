@@ -406,6 +406,299 @@ html.high-contrast .notif-title { color: #fff !important; }
 html.high-contrast .notif-body { color: #DDDDDD !important; }
 html.high-contrast .notif-time { color: #AAAAAA !important; }
 
+/* ===== Seção "Como Funciona" (home) ===== */
+html.high-contrast .section-bg-white,
+html.high-contrast .section-bg-page {
+  background: #000 !important;
+}
+html.high-contrast .section-head h2 { color: #fff !important; }
+html.high-contrast .section-head p { color: #DDDDDD !important; }
+html.high-contrast .section-head .kicker { color: #00E5FF !important; }
+
+html.high-contrast .howit-card {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  box-shadow: none !important;
+}
+html.high-contrast .howit-num { color: #FFD600 !important; }
+html.high-contrast .howit-icon {
+  background: #003040 !important;
+  color: #00E5FF !important;
+}
+html.high-contrast .howit-card h3 { color: #fff !important; }
+html.high-contrast .howit-card p { color: #DDDDDD !important; }
+
+/* ===== Páginas de perfil (cidadão e MEI) — classes vda-* ===== */
+
+/* Shell e layout */
+html.high-contrast .vda-shell { background: #000 !important; }
+
+/* Card de identidade (sidebar) */
+html.high-contrast .vda-id-card {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  box-shadow: none !important;
+}
+html.high-contrast .vda-id-card::before { display: none !important; }
+html.high-contrast .vda-id-card::after { background: #FFD600 !important; }
+html.high-contrast .vda-id-name { color: #fff !important; }
+html.high-contrast .vda-id-role { color: #DDDDDD !important; opacity: 1 !important; }
+html.high-contrast .vda-id-stats {
+  border-top-color: rgba(255,255,255,0.4) !important;
+}
+html.high-contrast .vda-id-stat-num { color: #FFD600 !important; }
+html.high-contrast .vda-id-stat-lbl { color: #DDDDDD !important; opacity: 1 !important; }
+html.high-contrast .vda-id-verified {
+  background: #FFD600 !important;
+  color: #000 !important;
+}
+html.high-contrast .vda-id-pending {
+  background: #1A1A1A !important;
+  color: #fff !important;
+}
+html.high-contrast .vda-id-avatar {
+  background: #FFD600 !important;
+  color: #000 !important;
+  border-color: rgba(255,255,255,0.6) !important;
+}
+
+/* Navegação lateral */
+html.high-contrast .vda-nav {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+}
+html.high-contrast .vda-nav-section { color: #AAAAAA !important; }
+html.high-contrast .vda-nav-item {
+  color: #fff !important;
+  background: transparent !important;
+}
+html.high-contrast .vda-nav-item:hover {
+  background: #1A1A1A !important;
+  color: #FFD600 !important;
+  text-decoration: none !important;
+}
+html.high-contrast .vda-nav-item.is-active {
+  background: #FFD600 !important;
+  color: #000 !important;
+}
+html.high-contrast .vda-nav-item.is-active::before {
+  background: #000 !important;
+}
+html.high-contrast .vda-nav-item.is-danger { color: #FF5C5C !important; }
+html.high-contrast .vda-nav-item.is-danger:hover {
+  background: #3A0000 !important;
+}
+
+/* Sidebar backdrop e drawer mobile */
+html.high-contrast .vda-sidebar {
+  background: #000 !important;
+}
+html.high-contrast .vda-mobile-toggle {
+  background: #1A1A1A !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+}
+html.high-contrast .vda-mobile-toggle:hover {
+  background: #FFD600 !important;
+  color: #000 !important;
+}
+
+/* Tabs mobile */
+html.high-contrast .vda-mobile-tabs {
+  background: #000 !important;
+  border-bottom-color: #fff !important;
+}
+html.high-contrast .vda-mobile-tab {
+  background: #000 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+}
+html.high-contrast .vda-mobile-tab:hover {
+  background: #1A1A1A !important;
+  color: #FFD600 !important;
+  border-color: #FFD600 !important;
+}
+html.high-contrast .vda-mobile-tab.is-active {
+  background: #FFD600 !important;
+  color: #000 !important;
+  border-color: #FFD600 !important;
+}
+html.high-contrast .vda-mobile-tab.is-active svg { stroke: #000 !important; }
+
+/* Breadcrumb */
+html.high-contrast .vda-crumb { color: #AAAAAA !important; }
+html.high-contrast .vda-crumb a { color: #FFD600 !important; }
+
+/* Cabeçalho da página */
+html.high-contrast .vda-page-head h1 { color: #fff !important; }
+html.high-contrast .vda-page-head p { color: #DDDDDD !important; }
+
+/* Seções (cards brancos) */
+html.high-contrast .vda-section {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  box-shadow: none !important;
+}
+html.high-contrast .vda-section-head {
+  border-bottom-color: #fff !important;
+}
+html.high-contrast .vda-section-head h2 { color: #fff !important; }
+html.high-contrast .vda-section-head .sub { color: #DDDDDD !important; }
+html.high-contrast .vda-section-foot {
+  background: #0A0A0A !important;
+  border-top-color: #fff !important;
+}
+html.high-contrast .vda-section-foot .hint { color: #DDDDDD !important; }
+
+/* Cards de estatísticas */
+html.high-contrast .vda-stat {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+}
+html.high-contrast .vda-stat-num { color: #FFD600 !important; }
+html.high-contrast .vda-stat-lbl { color: #DDDDDD !important; }
+html.high-contrast .vda-stat-icon {
+  background: #1A1A1A !important;
+  color: #fff !important;
+}
+
+/* Atalhos rápidos */
+html.high-contrast .vda-quick-card {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+  color: #fff !important;
+}
+html.high-contrast .vda-quick-card:hover {
+  border-color: #FFD600 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  text-decoration: none !important;
+}
+html.high-contrast .vda-quick-card .icon {
+  background: #1A1A1A !important;
+  color: #FFD600 !important;
+}
+html.high-contrast .vda-quick-card strong { color: #fff !important; }
+html.high-contrast .vda-quick-card span { color: #DDDDDD !important; }
+
+/* Botões vda-* */
+html.high-contrast .vda-btn-primary {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid #fff !important;
+}
+html.high-contrast .vda-btn-primary:hover {
+  background: #FFD600 !important;
+  color: #000 !important;
+  border-color: #FFD600 !important;
+}
+html.high-contrast .vda-btn-secondary {
+  background: #000 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+}
+html.high-contrast .vda-btn-secondary:hover {
+  background: #1A1A1A !important;
+}
+html.high-contrast .vda-btn-yellow {
+  background: #FFD600 !important;
+  color: #000 !important;
+  border: 2px solid #FFD600 !important;
+}
+html.high-contrast .vda-btn-yellow:hover {
+  background: #FFEA00 !important;
+  color: #000 !important;
+}
+html.high-contrast .vda-btn-ghost {
+  background: transparent !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+}
+html.high-contrast .vda-btn-ghost:hover {
+  background: #1A1A1A !important;
+}
+html.high-contrast .vda-btn-danger-ghost {
+  color: #FF5C5C !important;
+  border: 2px solid #FF5C5C !important;
+}
+html.high-contrast .vda-btn-danger-ghost:hover {
+  background: #3A0000 !important;
+}
+
+/* Inputs */
+html.high-contrast .vda-input {
+  background: #000 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+}
+html.high-contrast .vda-input:focus {
+  border-color: #FFD600 !important;
+  box-shadow: 0 0 0 3px #FFD600 !important;
+}
+html.high-contrast .vda-input.is-locked {
+  background: #0A0A0A !important;
+  color: #AAAAAA !important;
+  border-color: #555 !important;
+}
+html.high-contrast .vda-field label { color: #fff !important; }
+html.high-contrast .vda-help { color: #DDDDDD !important; }
+html.high-contrast .vda-help.is-error { color: #FF5C5C !important; }
+
+/* Bloco de avatar (upload) */
+html.high-contrast .vda-avatar-block {
+  background: #0A0A0A !important;
+  border: 2px dashed #fff !important;
+}
+html.high-contrast .vda-avatar-preview {
+  background: #1A1A1A !important;
+  color: #FFD600 !important;
+  border-color: #fff !important;
+}
+html.high-contrast .vda-avatar-meta strong { color: #fff !important; }
+html.high-contrast .vda-avatar-meta p { color: #DDDDDD !important; }
+
+/* Banner de verificação */
+html.high-contrast .vda-verify-banner {
+  background: #0A0A0A !important;
+  border-color: #fff !important;
+  color: #fff !important;
+}
+html.high-contrast .vda-verify-banner.is-verified {
+  border-left: 6px solid #00FF66 !important;
+  border-color: #00FF66 !important;
+}
+html.high-contrast .vda-verify-banner.is-pending {
+  border-left: 6px solid #FFD600 !important;
+  border-color: #FFD600 !important;
+}
+html.high-contrast .vda-verify-banner.is-rejected {
+  border-left: 6px solid #FF5C5C !important;
+  border-color: #FF5C5C !important;
+}
+html.high-contrast .vda-verify-banner .icon-wrap {
+  background: #1A1A1A !important;
+}
+html.high-contrast .vda-verify-banner strong { color: #fff !important; }
+html.high-contrast .vda-verify-banner .desc { color: #DDDDDD !important; opacity: 1 !important; }
+
+/* Toggle row (disponibilidade) */
+html.high-contrast .vda-toggle-row {
+  background: #000 !important;
+  border: 2px solid #fff !important;
+}
+html.high-contrast .vda-toggle-row .meta strong { color: #fff !important; }
+html.high-contrast .vda-toggle-row .meta span { color: #DDDDDD !important; }
+
+/* Status pill */
+html.high-contrast .vda-status-pill.is-on {
+  background: #003318 !important;
+  color: #00FF66 !important;
+}
+html.high-contrast .vda-status-pill.is-off {
+  background: #1A1A1A !important;
+  color: #AAAAAA !important;
+}
+
 /* ===== Foco visível extra-forte ===== */
 html.high-contrast :focus-visible {
   outline: 4px solid #FFD600 !important;
