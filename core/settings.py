@@ -21,6 +21,12 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
 CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='http://localhost:8000', cast=Csv())
 
+# Hostname público definido automaticamente pelo Render
+RENDER_EXTERNAL_HOSTNAME = config('RENDER_EXTERNAL_HOSTNAME', default='')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_EXTERNAL_HOSTNAME}')
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -74,20 +80,13 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-_database_url = config('DATABASE_URL', default='')
-if _database_url:
-    DATABASES = {'default': dj_database_url.parse(_database_url)}
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': config('DATABASE_ENGINE', default='django.db.backends.sqlite3'),
-            'NAME': config('DATABASE_NAME', default=str(BASE_DIR / 'db.sqlite3')),
-            'USER': config('DATABASE_USER', default=''),
-            'PASSWORD': config('DATABASE_PASSWORD', default=''),
-            'HOST': config('DATABASE_HOST', default='localhost'),
-            'PORT': config('DATABASE_PORT', default='5432'),
-        }
-    }
+# Usa DATABASE_URL (Render/.env); sem ela, cai para SQLite local
+DATABASES = {
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL', default=f'sqlite:///{BASE_DIR / "db.sqlite3"}'),
+        conn_max_age=600,
+    )
+}
 
 
 # Password validation
@@ -125,7 +124,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
 
 # Media files (uploads dos usuarios)
 
